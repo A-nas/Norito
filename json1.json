@@ -1,0 +1,68 @@
+// CREATION D’UN ARBITRAGE PAR ALLOCATION   . # pas encore #
+
+{
+
+  "reference_externe": "XXX_ZZZ_1234", //la référence de la demande d'arbitrage chez l'appelant // done
+  "date_signature": "16/09/2016",      //la date de signature de la demande d'arbitrage *// done (mettre a la date d'aujourdhui)######
+  "reinvestissements": [               //liste d'entités "réinvestissement" //done
+    {
+      "code_support": "FONDSGENERAL", //le code du support sur lequel porte le désinvestissement (Code ISIN ?) *//done
+      "pourcentage": 50               //le pourcentage à désinvestir //done
+    },
+    {
+      "code_support": "ACCOMO",
+      "pourcentage": 50
+    }
+  ],
+  "support_saisie": "bo",             //le support de la saisie //done
+  "taux_frais_deroge": 0.5,           //le taux de frais dérogé *//done
+  "commentaire": "un commentaire",    //comm //done
+  "pieces": [
+    {
+      "nom": "demande.pdf",
+      "type": "demande_arbitrage" //le type de pièce
+    },
+
+    {
+      "nom": "dossier_arbitrage.pdf",
+      "type": "dossier_arbitrage_signe_electroniquement"
+    }
+  ]
+
+
+
+  // CREATION D’UN ARBITRAGE PAR DESINVESTISSEMENT ET REINVESTISSEMENT
+
+  {
+    "reference_externe": "XXX_ZZZ_1234",
+    "date_signature": "16/09/2016",
+    "desinvestissements": [
+      {
+        "code_support": "CENTIFO",
+        "montant": 5000
+      },
+      {
+        "code_support": "EUROPATRIMOINE",
+        "pourcentage": 100
+      }
+    ],
+    "reinvestissements": [
+      {
+        "code_support": "FONDSGENERAL",
+        "pourcentage": 100
+      }
+    ],
+    "suppaisie ": "b2b",
+    "commentaire": "un commentaire",
+    "pieces": [
+      {
+        "nom": "demande.pdf",
+        "type": "dort_semande_arbitrage"
+      },
+      {
+        "nom": "dossier_arbitrage.pdf",
+        "type": "dossier_arbitrage_signe_electroniquement"
+      }
+    ]
+  }
+}

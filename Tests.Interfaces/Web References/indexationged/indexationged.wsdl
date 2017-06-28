@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx">
+      <s:element name="IndexationListeDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="context" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listeIndexDoc" type="tns:ArrayOfIndexationDocument" />
+            <s:element minOccurs="0" maxOccurs="1" name="entite" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfIndexationDocument">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IndexationDocument" nillable="true" type="tns:IndexationDocument" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndexationDocument">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID_DocumentNortia" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_DocumentSalesForce" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeDocument" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID_PliNortia" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeActe" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeObjetAvenant" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_PliSalesForce" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="VisibleNOL" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IndexationListeDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IndexationListeDocumentResult" type="tns:ListeIndexationDocumentResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ListeIndexationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="codeRetour" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="context" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="entite" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="documentResponse" type="tns:ArrayOfIndexationDocumentResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfIndexationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IndexationDocumentResponse" nillable="true" type="tns:IndexationDocumentResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IndexationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID_DocumentNortia" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_DocumentSalesForce" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="codeRetour" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IntegrationListeDocument">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listeIntegDoc" type="tns:ArrayOfIntegrationDocument" />
+            <s:element minOccurs="0" maxOccurs="1" name="entite" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfIntegrationDocument">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IntegrationDocument" nillable="true" type="tns:IntegrationDocument" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IntegrationDocument">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Index" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_ActeSalesforce" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomDocument" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExtensionDocument" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeActe" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeDocument" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="VisibleNOL" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="DataDocument" type="s:base64Binary" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="IntegrationListeDocumentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IntegrationListeDocumentResult" type="tns:ListeIntegrationDocumentResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ListeIntegrationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="codeRetour" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="entite" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="documentResponse" type="tns:ArrayOfIntegrationDocumentResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfIntegrationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="IntegrationDocumentResponse" nillable="true" type="tns:IntegrationDocumentResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="IntegrationDocumentResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Index" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID_PliNortia" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ID_DocumentNortia" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NbPage" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="codeRetour" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="IndexationListeDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:IndexationListeDocument" />
+  </wsdl:message>
+  <wsdl:message name="IndexationListeDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:IndexationListeDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="IntegrationListeDocumentSoapIn">
+    <wsdl:part name="parameters" element="tns:IntegrationListeDocument" />
+  </wsdl:message>
+  <wsdl:message name="IntegrationListeDocumentSoapOut">
+    <wsdl:part name="parameters" element="tns:IntegrationListeDocumentResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IndexationGEDSoap">
+    <wsdl:operation name="IndexationListeDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Indexation des Documents dans la GED</wsdl:documentation>
+      <wsdl:input message="tns:IndexationListeDocumentSoapIn" />
+      <wsdl:output message="tns:IndexationListeDocumentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="IntegrationListeDocument">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Integration des Documents dans la GED</wsdl:documentation>
+      <wsdl:input message="tns:IntegrationListeDocumentSoapIn" />
+      <wsdl:output message="tns:IntegrationListeDocumentSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IndexationGEDSoap" type="tns:IndexationGEDSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IndexationListeDocument">
+      <soap:operation soapAction="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx/IndexationListeDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IntegrationListeDocument">
+      <soap:operation soapAction="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx/IntegrationListeDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="IndexationGEDSoap12" type="tns:IndexationGEDSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="IndexationListeDocument">
+      <soap12:operation soapAction="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx/IndexationListeDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IntegrationListeDocument">
+      <soap12:operation soapAction="http://qualif-extranet.nortia.fr/IndexationGED/IndexationGED.asmx/IntegrationListeDocument" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IndexationGED">
+    <wsdl:port name="IndexationGEDSoap" binding="tns:IndexationGEDSoap">
+      <soap:address location="http://qualif-extranet.nortia.fr/indexationged/indexationged.asmx" />
+    </wsdl:port>
+    <wsdl:port name="IndexationGEDSoap12" binding="tns:IndexationGEDSoap12">
+      <soap12:address location="http://qualif-extranet.nortia.fr/indexationged/indexationged.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

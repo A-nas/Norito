@@ -1,0 +1,7 @@
+https://stackoverflow.com/questions/10679214/how-do-you-set-the-content-type-header-for-an-httpclient-request
+https://stackoverflow.com/questions/4980912/username-and-password-in-https-url ***
+
+#ANGULAR-JS
+http://chariotsolutions.com/blog/post/angularjs-corner-using-promises-q-handle-asynchronous-calls/
+#THIS CAN BE USEFULL
+https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/

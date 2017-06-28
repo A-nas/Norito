@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="GenerationProd.asmx.cs" Class="GenerationProd.GenerationProd" %>
