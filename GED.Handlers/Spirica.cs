@@ -42,7 +42,7 @@ namespace GED.Handlers
             List<binaries> bins = new List<binaries>();
             SqlConnection con = Definition.connexion;
             SqlCommand cmd = new SqlCommand("select [Nom],[Extension],[Datas] from pli where CleSalesForce = @id_contrat", con);
-            cmd.Parameters.AddWithValue("@id_contrat", (Object) this.NumContrat ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@id_contrat", (Object) this.ReferenceInterne ?? DBNull.Value);
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -59,6 +59,34 @@ namespace GED.Handlers
             return bins;
         }
 
+
+        //cette focntion se base sur le jeux de tests crée, elle attache des pieces statiques
+        private List<binaries> fetchPiecesTest(){
+            List<binaries> bins = new List<binaries>();
+            // attachement des fichier de bases
+            bins.Add(new binaries
+            {
+                nomFichie = "demande",
+                extention = ".pdf",
+                ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
+            });
+            bins.Add(new binaries
+            {
+                nomFichie = "dossier_arbitrage",
+                extention = ".pdf",
+                ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
+            });
+            // attachement d'avenant en cas d'avenant attaché
+            if (this.ReferenceInterne == "TEST_FINAL01" || this.ReferenceInterne == "TEST_FINAL02"){
+                bins.Add(new binaries
+                {
+                    nomFichie = "avenant_support",
+                    extention = ".pdf",
+                    ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
+            });
+            }
+            return bins;
+        }
 
 
         // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
@@ -90,7 +118,7 @@ namespace GED.Handlers
             return content;
         }
 
-        
+
         //#############################################################################################################################//
 
 

@@ -44,6 +44,8 @@ namespace GED.Handlers
         private string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
         public List<DetailPiece> pieces = new List<DetailPiece>();
+        [JsonProperty(PropertyName = "date_signature", Order = 2)]
+        public DateTime date_sign = DateTime.Now;
 
 
         public Acte()
