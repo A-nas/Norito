@@ -575,9 +575,23 @@ namespace Tests.Interfaces
             }
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private async void button8_Click(object sender, EventArgs e)
         {
             Production prod = new Production();
+
+
+            IActe iacte;
+            Acte acte = new Acte();
+            iacte = (IActe) acte;
+
+            List<IActe> iactes;
+            List<Acte> actes;
+            iactes = (List<IActe>) actes;
+
+
+            List<Acte> actes = Definition.GetListeActes();
+            string[] responses = prod.envoyerProd((List<IActe>) actes);
+
 
         }
     }
