@@ -12,7 +12,7 @@ namespace GED.Handlers
     {
         public string NomType { get; set; }
         public string NomActeAdministratif { get; set; }
-        [JsonProperty(PropertyName = "ne", Order = 1)]
+        [JsonProperty(PropertyName = "reference_externe", Order = 1)]
         public string ReferenceInterne { get; set; }
         public string NomCompletSouscripteurs { get; set; }
         public string NumContrat { get; set; }
@@ -108,6 +108,8 @@ namespace GED.Handlers
 
             return nbPage;
         }
+
+
 
     }
 }

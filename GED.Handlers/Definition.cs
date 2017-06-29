@@ -109,7 +109,8 @@ namespace GED.Handlers
                     Frais = 0,
                     ListeSupportDesinvestir = { rep01 },
                     ListeSupportInvestir = { rep02 , rep03 },
-                    Commentaire = "un commentaire"
+                    Commentaire = "un commentaire",
+                    pieces = { piece01 , piece02 , piece03 }
                     //ListeDocument = { doc01, doc02 }
                 });
             }
@@ -167,8 +168,8 @@ namespace GED.Handlers
                     ReferenceInterne = "TEST_FINAL02",
                     ListeSupportInvestir = { rep01 , rep02 },
                     Commentaire = "un commentaire",
+                    pieces = { piece01, piece02, piece03 }
                     //ListeDocument = { doc01, doc02 },
-                    pieces = new List<DetailPiece>()
                 });
             }
 
@@ -223,7 +224,7 @@ namespace GED.Handlers
                     Commentaire = "un commentaire",
                     //ListeDocument = { doc01, doc02 },
                     Frais = 0.5f,
-                    pieces = new List<DetailPiece>()
+                    pieces = { piece01, piece02 }
                 });
             }
 
@@ -275,8 +276,8 @@ namespace GED.Handlers
                     ReferenceInterne = "TEST_FINAL04",
                     ListeSupportInvestir = { rep01, rep02 },
                     Commentaire = "un commentaire",
+                    pieces = { piece01, piece02 }
                     //ListeDocument = { doc01, doc02 },
-                    pieces = new List<DetailPiece>()
                 });
             }
 

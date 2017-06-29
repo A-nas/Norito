@@ -571,27 +571,33 @@ namespace Tests.Interfaces
             using (StreamWriter outputFile = new StreamWriter(mydocpath + @"\outGED.txt"))
             {
                 outputFile.WriteLine(toWrite);
-
             }
         }
 
         private async void button8_Click(object sender, EventArgs e)
         {
-            Production prod = new Production();
 
+            try
+            {
 
-            IActe iacte;
-            Acte acte = new Acte();
-            iacte = (IActe) acte;
+                List<Acte> actes = Definition.GetListeActes();
+                // prod
+                int nombreActes = actes.Count();
+                string[] response = new string[nombreActes];
+                for (int i = 0; i < nombreActes; i++)
+                {
+                    IActe acteprod = new Spirica(actes[i]);
+                    //IActe acteprod = (IActe) actes[i]; // cast avec du code 
+                    response[i] = (await acteprod.sendProd());
+                }
+                // print outPut
+                foreach (var item in response)
+                MessageBox.Show(item.ToString());
 
-            List<IActe> iactes;
-            List<Acte> actes;
-            iactes = (List<IActe>) actes;
-
-
-            List<Acte> actes = Definition.GetListeActes();
-            string[] responses = prod.envoyerProd((List<IActe>) actes);
-
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
 
         }
     }
