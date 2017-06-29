@@ -576,28 +576,25 @@ namespace Tests.Interfaces
 
         private async void button8_Click(object sender, EventArgs e)
         {
-
-            try
-            {
-
-                List<Acte> actes = Definition.GetListeActes();
+            /*
+            // liste des actes attendues
+            List<Acte> actes = Definition.GetListeActes();
+            Production p = Production.getInstance();
+            string[] respones = await p.envoyerProd(actes);
+            */
+            
+            List<Acte> actes = Definition.GetListeActes();
                 // prod
                 int nombreActes = actes.Count();
                 string[] response = new string[nombreActes];
-                for (int i = 0; i < nombreActes; i++)
-                {
-                    IActe acteprod = new Spirica(actes[i]);
-                    //IActe acteprod = (IActe) actes[i]; // cast avec du code 
-                    response[i] = (await acteprod.sendProd());
-                }
-                // print outPut
-                foreach (var item in response)
-                MessageBox.Show(item.ToString());
-
-            }catch(Exception ex)
+            for (int i = 0; i < nombreActes; i++)
             {
-                MessageBox.Show(ex.ToString());
+                IActe acteprod = new Spirica(actes[i]);
+                //IActe acteprod = (IActe) actes[i]; // cast avec du code 
+                response[i] = (await acteprod.sendProd());
             }
+             
+
 
         }
     }

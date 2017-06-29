@@ -8,21 +8,35 @@ namespace GED.Handlers
 {
     public class Production
     {
-        List<IActe> actes;
-        List<string> responses;
-        public static Production refInstance;
+        public static List<string> responses;
+        private static Production refInstance;
 
-        public static Production instance(List<IActe> _actes){
+        public static Production getInstance(){
             if(refInstance == null){
-                refInstance = new Production{ actes = _actes };
+                refInstance = new Production{};
             }
             return refInstance;        
         }
 
+        //DEPRECATED
         public async static Task<string[]> envoyerProd(List<IActe> actes){ // passer une liste d'actes SPI directement.
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
             for(int i=0; i < nombreActes; i++) response[i] = (await actes[i].sendProd());
+            return response;
+        }
+
+
+        public async Task<string[]> envoyerProd(List<Acte> actes)
+        {
+            int nombreActes = actes.Count();
+            string[] response = new string[nombreActes];
+            for (int i = 0; i < nombreActes; i++)
+            {
+                IActe acteprod = new Spirica(actes[i]);
+                //IActe acteprod = (IActe) actes[i]; // cast avec du code 
+                response[i] = (await acteprod.sendProd());
+            }
             return response;
         }
     }
