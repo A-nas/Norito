@@ -20,14 +20,14 @@ namespace GED.Handlers
         // mon code
 
         [JsonProperty(PropertyName = "pourcentage", Order = 1)]
-        private float montant_per;
+        private int montant_per;
         [JsonProperty(PropertyName = "montant", Order = 2)]
         private float montant_euro;
 
         public bool ShouldSerializemontant_per()
         {
             if (TypeRepartition == "%") {
-                montant_per = ValeurRepartition;
+                montant_per = (int) ValeurRepartition;
                 return true;
             }
             return false;

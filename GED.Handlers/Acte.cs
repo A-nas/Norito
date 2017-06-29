@@ -45,7 +45,7 @@ namespace GED.Handlers
         [JsonProperty(PropertyName = "pieces", Order = 7)]
         public List<DetailPiece> pieces = new List<DetailPiece>();
         [JsonProperty(PropertyName = "date_signature", Order = 2)]
-        public DateTime date_sign = DateTime.Now;
+        public string date_sign;
 
 
         public Acte()
@@ -59,6 +59,7 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
+            date_sign = DateTime.Now.ToString("dd'/'MM'/'yyyy");
         }
 
         public string Get_ID_ProfilCompagnieCA()

@@ -26,7 +26,7 @@ namespace GED.Handlers
         public static readonly string remotePath = "//SPIRICA//"; //sftp://u87840885@home663743708.1and1-data.host/SPIRICA
 
         // SPIRICA SERIALIZABLE PROPERTIES
-        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type" };
+        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type", "date_signature" };
 
         // DATABASE STRING
         public static readonly SqlConnection connexion = new SqlConnection("data source=192.168.1.2\\SQL2005DEV;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");
@@ -106,12 +106,13 @@ namespace GED.Handlers
                 la.Add(new Acte
                 {
                     ReferenceInterne = "TEST_FINAL01",
-                    Frais = 0,
+                    Frais = 0f,
                     ListeSupportDesinvestir = { rep01 },
-                    ListeSupportInvestir = { rep02 , rep03 },
+                    ListeSupportInvestir = { rep02, rep03 },
                     Commentaire = "un commentaire",
-                    pieces = { piece01 , piece02 , piece03 }
+                    pieces = { piece01, piece02, piece03 },
                     //ListeDocument = { doc01, doc02 }
+                    NumContrat = "113100096"
                 });
             }
 
@@ -168,8 +169,9 @@ namespace GED.Handlers
                     ReferenceInterne = "TEST_FINAL02",
                     ListeSupportInvestir = { rep01 , rep02 },
                     Commentaire = "un commentaire",
-                    pieces = { piece01, piece02, piece03 }
+                    pieces = { piece01, piece02, piece03 },
                     //ListeDocument = { doc01, doc02 },
+                    NumContrat = "113100096"
                 });
             }
 
@@ -224,7 +226,8 @@ namespace GED.Handlers
                     Commentaire = "un commentaire",
                     //ListeDocument = { doc01, doc02 },
                     Frais = 0.5f,
-                    pieces = { piece01, piece02 }
+                    pieces = { piece01, piece02 },
+                    NumContrat = "113100096"
                 });
             }
 
@@ -276,8 +279,9 @@ namespace GED.Handlers
                     ReferenceInterne = "TEST_FINAL04",
                     ListeSupportInvestir = { rep01, rep02 },
                     Commentaire = "un commentaire",
-                    pieces = { piece01, piece02 }
+                    pieces = { piece01, piece02 },
                     //ListeDocument = { doc01, doc02 },
+                    NumContrat = "113100096"
                 });
             }
 
