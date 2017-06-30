@@ -113,15 +113,6 @@ namespace GED.Handlers
                 requestContent.Add(binaryFile, "file", bin.nomFichie + bin.extention );
             }
             //POST ASYNC CALL
-            try
-            {
-                HttpResponseMessage message4 = await client.PostAsync(Definition.url+this.NumContrat+ "/arbitrages", requestContent);
-                string content4 = await message4.Content.ReadAsStringAsync();
-            }
-            catch(Exception ex)
-            {
-
-            }
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
             string content = await message.Content.ReadAsStringAsync();
             //We are waiting for JSON response !

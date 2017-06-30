@@ -114,13 +114,20 @@ namespace GenerationProd
 
                 if (listeActePDF.Count > 0)
                 {
-                    //Génération de la Prod PDF
-                    if(!(genererProdActe?GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification) :GenererProdPDF(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification)))
-                        throw new Exception("Erreur lors de la génération de la production PDF (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    if(codeCompagnie == "SPI")
+                    {
 
-                    //Génération du Recap PDF
-                    if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, genererProdActe, classification))
-                        throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    }else
+                    {
+                        //Génération de la Prod PDF
+                        if(!(genererProdActe?GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification) :GenererProdPDF(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification)))
+                            throw new Exception("Erreur lors de la génération de la production PDF (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+
+                        //Génération du Recap PDF
+                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, genererProdActe, classification))
+                            throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    }
+
                 }
 
                 if (listeActeTraitementEdi.Count > 0)

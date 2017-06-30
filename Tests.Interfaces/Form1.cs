@@ -576,14 +576,11 @@ namespace Tests.Interfaces
 
         private async void button8_Click(object sender, EventArgs e)
         {
-            /*
             // liste des actes attendues
             List<Acte> actes = Definition.GetListeActes();
-            Production p = Production.getInstance();
-            string[] respones = await p.envoyerProd(actes);
-            */
+            string[] respones = await Production.getInstance().envoyerProd(actes);
             
-            List<Acte> actes = Definition.GetListeActes();
+            /*List<Acte> actes = Definition.GetListeActes();
                 // prod
                 int nombreActes = actes.Count();
                 string[] response = new string[nombreActes];
@@ -592,7 +589,7 @@ namespace Tests.Interfaces
                 IActe acteprod = new Spirica(actes[i]);
                 //IActe acteprod = (IActe) actes[i]; // cast avec du code 
                 response[i] = (await acteprod.sendProd());
-            }
+            }*/
              
 
 
