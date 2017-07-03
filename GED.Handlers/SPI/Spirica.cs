@@ -31,7 +31,7 @@ namespace GED.Handlers
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ContractResolver = new ShouldSerializeContractResolver()
             };
-            return JsonConvert.SerializeObject(this, jsonSetting); // Replace(@"\", "");
+            return JsonConvert.SerializeObject(this, jsonSetting);
         }
 
 

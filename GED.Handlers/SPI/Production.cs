@@ -33,8 +33,8 @@ namespace GED.Handlers
             string[] response = new string[nombreActes];
             for (int i = 0; i < nombreActes; i++)
             {
+                //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
-                //IActe acteprod = (IActe) actes[i]; // cast avec du code 
                 response[i] = (await acteprod.sendProd());
             }
             return response;

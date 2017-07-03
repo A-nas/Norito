@@ -34,18 +34,19 @@ namespace GED.Handlers
         public bool IsTraitementEdi { get; set; }
         public DateTime DateCreation { get; set; }
         public DateTime DateAcquisition { get; set; }
+        [JsonProperty(PropertyName = "date_signature", Order = 2)]
+        public DateTime DateEnvoiProduction { get; set; }
         [JsonProperty(PropertyName = "commentaire", Order = 6)]
         public string Commentaire { get; set; }
         public bool InvestissementImmediat { get; set; }
         public bool Regul { get; set; }
+
 
         // proprietes a alimentés
         [JsonProperty(PropertyName = "support_saisie", Order = 5)]
         private string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
         public List<DetailPiece> pieces = new List<DetailPiece>();
-        [JsonProperty(PropertyName = "date_signature", Order = 2)]
-        public string date_sign;
 
 
         public Acte()
@@ -59,7 +60,7 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
-            date_sign = DateTime.Now.ToString("dd'/'MM'/'yyyy");
+            DateEnvoiProduction = DateTime.Now.Date;// ToString("dd'/'MM'/'yyyy");
         }
 
         public string Get_ID_ProfilCompagnieCA()

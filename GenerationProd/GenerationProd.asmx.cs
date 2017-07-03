@@ -90,7 +90,7 @@ namespace GenerationProd
             public string message;
         }
 
-        protected static void GenererProduction(string IDProd, string codeCompagnie, List<Acte> listeActe,string typeEnvoi="",bool genererProdActe=false, string classification = "")
+        protected async static void GenererProduction(string IDProd, string codeCompagnie, List<Acte> listeActe,string typeEnvoi="",bool genererProdActe=false, string classification = "")
         {
             bool retour = false;
             string message = "";
@@ -116,8 +116,9 @@ namespace GenerationProd
                 {
                     if(codeCompagnie == "SPI")
                     {
-
-                    }else
+                        string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
+                    }
+                    else
                     {
                         //Génération de la Prod PDF
                         if(!(genererProdActe?GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification) :GenererProdPDF(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification)))
