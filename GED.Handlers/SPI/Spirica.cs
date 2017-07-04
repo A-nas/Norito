@@ -22,6 +22,11 @@ namespace GED.Handlers
 {
     public class Spirica : Acte,IActe
     {
+        // proprietés suplementaires
+        [JsonProperty(PropertyName = "support_saisie", Order = 5)]
+        private static string supsaisie = "bo";
+        [JsonProperty(PropertyName = "pieces", Order = 7)]
+        public List<DetailPiece> pieces = new List<DetailPiece>();
 
         // generate JSON string for the current instance
         private string genJson(){
@@ -115,7 +120,7 @@ namespace GED.Handlers
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
             string content = await message.Content.ReadAsStringAsync();
-            //We are waiting for JSON response !
+            //here We are waiting until JSON response !
             return content;
         }
 
@@ -143,8 +148,8 @@ namespace GED.Handlers
             this.Frais = acte.Frais;
             this.ID_ProfilCompagnie = acte.ID_ProfilCompagnie;
             this.NomEnveloppe = acte.NomEnveloppe;
-            this.ListeSupportDesinvestir = acte.ListeSupportDesinvestir;
-            this.ListeSupportInvestir = acte.ListeSupportInvestir;
+            this.ListeSupportDesinvestir = acte.ListeSupportDesinvestir; // transtyper ca
+            this.ListeSupportInvestir = acte.ListeSupportInvestir;       // *** ca aussi
             this.ListeDocument = acte.ListeDocument;
             this.IsTraitementEdi = acte.IsTraitementEdi;
             this.DateCreation = acte.DateCreation;
@@ -152,8 +157,7 @@ namespace GED.Handlers
             this.Commentaire = acte.Commentaire;
             this.InvestissementImmediat = acte.InvestissementImmediat;
             this.Regul = acte.Regul;
-            this.pieces = acte.pieces;
-
+            //this.pieces = acte.pieces; // aller chercher ca ***
             }
 
 
