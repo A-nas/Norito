@@ -19,6 +19,8 @@ using System.Net.Http.Headers;
 using System.Net;
 //for Burp suite debug
 using System.Security.Cryptography.X509Certificates;
+//for inserting data into sql server
+using System.Data.SqlClient;
 
 namespace Tests.Interfaces
 {
@@ -593,6 +595,38 @@ namespace Tests.Interfaces
              
 
 
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                String query = "INSERT INTO dbo.SPI_SUPPORTS ([Code support],[Code ISIN],[libellé support],[Type]) VALUES (@codeSupport,@CodeISIN,@LibelleSupport, @Type)";
+                // connexion string a changeeeeeeeeeer
+                SqlCommand command = new SqlCommand(query, Definition.connexion);
+
+                StreamReader rd = new StreamReader(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\FichierEnvoyésParSpirica\message 3\Supports avec avenant.xlsx");
+                while (!rd.EndOfStream)
+                {
+                    string[] splits = rd.ReadLine().Split(';');
+                    // connexion parameter
+                    command.Parameters.AddWithValue("@id", splits[0].ToString());
+                    command.Parameters.AddWithValue("@username", splits[1].ToString());
+                    command.Parameters.AddWithValue("@password", splits[2].ToString());
+                    command.Parameters.AddWithValue("@email", splits[3].ToString());
+                    // run !
+                    command.ExecuteNonQuery();
+                    if (command.ExecuteNonQuery() > 0)
+                    {
+                        // we should be there
+                    }
+                }
+
+                }catch(Exception ex){
+
+                    }
+            
         }
     }
 }
