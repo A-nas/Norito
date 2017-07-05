@@ -599,34 +599,37 @@ namespace Tests.Interfaces
 
         private void button9_Click(object sender, EventArgs e)
         {
-
+            // SUPPORTS TABLE FILL !!
             try
             {
-                String query = "INSERT INTO dbo.SPI_SUPPORTS ([Code support],[Code ISIN],[libellé support],[Type]) VALUES (@codeSupport,@CodeISIN,@LibelleSupport, @Type)";
+                String query = "INSERT INTO dbo.SUPPORT_TRANSTYPE ([Code_Support],[Code_ISIN],[libelle_support],[Type],[Code_Compagnie]) VALUES (@codeSupport,@CodeISIN,@LibelleSupport, @Type, 'SPI' )";
                 // connexion string a changeeeeeeeeeer
-                SqlCommand command = new SqlCommand(query, Definition.connexion);
+                
+                Definition.connexionQualif.Open();
+                StreamReader rd = new StreamReader(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\FichierEnvoyésParSpirica\message 3\Supports avec avenant.csv");
 
-                StreamReader rd = new StreamReader(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\FichierEnvoyésParSpirica\message 3\Supports avec avenant.xlsx");
                 while (!rd.EndOfStream)
                 {
                     string[] splits = rd.ReadLine().Split(';');
                     // connexion parameter
-                    command.Parameters.AddWithValue("@id", splits[0].ToString());
-                    command.Parameters.AddWithValue("@username", splits[1].ToString());
-                    command.Parameters.AddWithValue("@password", splits[2].ToString());
-                    command.Parameters.AddWithValue("@email", splits[3].ToString());
-                    // run !
-                    command.ExecuteNonQuery();
-                    if (command.ExecuteNonQuery() > 0)
-                    {
-                        // we should be there
-                    }
+                        {
+                                SqlCommand command = new SqlCommand(query, Definition.connexionQualif);
+                                command.Parameters.AddWithValue("@codeSupport", splits[0].ToString());
+                                command.Parameters.AddWithValue("@CodeISIN", splits[1].ToString());
+                                command.Parameters.AddWithValue("@LibelleSupport", splits[2].ToString());
+                                command.Parameters.AddWithValue("@Type", splits[3].ToString());
+                                //command.Parameters.AddWithValue("@Comp", "SPI");
+                                // run !
+                                command.ExecuteNonQuery();
+                        }
                 }
+                MessageBox.Show(i.ToString());
+                Definition.connexionQualif.Close();
+            }
+            catch(Exception ex) { }
 
-                }catch(Exception ex){
-
-                    }
             
+
         }
     }
 }

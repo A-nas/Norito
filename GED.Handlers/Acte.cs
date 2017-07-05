@@ -42,13 +42,6 @@ namespace GED.Handlers
         public bool Regul { get; set; }
 
 
-        // proprietes a alimentés
-        [JsonProperty(PropertyName = "support_saisie", Order = 5)]
-        private string supsaisie = "bo";
-        [JsonProperty(PropertyName = "pieces", Order = 7)]
-        public List<DetailPiece> pieces = new List<DetailPiece>();
-
-
         public Acte()
         {
             NomActeAdministratif = "";
@@ -60,7 +53,6 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
-            DateEnvoiProduction = DateTime.Now.Date;// ToString("dd'/'MM'/'yyyy");
         }
 
         public string Get_ID_ProfilCompagnieCA()

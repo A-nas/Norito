@@ -137,14 +137,14 @@
     <Compile Include="Assureur.cs" />
     <Compile Include="Avenant.cs" />
     <Compile Include="Contrat.cs" />
-    <Compile Include="Definition.cs" />
-    <Compile Include="DetailPiece.cs" />
+    <Compile Include="SPI\Definition.cs" />
+    <Compile Include="SPI\DetailPiece.cs" />
     <Compile Include="DocContrat.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="Export.cs" />
-    <Compile Include="IActe.cs" />
+    <Compile Include="SPI\IActe.cs" />
     <Compile Include="Pli.cs" />
-    <Compile Include="Production.cs" />
+    <Compile Include="SPI\Production.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -154,10 +154,10 @@
     <Compile Include="RejetAvenant.cs" />
     <Compile Include="Repartition.cs" />
     <Compile Include="Repertoire.cs" />
-    <Compile Include="ShouldSerializeContractResolver.cs" />
-    <Compile Include="Spirica.cs" />
-    <Compile Include="SqlCommandArray.cs" />
-    <Compile Include="Test.cs" />
+    <Compile Include="SPI\ShouldSerializeContractResolver.cs" />
+    <Compile Include="SPI\Spirica.cs" />
+    <Compile Include="SPI\SqlCommandArray.cs" />
+    <Compile Include="Others\Test.cs" />
     <Compile Include="TypeDocument.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -184,9 +184,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SPI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
