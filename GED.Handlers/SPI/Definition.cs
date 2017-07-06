@@ -54,34 +54,34 @@ namespace GED.Handlers
             {
                 Repartition rep01 = new Repartition
                 {
-                    CodeISIN = "ALTOBELLA",
+                    CodeISIN = "NL0000235190",
                     TypeRepartition = "%",
                     ValeurRepartition = 10
                 };
 
                 Repartition rep02 = new Repartition
                 {
-                    CodeISIN = "EUROSELACTIF",
+                    CodeISIN = "FR0010220475",
                     TypeRepartition = "%",
                     ValeurRepartition = 60
                 };
 
                 Repartition rep03 = new Repartition
                 {
-                    CodeISIN = "CARPAT",
+                    CodeISIN = "LU0323134006",
                     TypeRepartition = "%",
                     ValeurRepartition = 40
                 };
 
                 DocumentProduction doc01 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 111,
+                    ID_DocumentNortia = 890350,
                     ID_DocumentSalesForce = "idSalesForce"
                 };
 
                 DocumentProduction doc02 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 222,
+                    ID_DocumentNortia = 890371,
                     ID_DocumentSalesForce = "idSalesForce"
                 };
                 //==

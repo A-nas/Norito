@@ -27,6 +27,8 @@ namespace GED.Handlers
         private static string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
         public List<DetailPiece> pieces = new List<DetailPiece>();
+        [JsonProperty(PropertyName = "date_signature", Order = 2)]
+        public string dateDeSignature;
 
         // generate JSON string for the current instance
         private string genJson(){
@@ -110,7 +112,7 @@ namespace GED.Handlers
             json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             requestContent.Add(json, "arbitrage");
             //List<binaries> bins = fetchPieces();
-            List<binaries> bins = fetchPiecesTest();
+            List<binaries> bins = fetchPiecesTest(); // a remplacer
             foreach (binaries bin in bins)
             {
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
@@ -157,9 +159,54 @@ namespace GED.Handlers
             this.Commentaire = acte.Commentaire;
             this.InvestissementImmediat = acte.InvestissementImmediat;
             this.Regul = acte.Regul;
-            //this.pieces = acte.pieces; // aller chercher ca ***
+            this.dateDeSignature = DateEnvoiProduction.ToString("dd/M/yyyy");
+            //alimenter les props manquées
+            fillData();
             }
 
+        private void fillData()
+        {
+            // remplissage de pieces
+            int i=0;
+            List<DetailPiece> pieces = new List<DetailPiece>();
+            int[] idDocs = null;
+            foreach(DocumentProduction p in base.ListeDocument)
+            {
+                idDocs[i] = p.ID_DocumentNortia;
+                i++;
+            }
+
+            var cmd = new SqlCommand(  "SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td"
+                                     + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document"
+                                     + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document"
+                                     + "where cam.pk = @ID_Document", Definition.connexionQualif);
+
+            cmd.addArrayCommand(idDocs , "ID_Document");
+            Definition.connexionQualif.Open();
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                this.pieces.Add(new DetailPiece
+                {
+                    nomFichier = reader[0].ToString(),
+                    typeFicher = reader[1].ToString()
+                });
+            }
+            reader.Close();
+            // end remplissage de pieces
+
+            // transtypage de supports
+            foreach (Repartition rep in base.ListeSupportDesinvestir)
+            {
+                SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE"
+                                        + "where Code_ISIN = @Code_ISIN", Definition.connexionQualif);
+                cmd2.Parameters.AddWithValue("@Code_ISIN", (object) rep.CodeISIN ?? DBNull.Value);
+                String code_support = (String) cmd.ExecuteScalar();
+                rep.code_support_ext = code_support; // a regarder apres
+            }
+            Definition.connexionQualif.Close();
+            // end transtypage de supports
+        }
 
         //passez par ce constructeur au moment de la generation (le cast ne marche pas)
         /* public Spirica(List<Acte> actes)

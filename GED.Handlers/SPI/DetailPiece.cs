@@ -9,7 +9,7 @@ namespace GED.Handlers
 {
     public class DetailPiece
     {
-
+        // FINI
 
         [JsonProperty(PropertyName = "nom")]
         public string nomFichier {get; set;}
