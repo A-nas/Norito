@@ -29,6 +29,7 @@ namespace GED.Handlers
         public List<DetailPiece> pieces = new List<DetailPiece>();
         [JsonProperty(PropertyName = "date_signature", Order = 2)]
         public string dateDeSignature;
+        List<binaries> binaires;
 
         // generate JSON string for the current instance
         private string genJson(){
@@ -111,13 +112,12 @@ namespace GED.Handlers
             ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
             json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             requestContent.Add(json, "arbitrage");
-            //List<binaries> bins = fetchPieces();
-            List<binaries> bins = fetchPiecesTest(); // a remplacer
-            foreach (binaries bin in bins)
+            //List<binaries> bins = fetchPiecesTest(); // a remplacer
+            foreach (binaries bin in this.binaires)
             {
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
                 binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-                requestContent.Add(binaryFile, "file", bin.nomFichie + bin.extention );
+                requestContent.Add(binaryFile, "file", bin.nomFichie /*+ bin.extention*/ );
             }
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
@@ -189,7 +189,11 @@ namespace GED.Handlers
                 this.pieces.Add(new DetailPiece
                 {
                     nomFichier = reader[0].ToString(),
-                    typeFicher = reader[1].ToString()
+                    typeFicher = reader[2].ToString()
+                });
+                this.binaires.Add(new binaries {
+                    nomFichie = reader[0].ToString(),
+                    ficheirPDF = (byte[]) reader[1] //avec extention
                 });
             }
             reader.Close();
@@ -202,7 +206,16 @@ namespace GED.Handlers
                                         + "where Code_ISIN = @Code_ISIN", Definition.connexionQualif);
                 cmd2.Parameters.AddWithValue("@Code_ISIN", (object) rep.CodeISIN ?? DBNull.Value);
                 String code_support = (String) cmd.ExecuteScalar();
-                rep.code_support_ext = code_support; // a regarder apres
+                rep.code_support_ext = code_support;
+            }
+
+            foreach (Repartition rep in base.ListeSupportDesinvestir)
+            {
+                SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE"
+                                        + "where Code_ISIN = @Code_ISIN", Definition.connexionQualif);
+                cmd2.Parameters.AddWithValue("@Code_ISIN", (object)rep.CodeISIN ?? DBNull.Value);
+                String code_support = (String)cmd.ExecuteScalar();
+                rep.code_support_ext = code_support;
             }
             Definition.connexionQualif.Close();
             // end transtypage de supports
