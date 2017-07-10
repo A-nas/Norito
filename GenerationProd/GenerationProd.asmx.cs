@@ -22,6 +22,7 @@ using System.Xml.Linq;
 using GED.Tools;
 // my usings
 using System.Web.Script.Serialization;
+using Newtonsoft.Json.Linq;
 
 namespace GenerationProd
 {
@@ -116,7 +117,15 @@ namespace GenerationProd
                 {
                     if(codeCompagnie == "SPI")
                     {
+                        List<Acte> listeActeSucces = new List<Acte>();
                         string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
+                        for(int i=0; i < respones.Length ; i++)
+                        {
+                            if ((string) JObject.Parse(respones[i])["success"] != "false") listeActeSucces.Add(listeActePDF[i]);
+                        }
+                        //Génération du Recap PDF
+                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, genererProdActe, classification))
+                            throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
                     }
                     else
                     {

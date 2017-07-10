@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json;
+using System.Data;
 // envoie SFTP
 using Renci.SshNet;
 using System.IO;
@@ -16,12 +17,15 @@ using System.Windows.Forms;
 // call web service (not tested yet)
 using System.Net.Http;
 using System.Net.Http.Headers;
+// for converting Object into byte[]
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 
 namespace GED.Handlers
 {
     // a revoir apres il y'a du code a optimiser *****
-    public class Spirica : Acte,IActe
+    public class Spirica : Acte, IActe
     {
         // proprietés suplementaires
         [JsonProperty(PropertyName = "support_saisie", Order = 5)]
@@ -33,7 +37,7 @@ namespace GED.Handlers
         List<binaries> binaires;
 
         // generate JSON string for the current instance
-        private string genJson(){
+        private string genJson() {
             JsonSerializerSettings jsonSetting = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -44,13 +48,14 @@ namespace GED.Handlers
         }
 
 
+        
         // fetch for all files including name,extension,binaries for the current (this) "NumContrat"
-        private List<binaries> fetchPieces(){
+        private List<binaries> fetchPieces() {
 
             List<binaries> bins = new List<binaries>();
             SqlConnection con = Definition.connexion;
             SqlCommand cmd = new SqlCommand("select [Nom],[Extension],[Datas] from pli where CleSalesForce = @id_contrat", con);
-            cmd.Parameters.AddWithValue("@id_contrat", (Object) this.ReferenceInterne ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@id_contrat", (Object)this.ReferenceInterne ?? DBNull.Value);
             con.Open();
             SqlDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -59,7 +64,7 @@ namespace GED.Handlers
                 {
                     nomFichie = reader[0].ToString(),
                     extention = reader[1].ToString(),
-                    ficheirPDF = (byte[]) reader[2]
+                    ficheirPDF = (byte[])reader[2]
                 });
             }
             reader.Close();
@@ -68,8 +73,10 @@ namespace GED.Handlers
         }
 
 
+
+        /*
         //cette focntion se base sur le jeux de tests crée, elle attache des pieces statiques
-        private List<binaries> fetchPiecesTest(){
+        private List<binaries> fetchPiecesTest() {
 
             List<binaries> bins = new List<binaries>();
             // attachement des fichier de bases
@@ -86,16 +93,16 @@ namespace GED.Handlers
                 ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
             });
             // attachement d'avenant en cas d'avenant attaché
-            if (this.ReferenceInterne == "TEST_FINAL01" || this.ReferenceInterne == "TEST_FINAL02"){
+            if (this.ReferenceInterne == "TEST_FINAL01" || this.ReferenceInterne == "TEST_FINAL02") {
                 bins.Add(new binaries
                 {
                     nomFichie = "avenant_support",
                     extention = ".pdf",
                     ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
-            });
+                });
             }
             return bins;
-        }
+        }*/
 
 
         // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
@@ -104,7 +111,7 @@ namespace GED.Handlers
             // preparing request HEADERS
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
-            byte[] Basic_Auth = Encoding.ASCII.GetBytes(Definition.id+":"+Definition.pass); // tester cet appel je vais pas y revenir une autre fois.
+            byte[] Basic_Auth = Encoding.ASCII.GetBytes(Definition.id + ":" + Definition.pass); // tester cet appel je vais pas y revenir une autre fois.
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Basic_Auth));
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
@@ -118,7 +125,7 @@ namespace GED.Handlers
             {
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
                 binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-                requestContent.Add(binaryFile, "file", bin.nomFichie /*+ bin.extention*/ );
+                requestContent.Add(binaryFile, "file", bin.nomFichie + bin.extention );
             }
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
@@ -137,7 +144,7 @@ namespace GED.Handlers
         public Spirica() { }
 
         // pour passse
-        public Spirica(Acte acte){
+        public Spirica(Acte acte) {
 
             this.NomType = acte.NomType;
             this.NomActeAdministratif = acte.NomActeAdministratif;
@@ -151,8 +158,8 @@ namespace GED.Handlers
             this.Frais = acte.Frais;
             this.ID_ProfilCompagnie = acte.ID_ProfilCompagnie;
             this.NomEnveloppe = acte.NomEnveloppe;
-            this.ListeSupportDesinvestir = acte.ListeSupportDesinvestir; // transtyper ca
-            this.ListeSupportInvestir = acte.ListeSupportInvestir;       // *** ca aussi
+            this.ListeSupportDesinvestir = acte.ListeSupportDesinvestir;
+            this.ListeSupportInvestir = acte.ListeSupportInvestir;
             this.ListeDocument = acte.ListeDocument;
             this.IsTraitementEdi = acte.IsTraitementEdi;
             this.DateCreation = acte.DateCreation;
@@ -160,67 +167,87 @@ namespace GED.Handlers
             this.Commentaire = acte.Commentaire;
             this.InvestissementImmediat = acte.InvestissementImmediat;
             this.Regul = acte.Regul;
-            this.dateDeSignature = DateEnvoiProduction.ToString("dd/M/yyyy");
+            this.dateDeSignature = DateEnvoiProduction.ToString("dd/MM/yyyy");
+            this.binaires = new List<binaries>();
             //alimenter les props manquées
             fillData();
-            }
+        }
 
         private void fillData()
         {
             // remplissage de pieces
-            int i=0;
+            int i = 0;
             List<DetailPiece> pieces = new List<DetailPiece>();
-            int[] idDocs = null;
-            foreach(DocumentProduction p in base.ListeDocument)
+            int[] idDocs = new int[base.ListeDocument.Count()];
+            foreach (DocumentProduction p in base.ListeDocument)
             {
                 idDocs[i] = p.ID_DocumentNortia;
                 i++;
             }
 
-            var cmd = new SqlCommand(  "SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td"
-                                     + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document"
-                                     + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document"
-                                     + "where cam.pk = @ID_Document", Definition.connexionQualif);
+            var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td "
+                                     + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
+                                     + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
+                                     + "where cam.pk in ({ID_Document}) ", Definition.connexionQualif);
 
-            cmd.addArrayCommand(idDocs , "ID_Document");
+            cmd.addArrayCommand(idDocs, "ID_Document");
             Definition.connexionQualif.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                this.pieces.Add(new DetailPiece
+            try {
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    nomFichier = reader[0].ToString(),
-                    typeFicher = reader[2].ToString()
-                });
-                this.binaires.Add(new binaries {
-                    nomFichie = reader[0].ToString(),
-                    ficheirPDF = (byte[]) reader[1] //avec extention
-                });
-            }
-            reader.Close();
+                    this.pieces.Add(new DetailPiece
+                    {
+                        nomFichier = reader[0].ToString(),
+                        typeFicher = reader[2].ToString()
+                    });
+                    this.binaires.Add(new binaries {
+                        nomFichie = reader[0].ToString(),
+                        ficheirPDF = (byte[])reader[1]
+                    });
+                }
+                reader.Close();
+
+            } catch(Exception ex) { }
+
+
             // end remplissage de pieces
-
+            /*
             // transtypage de supports
-            foreach (Repartition rep in base.ListeSupportDesinvestir)
-            {
-                SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE"
-                                        + "where Code_ISIN = @Code_ISIN", Definition.connexionQualif);
-                cmd2.Parameters.AddWithValue("@Code_ISIN", (object) rep.CodeISIN ?? DBNull.Value);
-                String code_support = (String) cmd.ExecuteScalar();
-                rep.code_support_ext = code_support;
-            }
+            SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
+                        + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
+            cmd2.Parameters.AddWithValue("@Code_ISIN", SqlDbType.Text);
 
             foreach (Repartition rep in base.ListeSupportDesinvestir)
             {
-                SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE"
-                                        + "where Code_ISIN = @Code_ISIN", Definition.connexionQualif);
-                cmd2.Parameters.AddWithValue("@Code_ISIN", (object)rep.CodeISIN ?? DBNull.Value);
-                String code_support = (String)cmd.ExecuteScalar();
+                cmd2.Parameters["@Code_ISIN"].Value = rep.CodeISIN;
+                String code_support = (String) cmd2.ExecuteScalar();
                 rep.code_support_ext = code_support;
             }
+
+            foreach (Repartition rep in base.ListeSupportInvestir)
+            {
+                cmd2.Parameters["@Code_ISIN"].Value = rep.CodeISIN;
+                String code_support = (String)cmd2.ExecuteScalar();
+                rep.code_support_ext = code_support;
+            }*/
             Definition.connexionQualif.Close();
             // end transtypage de supports
         }
+
+        private byte[] ToBytes(object obj)
+        {
+                if (obj == null)
+                    return null;
+                BinaryFormatter bf = new BinaryFormatter();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bf.Serialize(ms, obj);
+                    return ms.ToArray();
+                }
+        }
+
+
 
     }
 }

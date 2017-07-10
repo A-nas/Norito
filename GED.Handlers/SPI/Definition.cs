@@ -26,7 +26,7 @@ namespace GED.Handlers
         public static readonly string remotePath = "//SPIRICA//"; //sftp://u87840885@home663743708.1and1-data.host/SPIRICA
 
         // SPIRICA SERIALIZABLE PROPERTIES
-        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type", "date_signature" };
+        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type", "date_signature", "taux_frais_deroge" };
 
         // DATABASE STRING
         public static readonly SqlConnection connexion = new SqlConnection("data source=192.168.1.2\\SQL2005DEV;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");
@@ -51,26 +51,26 @@ namespace GED.Handlers
             
             List<Acte> la = new List<Acte>();
             // sub object
-            {
+            { // 3 supports qui existe sur la table transtypage et qui necessie un avenant
                 Repartition rep01 = new Repartition
                 {
-                    CodeISIN = "NL0000235190",
+                    code_support_ext = "FR0000284424",
                     TypeRepartition = "%",
-                    ValeurRepartition = 10
+                    ValeurRepartition = 70
                 };
 
                 Repartition rep02 = new Repartition
                 {
-                    CodeISIN = "FR0010220475",
+                    code_support_ext = "FR0010318949",
                     TypeRepartition = "%",
-                    ValeurRepartition = 60
+                    ValeurRepartition = 100
                 };
 
                 Repartition rep03 = new Repartition
                 {
-                    CodeISIN = "LU0323134006",
+                    code_support_ext = "FR0010207027",
                     TypeRepartition = "%",
-                    ValeurRepartition = 40
+                    ValeurRepartition = 70
                 };
 
                 DocumentProduction doc01 = new DocumentProduction
@@ -81,7 +81,7 @@ namespace GED.Handlers
 
                 DocumentProduction doc02 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 890371,
+                    ID_DocumentNortia = 38391,
                     ID_DocumentSalesForce = "idSalesForce"
                 };
                 //==
@@ -112,8 +112,8 @@ namespace GED.Handlers
                     ListeSupportInvestir = { rep02, rep03 },
                     Commentaire = "un commentaire",
                     //pieces = { piece01, piece02, piece03 },
-                    //ListeDocument = { doc01, doc02 }
-                    NumContrat = "113100096"
+                    ListeDocument = { doc01, doc02 },
+                    NumContrat = "113100096",
                 });
             }
 

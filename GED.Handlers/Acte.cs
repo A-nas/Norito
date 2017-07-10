@@ -34,7 +34,6 @@ namespace GED.Handlers
         public bool IsTraitementEdi { get; set; }
         public DateTime DateCreation { get; set; }
         public DateTime DateAcquisition { get; set; }
-        [JsonProperty(PropertyName = "date_signature", Order = 2)]
         public DateTime DateEnvoiProduction { get; set; }
         [JsonProperty(PropertyName = "commentaire", Order = 6)]
         public string Commentaire { get; set; }
@@ -53,6 +52,8 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
+            // POUR TESTER
+            DateEnvoiProduction = System.DateTime.Now.Date;
         }
 
         public string Get_ID_ProfilCompagnieCA()

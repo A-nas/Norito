@@ -414,7 +414,7 @@ namespace Tests.Interfaces
         private void button5_Click(object sender, EventArgs e)
         {
             //check wether file has uploaded
-            Spirica.showFiles(); // default directory is => /spirica/
+            //Spirica.showFiles(); // default directory is => /spirica/
         }
 
         private void progressBar1_Click(object sender, EventArgs e)
@@ -597,6 +597,9 @@ namespace Tests.Interfaces
 
         }
 
+
+
+        //a enlever
         private void button9_Click(object sender, EventArgs e)
         {
             // SUPPORTS TABLE FILL !!
@@ -623,7 +626,6 @@ namespace Tests.Interfaces
                                 command.ExecuteNonQuery();
                         }
                 }
-                MessageBox.Show(i.ToString());
                 Definition.connexionQualif.Close();
             }
             catch(Exception ex) { }
