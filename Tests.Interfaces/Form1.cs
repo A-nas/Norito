@@ -21,6 +21,8 @@ using System.Net;
 using System.Security.Cryptography.X509Certificates;
 //for inserting data into sql server
 using System.Data.SqlClient;
+//Json read
+using Newtonsoft.Json.Linq;
 
 namespace Tests.Interfaces
 {
@@ -581,7 +583,10 @@ namespace Tests.Interfaces
             // liste des actes attendues
             List<Acte> actes = Definition.GetListeActes();
             string[] respones = await Production.getInstance().envoyerProd(actes);
-            
+            List<Acte> listeActeSucces = new List<Acte>();
+            for (int i = 0; i < respones.Length; i++)
+                 if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) listeActeSucces.Add(actes[i]);
+               
             /*List<Acte> actes = Definition.GetListeActes();
                 // prod
                 int nombreActes = actes.Count();
@@ -592,7 +597,7 @@ namespace Tests.Interfaces
                 //IActe acteprod = (IActe) actes[i]; // cast avec du code 
                 response[i] = (await acteprod.sendProd());
             }*/
-             
+
 
 
         }

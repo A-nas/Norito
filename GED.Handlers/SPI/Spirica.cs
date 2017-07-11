@@ -48,7 +48,7 @@ namespace GED.Handlers
         }
 
 
-        
+        /*
         // fetch for all files including name,extension,binaries for the current (this) "NumContrat"
         private List<binaries> fetchPieces() {
 
@@ -70,7 +70,7 @@ namespace GED.Handlers
             reader.Close();
             con.Close();
             return bins;
-        }
+        }*/
 
 
 
@@ -137,9 +137,9 @@ namespace GED.Handlers
 
         //#############################################################################################################################//
 
-
+        /*
         // pointeur de fonction PreProcessInformation appelé quand l'envoie asynchrone est fini
-        private delegate void finishTask(SftpClient cli, FileStream fs, IAsyncResult ar);
+        private delegate void finishTask(SftpClient cli, FileStream fs, IAsyncResult ar);*/
 
         public Spirica() { }
 
@@ -212,7 +212,7 @@ namespace GED.Handlers
 
 
             // end remplissage de pieces
-            /*
+            
             // transtypage de supports
             SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
                         + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
@@ -230,7 +230,7 @@ namespace GED.Handlers
                 cmd2.Parameters["@Code_ISIN"].Value = rep.CodeISIN;
                 String code_support = (String)cmd2.ExecuteScalar();
                 rep.code_support_ext = code_support;
-            }*/
+            }
             Definition.connexionQualif.Close();
             // end transtypage de supports
         }

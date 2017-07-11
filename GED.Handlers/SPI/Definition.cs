@@ -54,23 +54,23 @@ namespace GED.Handlers
             { // 3 supports qui existe sur la table transtypage et qui necessie un avenant
                 Repartition rep01 = new Repartition
                 {
-                    code_support_ext = "FR0000284424",
+                    CodeISIN = "FEURO",
                     TypeRepartition = "%",
                     ValeurRepartition = 70
                 };
 
                 Repartition rep02 = new Repartition
                 {
-                    code_support_ext = "FR0010318949",
+                    CodeISIN = "SCPI00003719",
                     TypeRepartition = "%",
                     ValeurRepartition = 100
                 };
 
                 Repartition rep03 = new Repartition
                 {
-                    code_support_ext = "FR0010207027",
+                    CodeISIN = "EURODIFFPRI",
                     TypeRepartition = "%",
-                    ValeurRepartition = 70
+                    ValeurRepartition = 50
                 };
 
                 DocumentProduction doc01 = new DocumentProduction
@@ -109,7 +109,7 @@ namespace GED.Handlers
                     ReferenceInterne = "TEST_FINAL01",
                     Frais = 0f,
                     ListeSupportDesinvestir = { rep01 },
-                    ListeSupportInvestir = { rep02, rep03 },
+                    ListeSupportInvestir = { rep02/*, rep03*/ },
                     Commentaire = "un commentaire",
                     //pieces = { piece01, piece02, piece03 },
                     ListeDocument = { doc01, doc02 },

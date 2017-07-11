@@ -114,21 +114,7 @@ namespace GenerationProd
                 }
 
                 if (listeActePDF.Count > 0)
-                {
-                    if(codeCompagnie == "SPI")
-                    {
-                        List<Acte> listeActeSucces = new List<Acte>();
-                        string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
-                        for(int i=0; i < respones.Length ; i++)
-                        {
-                            if ((string) JObject.Parse(respones[i])["success"] != "false") listeActeSucces.Add(listeActePDF[i]);
-                        }
-                        //Génération du Recap PDF
-                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, genererProdActe, classification))
-                            throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
-                    }
-                    else
-                    {
+                {  
                         //Génération de la Prod PDF
                         if(!(genererProdActe?GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification) :GenererProdPDF(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, classification)))
                             throw new Exception("Erreur lors de la génération de la production PDF (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
@@ -136,23 +122,35 @@ namespace GenerationProd
                         //Génération du Recap PDF
                         if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi,false, genererProdActe, classification))
                             throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
-                    }
-
                 }
 
                 if (listeActeTraitementEdi.Count > 0)
                 {
-                    //Génération de l'XML
-                    if (!GenererProdXML(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, genererProdActe, classification))
-                        throw new Exception("Erreur lors de la génération de la production XML EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
- 
-                    //Génération de la Prod PDF
-                    if(!(genererProdActe?GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi,true, classification) :GenererProdPDF(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi,true, classification)))
-                        throw new Exception("Erreur lors de la génération de la production PDF EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    if (codeCompagnie == "SPI")
+                    {
+                        List<Acte> listeActeSucces = new List<Acte>();
+                        string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
+                        for (int i = 0; i < respones.Length; i++)
+                        {
+                            if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) listeActeSucces.Add(listeActePDF[i]);
+                        }
+                        //Génération du Recap PDF
+                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, genererProdActe, classification))
+                            throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    }else
+                    {
+                        //Génération de l'XML
+                        if (!GenererProdXML(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, genererProdActe, classification))
+                            throw new Exception("Erreur lors de la génération de la production XML EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
 
-                    //Génération du Recap PDF
-                    if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeTraitementEdi,typeEnvoi, true, genererProdActe, classification))
-                        throw new Exception("Erreur lors de la génération du recap de production EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());      
+                        //Génération de la Prod PDF
+                        if (!(genererProdActe ? GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, true, classification) : GenererProdPDF(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, true, classification)))
+                            throw new Exception("Erreur lors de la génération de la production PDF EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+
+                        //Génération du Recap PDF
+                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, true, genererProdActe, classification))
+                            throw new Exception("Erreur lors de la génération du recap de production EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                    }
                 }
 
                 retour = true;
