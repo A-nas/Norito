@@ -8,14 +8,25 @@ namespace GED.Handlers
 {
     public class Production
     {
-        public static List<string> responses;
+        //public static List<string> responses;
         private static Production refInstance;
+        public static Dictionary<string, string> TRANSTYPE;
 
         public static Production getInstance(){
             if(refInstance == null){
                 refInstance = new Production{};
             }
             return refInstance;        
+        }
+
+        private Production()
+        {
+            TRANSTYPE = new Dictionary<string, string>();
+
+            SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
+            + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
+            // a completer ce soir !!
+
         }
 
         //DEPRECATED
