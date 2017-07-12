@@ -102,7 +102,6 @@ namespace GED.Handlers
                     nomFichier = "avenant_support.pdf",
                     typeFicher = "avenant_support" // penser a la modification des types
                 };
-                //==
 
                 la.Add(new Acte
                 {
@@ -120,7 +119,7 @@ namespace GED.Handlers
             //deuxiemmme acte
             // sub object
             {
-                Repartition rep01 = new Repartition
+                /*Repartition rep01 = new Repartition
                 {
                     CodeISIN = "CARPAT",
                     TypeRepartition = "%",
@@ -132,17 +131,31 @@ namespace GED.Handlers
                     CodeISIN = "PATRIMMOCO",
                     TypeRepartition = "%",
                     ValeurRepartition = 50
+                };*/
+
+                Repartition rep01 = new Repartition
+                {
+                    CodeISIN = "FEURO",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 50
+                };
+
+                Repartition rep02 = new Repartition
+                {
+                    CodeISIN = "SCPI00003719",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 50
                 };
 
                 DocumentProduction doc01 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 111,
+                    ID_DocumentNortia = 890350,
                     ID_DocumentSalesForce = "idSalesForce2"
                 };
 
                 DocumentProduction doc02 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 222,
+                    ID_DocumentNortia = 38391,
                     ID_DocumentSalesForce = "idSalesForce1"
                 };
 
@@ -171,7 +184,7 @@ namespace GED.Handlers
                     ListeSupportInvestir = { rep01 , rep02 },
                     Commentaire = "un commentaire",
                     //pieces = { piece01, piece02, piece03 },
-                    //ListeDocument = { doc01, doc02 },
+                    ListeDocument = { doc01, doc02 },
                     NumContrat = "113100096"
                 });
             }
@@ -180,29 +193,36 @@ namespace GED.Handlers
             //3eme acte
             // sub object
             {
-                Repartition rep01 = new Repartition
-                {
-                    CodeISIN = "PATRIMMOCO",
-                    TypeRepartition = "%",
-                    ValeurRepartition = 50
-                };
+                /* Repartition rep01 = new Repartition
+                 {
+                     CodeISIN = "PATRIMMOCO",
+                     TypeRepartition = "%",
+                     ValeurRepartition = 50
+                 };
+
+                 Repartition rep02 = new Repartition
+                 {
+                     CodeISIN = "HAASGPIF100",
+                     TypeRepartition = "%",
+                     ValeurRepartition = 100
+                 };*/
 
                 Repartition rep02 = new Repartition
                 {
-                    CodeISIN = "HAASGPIF100",
+                    CodeISIN = "FEURO",
                     TypeRepartition = "%",
                     ValeurRepartition = 100
                 };
 
                 DocumentProduction doc01 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 111,
+                    ID_DocumentNortia = 890350,
                     ID_DocumentSalesForce = "idSalesForce2"
                 };
 
                 DocumentProduction doc02 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 222,
+                    ID_DocumentNortia = 38391,
                     ID_DocumentSalesForce = "idSalesForce1"
                 };
 
@@ -223,9 +243,9 @@ namespace GED.Handlers
                 {
                     ReferenceInterne = "TEST_FINAL03",
                     ListeSupportInvestir = { rep02 },
-                    ListeSupportDesinvestir = { rep01 },
+                    //ListeSupportDesinvestir = { rep01 },
                     Commentaire = "un commentaire",
-                    //ListeDocument = { doc01, doc02 },
+                    ListeDocument = { doc01, doc02 },
                     Frais = 0.5f,
                     //pieces = { piece01, piece02 },
                     NumContrat = "113100096"
@@ -238,27 +258,27 @@ namespace GED.Handlers
             {
                 Repartition rep01 = new Repartition
                 {
-                    CodeISIN = "FONDSGENERAL",
+                    CodeISIN = "FEURO",
                     TypeRepartition = "%",
-                    ValeurRepartition = 50
+                    ValeurRepartition = 100
                 };
 
-                Repartition rep02 = new Repartition
+                /*Repartition rep02 = new Repartition
                 {
                     CodeISIN = "ACCOMO",
                     TypeRepartition = "%",
                     ValeurRepartition = 50
-                };
+                };*/
 
                 DocumentProduction doc01 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 111,
+                    ID_DocumentNortia = 890350,
                     ID_DocumentSalesForce = "idSalesForce2"
                 };
 
                 DocumentProduction doc02 = new DocumentProduction
                 {
-                    ID_DocumentNortia = 222,
+                    ID_DocumentNortia = 38391,
                     ID_DocumentSalesForce = "idSalesForce1"
                 };
 
@@ -278,10 +298,11 @@ namespace GED.Handlers
                 la.Add(new Acte
                 {
                     ReferenceInterne = "TEST_FINAL04",
-                    ListeSupportInvestir = { rep01, rep02 },
+                    ListeSupportInvestir = { rep01 },
                     Commentaire = "un commentaire",
+                    Frais = 0.5f,
                     //pieces = { piece01, piece02 },
-                    //ListeDocument = { doc01, doc02 },
+                    ListeDocument = { doc01, doc02 },
                     NumContrat = "113100096"
                 });
             }

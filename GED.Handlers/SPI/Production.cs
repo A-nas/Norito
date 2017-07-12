@@ -3,30 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
+
+
 
 namespace GED.Handlers
 {
+    //SINGLETON
     public class Production
     {
         //public static List<string> responses;
         private static Production refInstance;
-        public static Dictionary<string, string> TRANSTYPE;
+        public Dictionary<string, string> TRANSTYPE;
 
         public static Production getInstance(){
-            if(refInstance == null){
-                refInstance = new Production{};
+            Production refInstance =  null;
+            try {
+                if (refInstance == null)
+                {
+                    refInstance = new Production();
+                }
+                return refInstance;
+            } catch(Exception ex)
+            {
+                Console.WriteLine("exception throwed ==> {0}", ex.Message);
             }
-            return refInstance;        
+            return refInstance;
         }
 
         private Production()
         {
             TRANSTYPE = new Dictionary<string, string>();
 
-            SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
-            + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
-            // add dictionnary
-
+            SqlCommand cmd = new SqlCommand("SELECT DISTINCT(Code_ISIN),Code_Support FROM SUPPORT_TRANSTYPE " , Definition.connexionQualif);
+            Definition.connexionQualif.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+                TRANSTYPE.Add(dr[0].ToString() , dr[1].ToString());
+            Definition.connexionQualif.Close();
         }
 
         //DEPRECATED

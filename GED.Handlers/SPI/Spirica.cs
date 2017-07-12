@@ -130,7 +130,7 @@ namespace GED.Handlers
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
             string content = await message.Content.ReadAsStringAsync();
-            //here We are waiting until JSON response !
+            //here We are waiting until we get the JSON response !
             return content;
         }
 
@@ -207,30 +207,16 @@ namespace GED.Handlers
                     });
                 }
                 reader.Close();
-
+                Definition.connexionQualif.Close();
             } catch(Exception ex) { }
-
-
             // end remplissage de pieces
-            
+
             // transtypage de supports
-            SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
-                        + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
-            cmd2.Parameters.AddWithValue("@Code_ISIN", SqlDbType.Text);
+            var instance = Production.getInstance();
+            Dictionary<string,string> dicto = instance.TRANSTYPE;
+            foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir))
+                rep.code_support_ext = dicto[rep.CodeISIN];
 
-            foreach (Repartition rep in base.ListeSupportDesinvestir)
-            {
-                cmd2.Parameters["@Code_ISIN"].Value = rep.CodeISIN;
-                String code_support = (String) cmd2.ExecuteScalar();
-                rep.code_support_ext = code_support;
-            }
-
-            foreach (Repartition rep in base.ListeSupportInvestir)
-            {
-                cmd2.Parameters["@Code_ISIN"].Value = rep.CodeISIN;
-                String code_support = (String)cmd2.ExecuteScalar();
-                rep.code_support_ext = code_support;
-            }
             Definition.connexionQualif.Close();
             // end transtypage de supports
         }
