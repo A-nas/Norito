@@ -25,7 +25,7 @@ namespace GED.Handlers
 
             SqlCommand cmd2 = new SqlCommand("SELECT Code_Support FROM SUPPORT_TRANSTYPE "
             + "where Code_ISIN = @Code_ISIN ", Definition.connexionQualif);
-            // a completer ce soir !!
+            // add dictionnary
 
         }
 
