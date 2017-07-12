@@ -32,6 +32,7 @@ namespace GED.Handlers
         public static readonly SqlConnection connexion = new SqlConnection("data source=192.168.1.2\\SQL2005DEV;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");
         //public static readonly SqlConnection connexionProd = new SqlConnection("data source=192.168.1.5\\DW;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");
         public static readonly SqlConnection connexionQualif = new SqlConnection("data source=192.168.1.2\\SQL2005qualif;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");
+        public static readonly SqlConnection connexionQualifDW = new SqlConnection("data source=192.168.1.2\\SQL2005qualif;Database=DWNortia;Uid=sa;password=NICKEL2000;");
 
         //THIS IS FOR TEST
         private static ProgressBar progBar;

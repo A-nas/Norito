@@ -185,38 +185,47 @@ namespace GED.Handlers
                 i++;
             }
 
+
+            if(idDocs.Length > 0)
+            {
             var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td "
                                      + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
                                      + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
                                      + "where cam.pk in ({ID_Document}) ", Definition.connexionQualif);
 
-            cmd.addArrayCommand(idDocs, "ID_Document");
-            Definition.connexionQualif.Open();
-            try {
-                SqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    this.pieces.Add(new DetailPiece
+                cmd.addArrayCommand(idDocs, "ID_Document");
+                Definition.connexionQualif.Open();
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
                     {
-                        nomFichier = reader[0].ToString(),
-                        typeFicher = reader[2].ToString()
-                    });
-                    this.binaires.Add(new binaries {
-                        nomFichie = reader[0].ToString(),
-                        ficheirPDF = (byte[])reader[1]
-                    });
-                }
-                reader.Close();
-                Definition.connexionQualif.Close();
-            } catch(Exception ex) { }
+                        this.pieces.Add(new DetailPiece
+                        {
+                            nomFichier = reader[0].ToString(),
+                            typeFicher = reader[2].ToString()
+                        });
+                        this.binaires.Add(new binaries
+                        {
+                            nomFichie = reader[0].ToString(),
+                            ficheirPDF = (byte[])reader[1]
+                        });
+                    }
+                    reader.Close();
+                    Definition.connexionQualif.Close();
+            }
+
             // end remplissage de pieces
 
             // transtypage de supports
             var instance = Production.getInstance();
             Dictionary<string,string> dicto = instance.TRANSTYPE;
-            foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir))
-                rep.code_support_ext = dicto[rep.CodeISIN];
-
+            try
+            {
+                foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir))
+                    rep.code_support_ext = dicto[rep.CodeISIN];
+            }catch(Exception ex){
+                //basicly "support" dont exist ... must be careful abt that
+                throw new Exception("exception levée au niveau du transtypage des supports", ex);
+            }
             Definition.connexionQualif.Close();
             // end transtypage de supports
         }

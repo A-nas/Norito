@@ -35,12 +35,12 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
 
-            SqlCommand cmd = new SqlCommand("SELECT DISTINCT(Code_ISIN),Code_Support FROM SUPPORT_TRANSTYPE " , Definition.connexionQualif);
-            Definition.connexionQualif.Open();
+            SqlCommand cmd = new SqlCommand("SELECT CodeISIN,CodeSupport_Cie FROM TCO_ForcageSupportsCies", Definition.connexionQualifDW);
+            Definition.connexionQualifDW.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString() , dr[1].ToString());
-            Definition.connexionQualif.Close();
+            Definition.connexionQualifDW.Close();
         }
 
         //DEPRECATED
@@ -56,7 +56,7 @@ namespace GED.Handlers
         {
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
-            for (int i = 0; i < nombreActes; i++)
+            for (int i = 2; i < nombreActes; i++)
             {
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);

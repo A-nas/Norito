@@ -35,8 +35,8 @@ namespace GenerationProd
 
     //NEW
     //[WebService(Namespace = "http://dev-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]      //DEV
-    //[WebService(Namespace = "http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //QUALIF
-    [WebService(Namespace = "http://extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //PROD
+    [WebService(Namespace = "http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //QUALIF
+    //[WebService(Namespace = "http://extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //PROD
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
     [System.ComponentModel.ToolboxItem(false)]
     // Pour autoriser l'appel de ce service Web depuis un script à l'aide d'ASP.NET AJAX, supprimez les marques de commentaire de la ligne suivante. 
@@ -131,11 +131,10 @@ namespace GenerationProd
                         List<Acte> listeActeSucces = new List<Acte>();
                         string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
                         for (int i = 0; i < respones.Length; i++)
-                        {
                             if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) listeActeSucces.Add(listeActePDF[i]);
-                        }
+
                         //Génération du Recap PDF
-                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, genererProdActe, classification))
+                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
                             throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
                     }else
                     {
