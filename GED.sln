@@ -62,6 +62,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopieProd", "CopieProd\CopieProd.csproj", "{D7DAEAE5-167C-4A61-B762-F05AC767800B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Interfaces", "Tests.Interfaces\Tests.Interfaces.csproj", "{3739C3A3-358B-4DC7-A734-7120222077C4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14133341-07F1-4531-8B77-FDB65BE28716} = {14133341-07F1-4531-8B77-FDB65BE28716}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuiviDeTransfer", "SuiviDeTransfer\SuiviDeTransfer.csproj", "{E9EC9AF3-7A77-4B8A-894F-EE2F6C750115}"
 EndProject

@@ -23,6 +23,7 @@ using GED.Tools;
 // my usings
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
+using GED.Handlers;
 
 namespace GenerationProd
 {
@@ -128,15 +129,30 @@ namespace GenerationProd
                 {
                     if (codeCompagnie == "SPI")
                     {
-                        List<Acte> listeActeSucces = new List<Acte>();
-                        string[] respones = await Production.getInstance().envoyerProd(listeActePDF);
-                        for (int i = 0; i < respones.Length; i++)
-                            if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) listeActeSucces.Add(listeActePDF[i]);
+                        try
+                        {
+                            Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA:: premier acte => " + listeActeTraitementEdi[0].ReferenceInterne);
+                            List<Acte> listeActeSucces = new List<Acte>();
+                            string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
 
-                        //Génération du Recap PDF
-                        if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
-                            throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
-                    }else
+                            for (int i = 0; i < respones.Length; i++)
+                            {
+                                Log.Trace(IDProd, Log.MESSAGE_INFO, respones[i]);
+                                if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) listeActeSucces.Add(listeActeTraitementEdi[i]);
+                            }
+
+                            if(listeActeSucces.Count() > 0)
+                            { //Génération du Recap PDF
+                                if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
+                                    throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                            }
+                           
+                        }catch (Exception ex) { Log.Trace(IDProd, Log.MESSAGE_INFO, ex.Message); }
+
+
+
+                    }
+                    else
                     {
                         //Génération de l'XML
                         if (!GenererProdXML(IDProd, codeCompagnie, laDate, listeActeTraitementEdi, typeEnvoi, genererProdActe, classification))
@@ -376,36 +392,7 @@ namespace GenerationProd
 
         protected static bool GenererProdXML(string IDProd, string codeCompagnie, DateTime dateGeneration, List<Acte> listeActe, string typeEnvoi = "", bool genererProdActe = false, string classification = "")
         {
-            bool retour = false; // a remettre a sa place
-            // my code
-            if (codeCompagnie == "SPI") // a changer apres avec l'instance de SPIRICA
-            {
-                try
-                {
-
-                    Log.Trace(IDProd, Log.MESSAGE_INFO, "Génération de la Prod JSON pour SPIRICA");
-                    //BEGIN
-                     //appeler la methode de generation du pdf
-                    //END
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-                    retour = false;
-                    Log.Trace(IDProd, Log.MESSAGE_ERROR, ex.Message);
-                }
-
-                return retour;
-
-
-            }
-            else
-            {
-                // AEP // 
-                // end my code
+                bool retour = false;
                 XDocument doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"));
 
                 try
@@ -548,7 +535,7 @@ namespace GenerationProd
                 }
 
                 return retour;
-               }
+               
             } 
             
 

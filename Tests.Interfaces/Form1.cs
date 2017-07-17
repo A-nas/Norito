@@ -638,5 +638,14 @@ namespace Tests.Interfaces
             
 
         }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            GenererProd.GenerationProdSoapClient test = new GenererProd.GenerationProdSoapClient();
+            test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
+            GenererProd.Acte a = new GenererProd.Acte();
+            //Definition.GetListeActes();
+            
+        }
     }
 }
