@@ -106,8 +106,8 @@ namespace GED.Handlers
 
 
         // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
-        public async Task<string> sendProd()
-        {
+        public async Task<string> sendProd(){
+
             // preparing request HEADERS
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
@@ -173,8 +173,7 @@ namespace GED.Handlers
             fillData();
         }
 
-        private void fillData()
-        {
+        private void fillData(){
             // remplissage de pieces
             int i = 0;
             List<DetailPiece> pieces = new List<DetailPiece>();

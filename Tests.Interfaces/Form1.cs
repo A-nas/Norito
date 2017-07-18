@@ -652,27 +652,29 @@ namespace Tests.Interfaces
                 {
                         CodeISIN = "FEURO",
                         TypeRepartition = "%",
-                        ValeurRepartition = 70
+                        ValeurRepartition = 100
                     };
 
                 GenererProd.Repartition rep02 = new GenererProd.Repartition
                 {
-                        CodeISIN = "IMPRFRP",
+                        CodeISIN = "FR0010549360",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 GenererProd.DocumentProduction doc01 = new GenererProd.DocumentProduction
                 {
-                        ID_DocumentNortia = 890350,
-                        ID_DocumentSalesForce = "idSalesForce"
-                    };
+                        ID_DocumentNortia = 1636287,
+                        ID_DocumentSalesForce = "a098E000003hgUxQAI",
+                        NbPage = 1
+                };
 
+                /*
                 GenererProd.DocumentProduction doc02 = new GenererProd.DocumentProduction
                 {
                         ID_DocumentNortia = 38391,
                         ID_DocumentSalesForce = "idSalesForce"
-                    };
+                    };*/
                 //remplissage
           
                 Sactes[0].ListeSupportDesinvestir = new GenererProd.Repartition[1];
@@ -684,18 +686,36 @@ namespace Tests.Interfaces
            
 
 
-                Sactes[0].ListeDocument = new GenererProd.DocumentProduction[2];
+                Sactes[0].ListeDocument = new GenererProd.DocumentProduction[1];
                 Sactes[0].ListeDocument[0] = new GenererProd.DocumentProduction();
-                Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
+               // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
-                Sactes[0].ListeDocument[1] = doc02;
+                //Sactes[0].ListeDocument[1] = doc02;
                 //
-                Sactes[0].ReferenceInterne = "TEST_FINAL01";
+                
                 Sactes[0].Frais = 0f;
                 Sactes[0].Commentaire = "un commentaire";
-                Sactes[0].NumContrat = "113100096";
+                
+                Sactes[0].NomType = "Arbitrage";
+                Sactes[0].NomActeAdministratif = "";
+                Sactes[0].ReferenceInterne = "ACT000406644";
+                Sactes[0].NomCompletSouscripteurs = "Myriam MINCHENEAU";
+                Sactes[0].NumContrat = "112900001";
+                Sactes[0].CodeApporteur = "NOR100062";
+                Sactes[0].NomApporteur = "PATRIMUM SAS";
+                Sactes[0].MontantBrut = 5787.81f;
+                Sactes[0].TypeFrais = "%";
+                Sactes[0].Frais = 1;
+                Sactes[0].ID_ProfilCompagnie = "";
+                Sactes[0].NomEnveloppe = "PRIVATE VIE";
                 Sactes[0].IsTraitementEdi = true;
-                }
+                Sactes[0].DateCreation = DateTime.Now; // supposed
+                Sactes[0].DateAcquisition = DateTime.Now;
+                Sactes[0].DateEnvoiProduction = DateTime.Now;
+                Sactes[0].Commentaire = "";
+                Sactes[0].InvestissementImmediat = false;
+                Sactes[0].Regul = true;
+            }
 
                 test.GenererProd("TEST", "SPI", Sactes, "Scan", true, "");
             /*
