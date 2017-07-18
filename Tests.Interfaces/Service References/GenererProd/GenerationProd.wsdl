@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx">
+      <s:element name="GenererProd">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="IDProd" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="codeCompagnie" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="listeActe" type="tns:ArrayOfActe" />
+            <s:element minOccurs="0" maxOccurs="1" name="typeEnvoi" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="genererProdActe" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="classification" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfActe">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Acte" nillable="true" type="tns:Acte" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Acte">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="NomType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomActeAdministratif" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceInterne" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomCompletSouscripteurs" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NumContrat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodeApporteur" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomApporteur" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MontantBrut" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeFrais" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Frais" type="s:float" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_ProfilCompagnie" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NomEnveloppe" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ListeSupportDesinvestir" type="tns:ArrayOfRepartition" />
+          <s:element minOccurs="0" maxOccurs="1" name="ListeSupportInvestir" type="tns:ArrayOfRepartition" />
+          <s:element minOccurs="0" maxOccurs="1" name="ListeDocument" type="tns:ArrayOfDocumentProduction" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsTraitementEdi" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateCreation" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateAcquisition" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateEnvoiProduction" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Commentaire" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="InvestissementImmediat" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="Regul" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfRepartition">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Repartition" nillable="true" type="tns:Repartition" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Repartition">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="code_support_ext" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CodeISIN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TypeRepartition" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ValeurRepartition" type="s:float" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDocumentProduction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DocumentProduction" nillable="true" type="tns:DocumentProduction" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DocumentProduction">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID_DocumentNortia" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="ID_DocumentSalesForce" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="NbPage" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GenererProdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GenererProdResult" type="tns:GenererProdResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="GenererProdResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="IDProd" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="codeRetour" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GenererProdSoapIn">
+    <wsdl:part name="parameters" element="tns:GenererProd" />
+  </wsdl:message>
+  <wsdl:message name="GenererProdSoapOut">
+    <wsdl:part name="parameters" element="tns:GenererProdResponse" />
+  </wsdl:message>
+  <wsdl:portType name="GenerationProdSoap">
+    <wsdl:operation name="GenererProd">
+      <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Génère la prod Nortia</wsdl:documentation>
+      <wsdl:input message="tns:GenererProdSoapIn" />
+      <wsdl:output message="tns:GenererProdSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GenerationProdSoap" type="tns:GenerationProdSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GenererProd">
+      <soap:operation soapAction="http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx/GenererProd" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="GenerationProdSoap12" type="tns:GenerationProdSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GenererProd">
+      <soap12:operation soapAction="http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx/GenererProd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GenerationProd">
+    <wsdl:port name="GenerationProdSoap" binding="tns:GenerationProdSoap">
+      <soap:address location="http://localhost:40757/GenerationProd.asmx" />
+    </wsdl:port>
+    <wsdl:port name="GenerationProdSoap12" binding="tns:GenerationProdSoap12">
+      <soap12:address location="http://localhost:40757/GenerationProd.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
