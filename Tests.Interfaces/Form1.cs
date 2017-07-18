@@ -641,10 +641,11 @@ namespace Tests.Interfaces
 
         private void button10_Click(object sender, EventArgs e)
         {
-            List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
+            //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
             GenererProd.GenerationProdSoapClient test = new GenererProd.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
-            GenererProd.Acte[] Sactes = new GenererProd.Acte[4];
+            GenererProd.Acte[] Sactes = new GenererProd.Acte[1];
+            Sactes[0] = new GenererProd.Acte();
                 // sub object
                 {
                 GenererProd.Repartition rep01 = new GenererProd.Repartition
@@ -656,7 +657,7 @@ namespace Tests.Interfaces
 
                 GenererProd.Repartition rep02 = new GenererProd.Repartition
                 {
-                        CodeISIN = "SCPI00003719",
+                        CodeISIN = "IMPRFRP",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
@@ -672,172 +673,190 @@ namespace Tests.Interfaces
                         ID_DocumentNortia = 38391,
                         ID_DocumentSalesForce = "idSalesForce"
                     };
-                            //remplissage
+                //remplissage
+          
+                Sactes[0].ListeSupportDesinvestir = new GenererProd.Repartition[1];
+                Sactes[0].ListeSupportInvestir = new GenererProd.Repartition[1];
                 Sactes[0].ListeSupportDesinvestir[0] = new GenererProd.Repartition();
-                Sactes[0].ListeSupportInvestir[1] = new GenererProd.Repartition();
+                Sactes[0].ListeSupportInvestir[0] = new GenererProd.Repartition();
                 Sactes[0].ListeSupportDesinvestir[0] = rep01;
-                Sactes[0].ListeSupportInvestir[1] = rep02
-                
+                Sactes[0].ListeSupportInvestir[0] = rep02;
+           
+
+
+                Sactes[0].ListeDocument = new GenererProd.DocumentProduction[2];
+                Sactes[0].ListeDocument[0] = new GenererProd.DocumentProduction();
+                Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
+                Sactes[0].ListeDocument[0] = doc01;
+                Sactes[0].ListeDocument[1] = doc02;
+                //
+                Sactes[0].ReferenceInterne = "TEST_FINAL01";
+                Sactes[0].Frais = 0f;
+                Sactes[0].Commentaire = "un commentaire";
+                Sactes[0].NumContrat = "113100096";
+                Sactes[0].IsTraitementEdi = true;
                 }
 
-                //deuxiemmme acte
-                // sub object
+                test.GenererProd("TEST", "SPI", Sactes, "Scan", true, "");
+            /*
+            //deuxiemmme acte
+            // sub object
+            {
+
+                Repartition rep01 = new Repartition
                 {
+                    CodeISIN = "FEURO",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 50
+                };
 
-                    Repartition rep01 = new Repartition
-                    {
-                        CodeISIN = "FEURO",
-                        TypeRepartition = "%",
-                        ValeurRepartition = 50
-                    };
-
-                    Repartition rep02 = new Repartition
-                    {
-                        CodeISIN = "SCPI00003719",
-                        TypeRepartition = "%",
-                        ValeurRepartition = 50
-                    };
-
-                    DocumentProduction doc01 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 890350,
-                        ID_DocumentSalesForce = "idSalesForce2"
-                    };
-
-                    DocumentProduction doc02 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 38391,
-                        ID_DocumentSalesForce = "idSalesForce1"
-                    };
-
-                    //==
-                    DetailPiece piece01 = new DetailPiece
-                    {
-                        nomFichier = "demande.pdf",
-                        typeFicher = "demande_arbitrage" // penser a la modification des types
-                    };
-
-                    DetailPiece piece02 = new DetailPiece
-                    {
-                        nomFichier = "dossier_arbitrage.pdf",
-                        typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
-                    };
-
-                    DetailPiece piece03 = new DetailPiece
-                    {
-                        nomFichier = "avenant_support.pdf",
-                        typeFicher = "avenant_support" // penser a la modification des types
-                    };
-                    //==
-                    la.Add(new Acte
-                    {
-                        ReferenceInterne = "TEST_FINAL02",
-                        ListeSupportInvestir = { rep01, rep02 },
-                        Commentaire = "un commentaire",
-                        //pieces = { piece01, piece02, piece03 },
-                        ListeDocument = { doc01, doc02 },
-                        NumContrat = "113100096"
-                    });
-                }
-
-
-                //3eme acte
-                // sub object
+                Repartition rep02 = new Repartition
                 {
+                    CodeISIN = "SCPI00003719",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 50
+                };
 
-                    Repartition rep02 = new Repartition
-                    {
-                        CodeISIN = "FEURO",
-                        TypeRepartition = "%",
-                        ValeurRepartition = 100
-                    };
-
-                    DocumentProduction doc01 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 890350,
-                        ID_DocumentSalesForce = "idSalesForce2"
-                    };
-
-                    DocumentProduction doc02 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 38391,
-                        ID_DocumentSalesForce = "idSalesForce1"
-                    };
-
-                    //==
-                    DetailPiece piece01 = new DetailPiece
-                    {
-                        nomFichier = "demande.pdf",
-                        typeFicher = "demande_arbitrage" // penser a la modification des types
-                    };
-
-                    DetailPiece piece02 = new DetailPiece
-                    {
-                        nomFichier = "dossier_arbitrage.pdf",
-                        typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
-                    };
-                    //==
-                    la.Add(new Acte
-                    {
-                        ReferenceInterne = "TEST_FINAL03",
-                        ListeSupportInvestir = { rep02 },
-                        //ListeSupportDesinvestir = { rep01 },
-                        Commentaire = "un commentaire",
-                        ListeDocument = { doc01, doc02 },
-                        Frais = 0.5f,
-                        //pieces = { piece01, piece02 },
-                        NumContrat = "113100096"
-                    });
-                }
-
-
-                //4eme acte
-                // sub object
+                DocumentProduction doc01 = new DocumentProduction
                 {
-                    Repartition rep01 = new Repartition
-                    {
-                        CodeISIN = "FEURO",
-                        TypeRepartition = "%",
-                        ValeurRepartition = 100
-                    };
+                    ID_DocumentNortia = 890350,
+                    ID_DocumentSalesForce = "idSalesForce2"
+                };
 
-                    DocumentProduction doc01 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 890350,
-                        ID_DocumentSalesForce = "idSalesForce2"
-                    };
+                DocumentProduction doc02 = new DocumentProduction
+                {
+                    ID_DocumentNortia = 38391,
+                    ID_DocumentSalesForce = "idSalesForce1"
+                };
 
-                    DocumentProduction doc02 = new DocumentProduction
-                    {
-                        ID_DocumentNortia = 38391,
-                        ID_DocumentSalesForce = "idSalesForce1"
-                    };
+                //==
+                DetailPiece piece01 = new DetailPiece
+                {
+                    nomFichier = "demande.pdf",
+                    typeFicher = "demande_arbitrage" // penser a la modification des types
+                };
 
-                    //==
-                    DetailPiece piece01 = new DetailPiece
-                    {
-                        nomFichier = "demande.pdf",
-                        typeFicher = "demande_arbitrage" // penser a la modification des types
-                    };
+                DetailPiece piece02 = new DetailPiece
+                {
+                    nomFichier = "dossier_arbitrage.pdf",
+                    typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
+                };
 
-                    DetailPiece piece02 = new DetailPiece
-                    {
-                        nomFichier = "dossier_arbitrage.pdf",
-                        typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
-                    };
-                    //==
-                    la.Add(new Acte
-                    {
-                        ReferenceInterne = "TEST_FINAL04",
-                        ListeSupportInvestir = { rep01 },
-                        Commentaire = "un commentaire",
-                        Frais = 0.5f,
-                        //pieces = { piece01, piece02 },
-                        ListeDocument = { doc01, doc02 },
-                        NumContrat = "113100096"
-                    });
-                }
-            
+                DetailPiece piece03 = new DetailPiece
+                {
+                    nomFichier = "avenant_support.pdf",
+                    typeFicher = "avenant_support" // penser a la modification des types
+                };
+                //==
+                la.Add(new Acte
+                {
+                    ReferenceInterne = "TEST_FINAL02",
+                    ListeSupportInvestir = { rep01, rep02 },
+                    Commentaire = "un commentaire",
+                    //pieces = { piece01, piece02, piece03 },
+                    ListeDocument = { doc01, doc02 },
+                    NumContrat = "113100096"
+                });
+            }
+
+
+            //3eme acte
+            // sub object
+            {
+
+                Repartition rep02 = new Repartition
+                {
+                    CodeISIN = "FEURO",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 100
+                };
+
+                DocumentProduction doc01 = new DocumentProduction
+                {
+                    ID_DocumentNortia = 890350,
+                    ID_DocumentSalesForce = "idSalesForce2"
+                };
+
+                DocumentProduction doc02 = new DocumentProduction
+                {
+                    ID_DocumentNortia = 38391,
+                    ID_DocumentSalesForce = "idSalesForce1"
+                };
+
+                //==
+                DetailPiece piece01 = new DetailPiece
+                {
+                    nomFichier = "demande.pdf",
+                    typeFicher = "demande_arbitrage" // penser a la modification des types
+                };
+
+                DetailPiece piece02 = new DetailPiece
+                {
+                    nomFichier = "dossier_arbitrage.pdf",
+                    typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
+                };
+                //==
+                la.Add(new Acte
+                {
+                    ReferenceInterne = "TEST_FINAL03",
+                    ListeSupportInvestir = { rep02 },
+                    //ListeSupportDesinvestir = { rep01 },
+                    Commentaire = "un commentaire",
+                    ListeDocument = { doc01, doc02 },
+                    Frais = 0.5f,
+                    //pieces = { piece01, piece02 },
+                    NumContrat = "113100096"
+                });
+            }
+
+
+            //4eme acte
+            // sub object
+            {
+                Repartition rep01 = new Repartition
+                {
+                    CodeISIN = "FEURO",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 100
+                };
+
+                DocumentProduction doc01 = new DocumentProduction
+                {
+                    ID_DocumentNortia = 890350,
+                    ID_DocumentSalesForce = "idSalesForce2"
+                };
+
+                DocumentProduction doc02 = new DocumentProduction
+                {
+                    ID_DocumentNortia = 38391,
+                    ID_DocumentSalesForce = "idSalesForce1"
+                };
+
+                //==
+                DetailPiece piece01 = new DetailPiece
+                {
+                    nomFichier = "demande.pdf",
+                    typeFicher = "demande_arbitrage" // penser a la modification des types
+                };
+
+                DetailPiece piece02 = new DetailPiece
+                {
+                    nomFichier = "dossier_arbitrage.pdf",
+                    typeFicher = "dossier_arbitrage_signe_electroniquement" // penser a la modification des types
+                };
+                //==
+                la.Add(new Acte
+                {
+                    ReferenceInterne = "TEST_FINAL04",
+                    ListeSupportInvestir = { rep01 },
+                    Commentaire = "un commentaire",
+                    Frais = 0.5f,
+                    //pieces = { piece01, piece02 },
+                    ListeDocument = { doc01, doc02 },
+                    NumContrat = "113100096"
+                });
+            }*/
+
 
         }
     }

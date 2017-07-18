@@ -120,7 +120,7 @@ namespace GED.Handlers
             ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
             json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             requestContent.Add(json, "arbitrage");
-            //List<binaries> bins = fetchPiecesTest(); // a remplacer
+
             foreach (binaries bin in this.binaires)
             {
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
@@ -218,28 +218,16 @@ namespace GED.Handlers
             // transtypage de supports
             var instance = Production.getInstance();
             Dictionary<string,string> dicto = instance.TRANSTYPE;
-            try
-            {
-                foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir))
-                    rep.code_support_ext = dicto[rep.CodeISIN];
-            }catch(Exception ex){
-                //basicly "support" dont exist ... must be careful abt that
-                throw new Exception("exception levée au niveau du transtypage des supports", ex);
-            }
+            foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
+              if (dicto.ContainsKey(rep.CodeISIN)){
+                        rep.code_support_ext = dicto[rep.CodeISIN];
+                    }else{
+                        rep.code_support_ext = rep.CodeISIN;
+                    }
+                }
+
             Definition.connexionQualif.Close();
             // end transtypage de supports
-        }
-
-        private byte[] ToBytes(object obj)
-        {
-                if (obj == null)
-                    return null;
-                BinaryFormatter bf = new BinaryFormatter();
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    bf.Serialize(ms, obj);
-                    return ms.ToArray();
-                }
         }
 
 

@@ -56,7 +56,7 @@ namespace GED.Handlers
         {
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
-            for (int i = 2; i < nombreActes; i++)
+            for (int i = 0; i < nombreActes; i++)
             {
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);

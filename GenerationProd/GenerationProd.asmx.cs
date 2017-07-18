@@ -24,6 +24,8 @@ using GED.Tools;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using GED.Handlers;
+// only for debugging
+using System.Web.Script.Serialization;
 
 namespace GenerationProd
 {
@@ -66,8 +68,8 @@ namespace GenerationProd
                 if (codeCompagnie != "AEP" && codeCompagnie != "LMP" && codeCompagnie != "SPI" && codeCompagnie != "LMEP" && codeCompagnie != "CAR" && codeCompagnie != "CNP")
                     throw new Exception("Code compagnie inconnu");*/
 
-
                 Thread thread = new Thread(() => GenererProduction(IDProd, codeCompagnie, listeActe,typeEnvoi, genererProdActe, classification));
+                thread.Name = "must debbug this";
                 thread.Start();
 
                 retour.codeRetour = 0;
@@ -129,19 +131,27 @@ namespace GenerationProd
                 {
                     if (codeCompagnie == "SPI")
                     {
+                        // for debug stuff
+                        foreach(Acte a in listeActeTraitementEdi)
+                            Log.Trace(IDProd, "a enregistrer !!!", new JavaScriptSerializer().Serialize(a));
                         try
                         {
-                            Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA:: premier acte => " + listeActeTraitementEdi[0].ReferenceInterne);
+                            Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
                             List<Acte> listeActeSucces = new List<Acte>();
                             string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
 
                             for (int i = 0; i < respones.Length; i++)
                             {
-                                Log.Trace(IDProd, Log.MESSAGE_INFO, respones[i]);
-                                if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) listeActeSucces.Add(listeActeTraitementEdi[i]);
+                                // TEST IF NULL CELL
+                                if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) {
+                                    listeActeSucces.Add(listeActeTraitementEdi[i]);
+                                } else {
+                                    Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
+                                } 
                             }
+                            if(listeActeSucces.Count <= 0) throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
 
-                            if(listeActeSucces.Count() > 0)
+                            if (listeActeSucces.Count() > 0)
                             { //Génération du Recap PDF
                                 if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
                                     throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
