@@ -131,11 +131,10 @@ namespace GenerationProd
                 {
                     if (codeCompagnie == "SPI")
                     {
-                        // for debug stuff
+                        // A ENLEVER
                         foreach(Acte a in listeActeTraitementEdi)
                             Log.Trace(IDProd, "a enregistrer !!!", new JavaScriptSerializer().Serialize(a));
-                        try
-                        {
+                        
                             Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
                             List<Acte> listeActeSucces = new List<Acte>();
                             string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
@@ -156,10 +155,6 @@ namespace GenerationProd
                                 if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
                                     throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
                             }
-                           
-                        }catch (Exception ex) { Log.Trace(IDProd, Log.MESSAGE_INFO, ex.Message); }
-
-
 
                     }
                     else
