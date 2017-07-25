@@ -52,8 +52,7 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
-            // POUR TESTER
-            DateEnvoiProduction = System.DateTime.Now.Date;
+            DateEnvoiProduction = new DateTime();
         }
 
         public string Get_ID_ProfilCompagnieCA()
@@ -97,7 +96,7 @@ namespace GED.Handlers
                 foreach (DocumentProduction doc in ListeDocument)
                     nbPage += doc.NbPage;
             }
-            catch (Exception ex) // runtime exception are not throwed, why ?
+            catch (Exception ex)
             {
             }
 

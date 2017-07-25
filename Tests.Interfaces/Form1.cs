@@ -610,11 +610,12 @@ namespace Tests.Interfaces
             // SUPPORTS TABLE FILL !!
             try
             {
-                String query = "INSERT INTO dbo.SUPPORT_TRANSTYPE ([Code_Support],[Code_ISIN],[libelle_support],[Type],[Code_Compagnie]) VALUES (@codeSupport,@CodeISIN,@LibelleSupport, @Type, 'SPI' )";
+                //String query = "INSERT INTO dbo.SUPPORT_TRANSTYPE ([Code_Support],[Code_ISIN],[libelle_support],[Type],[Code_Compagnie]) VALUES (@codeSupport,@CodeISIN,@LibelleSupport, @Type, 'SPI' )";
+                string query = "INSERT INTO dbo.SUPPORT_TRANSTYPE ([Code_Support],[Code_ISIN],[Code_Compagnie]) VALUES (@codeSupport,@CodeISIN, 'SPI' )";
                 // connexion string a changeeeeeeeeeer
-                
+
                 Definition.connexionQualif.Open();
-                StreamReader rd = new StreamReader(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\FichierEnvoyésParSpirica\message 3\Supports avec avenant.csv");
+                StreamReader rd = new StreamReader(@"C:\Users\alaghouaouta\Desktop\Nouveau dossier\FichierEnvoyésParSpirica\message 4\Supports_gamme_PRIVATE_RECETTE_21072017.csv");
 
                 while (!rd.EndOfStream)
                 {
@@ -624,9 +625,6 @@ namespace Tests.Interfaces
                                 SqlCommand command = new SqlCommand(query, Definition.connexionQualif);
                                 command.Parameters.AddWithValue("@codeSupport", splits[0].ToString());
                                 command.Parameters.AddWithValue("@CodeISIN", splits[1].ToString());
-                                command.Parameters.AddWithValue("@LibelleSupport", splits[2].ToString());
-                                command.Parameters.AddWithValue("@Type", splits[3].ToString());
-                                //command.Parameters.AddWithValue("@Comp", "SPI");
                                 // run !
                                 command.ExecuteNonQuery();
                         }

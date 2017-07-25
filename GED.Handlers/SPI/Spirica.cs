@@ -9,16 +9,14 @@ using System.Configuration;
 using Newtonsoft.Json;
 using System.Data;
 // envoie SFTP
-using Renci.SshNet;
-using System.IO;
-using System.Threading;
+// using Renci.SshNet;
+// using System.IO;
+// using System.Threading;
 // a effecer apres
 using System.Windows.Forms;
-// call web service (not tested yet)
+// call web service
 using System.Net.Http;
 using System.Net.Http.Headers;
-// for converting Object into byte[]
-using System.Runtime.Serialization.Formatters.Binary;
 
 
 
@@ -46,63 +44,6 @@ namespace GED.Handlers
             };
             return JsonConvert.SerializeObject(this, jsonSetting);
         }
-
-
-        /*
-        // fetch for all files including name,extension,binaries for the current (this) "NumContrat"
-        private List<binaries> fetchPieces() {
-
-            List<binaries> bins = new List<binaries>();
-            SqlConnection con = Definition.connexion;
-            SqlCommand cmd = new SqlCommand("select [Nom],[Extension],[Datas] from pli where CleSalesForce = @id_contrat", con);
-            cmd.Parameters.AddWithValue("@id_contrat", (Object)this.ReferenceInterne ?? DBNull.Value);
-            con.Open();
-            SqlDataReader reader = cmd.ExecuteReader();
-            while (reader.Read())
-            {
-                bins.Add(new binaries
-                {
-                    nomFichie = reader[0].ToString(),
-                    extention = reader[1].ToString(),
-                    ficheirPDF = (byte[])reader[2]
-                });
-            }
-            reader.Close();
-            con.Close();
-            return bins;
-        }*/
-
-
-
-        /*
-        //cette focntion se base sur le jeux de tests crée, elle attache des pieces statiques
-        private List<binaries> fetchPiecesTest() {
-
-            List<binaries> bins = new List<binaries>();
-            // attachement des fichier de bases
-            bins.Add(new binaries
-            {
-                nomFichie = "demande",
-                extention = ".pdf",
-                ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
-            });
-            bins.Add(new binaries
-            {
-                nomFichie = "dossier_arbitrage",
-                extention = ".pdf",
-                ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
-            });
-            // attachement d'avenant en cas d'avenant attaché
-            if (this.ReferenceInterne == "TEST_FINAL01" || this.ReferenceInterne == "TEST_FINAL02") {
-                bins.Add(new binaries
-                {
-                    nomFichie = "avenant_support",
-                    extention = ".pdf",
-                    ficheirPDF = File.ReadAllBytes(@"C:\Users\alaghouaouta\Desktop\LastTestUntilRefactoring\demande.pdf")
-                });
-            }
-            return bins;
-        }*/
 
 
         // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
@@ -134,13 +75,6 @@ namespace GED.Handlers
             return content;
         }
 
-
-        //#############################################################################################################################//
-
-        /*
-        // pointeur de fonction PreProcessInformation appelé quand l'envoie asynchrone est fini
-        private delegate void finishTask(SftpClient cli, FileStream fs, IAsyncResult ar);*/
-
         public Spirica() { }
 
         // pour passse
@@ -169,7 +103,7 @@ namespace GED.Handlers
             this.Regul = acte.Regul;
             this.dateDeSignature = DateEnvoiProduction.ToString("dd/MM/yyyy");
             this.binaires = new List<binaries>();
-            //alimenter les props manquées
+            //fill other ppties
             fillData();
         }
 
@@ -177,15 +111,14 @@ namespace GED.Handlers
             // remplissage de pieces
             int i = 0;
             List<DetailPiece> pieces = new List<DetailPiece>();
+
             int[] idDocs = new int[base.ListeDocument.Count()];
-            foreach (DocumentProduction p in base.ListeDocument)
-            {
+            foreach (DocumentProduction p in base.ListeDocument){
                 idDocs[i] = p.ID_DocumentNortia;
                 i++;
             }
 
-
-            if(idDocs.Length > 0)
+            if (idDocs.Length > 0)
             {
             var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td "
                                      + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
@@ -226,7 +159,6 @@ namespace GED.Handlers
                 }
 
             Definition.connexionQualif.Close();
-            // end transtypage de supports
         }
 
 

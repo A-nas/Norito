@@ -26,6 +26,7 @@ namespace GED.Handlers
                 return refInstance;
             } catch(Exception ex)
             {
+                // we mustn't be there !
                 Console.WriteLine("exception throwed ==> {0}", ex.Message);
             }
             return refInstance;
@@ -35,8 +36,8 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
 
-            SqlCommand cmd = new SqlCommand("SELECT CodeISIN,CodeSupport_Cie FROM TCO_ForcageSupportsCies", Definition.connexionQualifDW);
-            Definition.connexionQualifDW.Open();
+            SqlCommand cmd = new SqlCommand("SELECT CodeISIN,CodeSupport_Cie FROM [dbo].[GenerationProd_Log]", Definition.connexionQualifDW); //TCO_ForcageSupportsCies
+            Definition.connexionQualif.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString() , dr[1].ToString());
