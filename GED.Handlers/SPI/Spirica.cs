@@ -42,6 +42,16 @@ namespace GED.Handlers
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ContractResolver = new ShouldSerializeContractResolver()
             };
+            //insert database
+            SqlCommand cmd = new SqlCommand("INSERT INTO GenerationProd_Log(Date_Log,ID_ProdSF,TypeMessage,Message) VALUES (@date_Log,@ID_ProdSF,@typeMessage,@message)", Definition.connexionQualif);
+            cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
+            cmd.Parameters.AddWithValue("@ID_ProdSF", (object)"---");
+            cmd.Parameters.AddWithValue("@typeMessage", (object)"VARDEBUG");
+            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting));
+            Definition.connexionQualif.Open();
+            cmd.ExecuteNonQuery();
+            Definition.connexionQualif.Close();
+            // end insert datatbse
             return JsonConvert.SerializeObject(this, jsonSetting);
         }
 
@@ -66,7 +76,7 @@ namespace GED.Handlers
             {
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
                 binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-                requestContent.Add(binaryFile, "file", bin.nomFichie + bin.extention );
+                requestContent.Add(binaryFile, "file", bin.nomFichie );
             }
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
@@ -120,7 +130,7 @@ namespace GED.Handlers
 
             if (idDocs.Length > 0)
             {
-            var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe [Type de Document] from type_document td "
+            var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe, cam.extension [Type de Document] from type_document td "
                                      + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
                                      + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
                                      + "where cam.pk in ({ID_Document}) ", Definition.connexionQualif);
@@ -132,13 +142,13 @@ namespace GED.Handlers
                     {
                         this.pieces.Add(new DetailPiece
                         {
-                            nomFichier = reader[0].ToString(),
+                            nomFichier = reader[0].ToString() + "" + reader[3].ToString(),
                             typeFicher = reader[2].ToString()
                         });
-                        this.binaires.Add(new binaries
-                        {
-                            nomFichie = reader[0].ToString(),
-                            ficheirPDF = (byte[])reader[1]
+                    this.binaires.Add(new binaries
+                    {
+                        nomFichie = reader[0].ToString() + "" + reader[3].ToString(),
+                        ficheirPDF = (byte[])reader[1]
                         });
                     }
                     reader.Close();
@@ -170,5 +180,4 @@ public class binaries
 {
     public byte[] ficheirPDF;
     public string nomFichie;
-    public string extention;
 }

@@ -648,21 +648,21 @@ namespace Tests.Interfaces
                 {
                 GenererProd.Repartition rep01 = new GenererProd.Repartition
                 {
-                        CodeISIN = "FEURO",
+                        CodeISIN = "FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 GenererProd.Repartition rep02 = new GenererProd.Repartition
                 {
-                        CodeISIN = "FR0010549360",
+                        CodeISIN = "EURODIFFPRI",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 GenererProd.DocumentProduction doc01 = new GenererProd.DocumentProduction
                 {
-                        ID_DocumentNortia = 1636287,
+                        ID_DocumentNortia = 1636367,
                         ID_DocumentSalesForce = "a098E000003hgUxQAI",
                         NbPage = 1
                 };

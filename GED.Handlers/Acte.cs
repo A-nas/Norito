@@ -52,7 +52,7 @@ namespace GED.Handlers
             InvestissementImmediat = false;
             Commentaire = "";
             Regul = false;
-            DateEnvoiProduction = new DateTime();
+            DateEnvoiProduction = new DateTime();//DateTime.Now.Date;
         }
 
         public string Get_ID_ProfilCompagnieCA()

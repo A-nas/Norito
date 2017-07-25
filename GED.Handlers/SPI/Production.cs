@@ -36,12 +36,12 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
 
-            SqlCommand cmd = new SqlCommand("SELECT CodeISIN,CodeSupport_Cie FROM [dbo].[GenerationProd_Log]", Definition.connexionQualifDW); //TCO_ForcageSupportsCies
+            SqlCommand cmd = new SqlCommand("SELECT Code_ISIN , Code_Support FROM [dbo].[SUPPORT_TRANSTYPE]", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
             Definition.connexionQualif.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString() , dr[1].ToString());
-            Definition.connexionQualifDW.Close();
+            Definition.connexionQualif.Close();
         }
 
         //DEPRECATED
