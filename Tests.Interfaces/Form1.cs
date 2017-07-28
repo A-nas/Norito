@@ -648,14 +648,14 @@ namespace Tests.Interfaces
                 {
                 GenererProd.Repartition rep01 = new GenererProd.Repartition
                 {
-                        CodeISIN = "FR0007051040",
+                        CodeISIN = "FR0010286021",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 GenererProd.Repartition rep02 = new GenererProd.Repartition
                 {
-                        CodeISIN = "EURODIFFPRI",
+                        CodeISIN = "FR0000992349",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
@@ -698,7 +698,7 @@ namespace Tests.Interfaces
                 Sactes[0].NomActeAdministratif = "";
                 Sactes[0].ReferenceInterne = "ACT000406644";
                 Sactes[0].NomCompletSouscripteurs = "Myriam MINCHENEAU";
-                Sactes[0].NumContrat = "112900001";
+                Sactes[0].NumContrat = "112900003";
                 Sactes[0].CodeApporteur = "NOR100062";
                 Sactes[0].NomApporteur = "PATRIMUM SAS";
                 Sactes[0].MontantBrut = 5787.81f;
@@ -707,9 +707,9 @@ namespace Tests.Interfaces
                 Sactes[0].ID_ProfilCompagnie = "";
                 Sactes[0].NomEnveloppe = "PRIVATE VIE";
                 Sactes[0].IsTraitementEdi = true;
-                Sactes[0].DateCreation = DateTime.Now; // supposed
+                Sactes[0].DateCreation = DateTime.Now;
                 Sactes[0].DateAcquisition = DateTime.Now;
-                Sactes[0].DateEnvoiProduction = DateTime.Now;
+                Sactes[0].DateEnvoiProduction = DateTime.Now; // supposed
                 Sactes[0].Commentaire = "";
                 Sactes[0].InvestissementImmediat = false;
                 Sactes[0].Regul = true;
@@ -876,6 +876,11 @@ namespace Tests.Interfaces
             }*/
 
 
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+        
         }
     }
 }

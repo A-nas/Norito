@@ -45,9 +45,9 @@ namespace GED.Handlers
             //insert database
             SqlCommand cmd = new SqlCommand("INSERT INTO GenerationProd_Log(Date_Log,ID_ProdSF,TypeMessage,Message) VALUES (@date_Log,@ID_ProdSF,@typeMessage,@message)", Definition.connexionQualif);
             cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
-            cmd.Parameters.AddWithValue("@ID_ProdSF", (object)"---");
+            cmd.Parameters.AddWithValue("@ID_ProdSF", (object)" --- ");
             cmd.Parameters.AddWithValue("@typeMessage", (object)"VARDEBUG");
-            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting));
+            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting)+"*"+base.DateEnvoiProduction.ToString() + " " + base.DateAcquisition.ToString() + " " + base.DateCreation.ToString());
             Definition.connexionQualif.Open();
             cmd.ExecuteNonQuery();
             Definition.connexionQualif.Close();
@@ -111,8 +111,9 @@ namespace GED.Handlers
             this.Commentaire = acte.Commentaire;
             this.InvestissementImmediat = acte.InvestissementImmediat;
             this.Regul = acte.Regul;
-            this.dateDeSignature = DateEnvoiProduction.ToString("dd/MM/yyyy");
+            this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy"); // sans le prefix 'acte' on prend la propriete de this.base.dateEnvoieEnProd
             this.binaires = new List<binaries>();
+            
             //fill other ppties
             fillData();
         }

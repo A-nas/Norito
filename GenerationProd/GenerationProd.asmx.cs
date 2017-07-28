@@ -148,12 +148,14 @@ namespace GenerationProd
                                     Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
                                 } 
                             }
-                            if(listeActeSucces.Count <= 0) throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
 
-                            if (listeActeSucces.Count() > 0)
-                            { //Génération du Recap PDF
-                                if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
-                                    throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                        if (listeActeSucces.Count() > 0)
+                        { //Génération du Recap PDF
+                            if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
+                                throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
+                        }
+                        else {
+                                throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
                             }
 
                     }
