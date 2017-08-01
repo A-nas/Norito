@@ -138,12 +138,14 @@ namespace GenerationProd
                             Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
                             List<Acte> listeActeSucces = new List<Acte>();
                             string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
+                            Log.Trace(IDProd, "", respones[0]);
 
                             for (int i = 0; i < respones.Length; i++)
                             {
                                 // TEST IF NULL CELL
                                 if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) {
                                     listeActeSucces.Add(listeActeTraitementEdi[i]);
+                                    
                                 } else {
                                     Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
                                 } 
