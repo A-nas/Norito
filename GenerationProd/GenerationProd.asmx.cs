@@ -138,13 +138,15 @@ namespace GenerationProd
                             Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
                             List<Acte> listeActeSucces = new List<Acte>();
                             string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
-                            Log.Trace(IDProd, "", respones[0]);
+                            
+                            
 
                             for (int i = 0; i < respones.Length; i++)
                             {
                                 // TEST IF NULL CELL
                                 if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) {
                                     listeActeSucces.Add(listeActeTraitementEdi[i]);
+                                    
                                     
                                 } else {
                                     Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
@@ -178,7 +180,7 @@ namespace GenerationProd
                 }
 
                 retour = true;
-                message = "Prod traitée avec succé";
+                message = "Prod traitée avec succès";
             }
             catch (Exception ex)
             {
@@ -187,9 +189,9 @@ namespace GenerationProd
             }
             
             if(EnvoyerReponseSF(IDProd,retour, message))
-                Log.Trace(IDProd, Log.MESSAGE_INFO, "SF a bien recut la réponse");
+                Log.Trace(IDProd, Log.MESSAGE_INFO, "SF a bien recu la réponse");
             else
-                Log.Trace(IDProd, Log.MESSAGE_WARNING, "SF n'a pas recut la réponse");
+                Log.Trace(IDProd, Log.MESSAGE_WARNING, "SF n'a pas recu la réponse");
         }
 
         protected static bool GenererProdPDF(string IDProd, string codeCompagnie, DateTime dateGeneration, List<Acte> listeActe, string typeEnvoi = "", bool TraitementEdi = false, string classification = "")
@@ -869,7 +871,7 @@ namespace GenerationProd
                     response.ProductionMessage = message;
 
                     //identification
-                    GED.Tools.wsdl_enterprise_dev.SforceService bdAuth = new GED.Tools.wsdl_enterprise_dev.SforceService();
+                    GED.Tools.k.SforceService bdAuth = new GED.Tools.wsdl_enterprise_dev.SforceService();
                     GED.Tools.wsdl_enterprise_dev.LoginResult lr = bdAuth.login(loginSF, mdpSF);
                     sIdSF = lr.sessionId;
 
