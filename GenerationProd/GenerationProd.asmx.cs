@@ -144,7 +144,7 @@ namespace GenerationProd
                             for (int i = 0; i < respones.Length; i++)
                             {
                                 // TEST IF NULL CELL
-                                if (Convert.ToBoolean(JObject.Parse(respones[i])["success"])) {
+                                if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) {
                                     listeActeSucces.Add(listeActeTraitementEdi[i]);
                                     
                                     
