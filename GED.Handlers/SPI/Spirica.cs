@@ -56,7 +56,7 @@ namespace GED.Handlers
         }
 
 
-        // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else.
+        // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else. (**add elec signature)
         public async Task<string> sendProd(){
 
             // preparing request HEADERS

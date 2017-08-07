@@ -8,7 +8,6 @@ namespace GED.Handlers
 {
     public interface IActe
     {
-        //string genJSON();
         Task<string> sendProd(); // fait l'appel au web service pour envoyer la prod
     }
 }

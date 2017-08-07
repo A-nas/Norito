@@ -14,9 +14,9 @@ namespace GED.Handlers
     {
         public ShouldSerializeContractResolver() { }
         // a mettre dans definition
-        List<string> pptActeNames = Definition.pptActeNames; // set of Spirica properties to Serialize
+        List<string> pptActeNames = Definition.pptActeNames; // set of Spirica properties to Serialize (should be moved to web.config file)
 
-        //retourne des proprieté a de/serialiser                                                                                 /* add ppties */
+        //retourne des proprieté a de/serialiser
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);

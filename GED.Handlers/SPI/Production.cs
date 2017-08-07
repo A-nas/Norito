@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace GED.Handlers
 {
-    //SINGLETON
+    //SINGLETON (duplicata web service)
     public class Production
     {
         //public static List<string> responses;
