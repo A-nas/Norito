@@ -10,8 +10,7 @@ namespace GED.Handlers
 {
     public static class SqlCommandArray
     {
-        
-            // methode d'extention pour ajouter un tableau de parametre a une commande
+            // extention méthode to add an array of parameter to sql query
             public static SqlParameter[] addArrayCommand<T>(this SqlCommand cmd, IEnumerable<T> listeVal, string nomParam, char separator = ',')
             {
                 List<SqlParameter> p = new List<SqlParameter>();

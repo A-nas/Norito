@@ -13,15 +13,15 @@ namespace GED.Handlers
      public class ShouldSerializeContractResolver : DefaultContractResolver
     {
         public ShouldSerializeContractResolver() { }
-        // a mettre dans definition
-        List<string> pptActeNames = Definition.pptActeNames; // set of Spirica properties to Serialize (should be moved to web.config file)
+        // ** deplacer vers definition
+        List<string> pptActeNames = Definition.pptActeNames;
 
-        //retourne des proprieté a de/serialiser
+        //methode that return the list of properties to be serialised
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
             properties = 
-                properties.Where(p => pptActeNames.Contains(p.PropertyName, StringComparer.OrdinalIgnoreCase)).ToList(); // proprties a serialiser
+                properties.Where(p => pptActeNames.Contains(p.PropertyName, StringComparer.OrdinalIgnoreCase)).ToList();
 
             return properties;
         }

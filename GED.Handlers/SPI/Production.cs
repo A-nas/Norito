@@ -12,10 +12,11 @@ namespace GED.Handlers
     //SINGLETON (duplicata web service)
     public class Production
     {
-        //public static List<string> responses;
         private static Production refInstance;
         public Dictionary<string, string> TRANSTYPE;
 
+
+        //method to get the instance of class
         public static Production getInstance(){
             Production refInstance =  null;
             try {
@@ -26,7 +27,7 @@ namespace GED.Handlers
                 return refInstance;
             } catch(Exception ex)
             {
-                // we mustn't be there !
+                // we mustn't be here !
                 Console.WriteLine("exception throwed ==> {0}", ex.Message);
             }
             return refInstance;
@@ -45,14 +46,14 @@ namespace GED.Handlers
         }
 
         //DEPRECATED
-        public async static Task<string[]> envoyerProd(List<IActe> actes){ // passer une liste d'actes SPI directement.
+        public async static Task<string[]> envoyerProd(List<IActe> actes){
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
             for(int i=0; i < nombreActes; i++) response[i] = (await actes[i].sendProd());
             return response;
         }
 
-
+        //** method to send a List of 'Acte'
         public async Task<string[]> envoyerProd(List<Acte> actes)
         {
             int nombreActes = actes.Count();

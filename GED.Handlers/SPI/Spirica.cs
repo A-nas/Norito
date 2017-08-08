@@ -8,13 +8,8 @@ using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json;
 using System.Data;
-// envoie SFTP
-// using Renci.SshNet;
-// using System.IO;
-// using System.Threading;
-// a effecer apres
 using System.Windows.Forms;
-// call web service
+// WEB SERVICE INCLUDES
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -22,10 +17,9 @@ using System.Net.Http.Headers;
 
 namespace GED.Handlers
 {
-    // a revoir apres il y'a du code a optimiser *****
-    public class Spirica : Acte, IActe
+   public class Spirica : Acte, IActe
     {
-        // proprietés suplementaires
+        // Additional properties
         [JsonProperty(PropertyName = "support_saisie", Order = 5)]
         private static string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
@@ -34,7 +28,7 @@ namespace GED.Handlers
         public string dateDeSignature;
         List<binaries> binaires;
 
-        // generate JSON string for the current instance
+        //method that serialise the current object (this) into a JSON flow (this method rely on the ShouldSerialiseContratResolver Class) 
         private string genJson() {
             JsonSerializerSettings jsonSetting = new JsonSerializerSettings
             {
@@ -42,7 +36,7 @@ namespace GED.Handlers
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ContractResolver = new ShouldSerializeContractResolver()
             };
-            //insert database
+            //insert database ##
             SqlCommand cmd = new SqlCommand("INSERT INTO GenerationProd_Log(Date_Log,ID_ProdSF,TypeMessage,Message) VALUES (@date_Log,@ID_ProdSF,@typeMessage,@message)", Definition.connexionQualif);
             cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
             cmd.Parameters.AddWithValue("@ID_ProdSF", (object)" --- ");
@@ -51,15 +45,15 @@ namespace GED.Handlers
             Definition.connexionQualif.Open();
             cmd.ExecuteNonQuery();
             Definition.connexionQualif.Close();
-            // end insert datatbse
+            // end insert datatbse ##
             return JsonConvert.SerializeObject(this, jsonSetting);
         }
 
 
-        // Async methode to call RESTful Sylvea API, this method return string type when the call is finished, TASK<string> else. (**add elec signature)
+        // Attach and send the current production (**add elec signature)
         public async Task<string> sendProd(){
 
-            // preparing request HEADERS
+            // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
             byte[] Basic_Auth = Encoding.ASCII.GetBytes(Definition.id + ":" + Definition.pass); // tester cet appel je vais pas y revenir une autre fois.
@@ -87,7 +81,7 @@ namespace GED.Handlers
 
         public Spirica() { }
 
-        // pour passse
+        // Consutructor used to cast ACTE => SPIRICA
         public Spirica(Acte acte) {
 
             this.NomType = acte.NomType;
@@ -113,13 +107,13 @@ namespace GED.Handlers
             this.Regul = acte.Regul;
             this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy"); // sans le prefix 'acte' on prend la propriete de this.base.dateEnvoieEnProd
             this.binaires = new List<binaries>();
-            
-            //fill other ppties
+
             fillData();
         }
 
+
+        //this method will fill additional properties
         private void fillData(){
-            // remplissage de pieces
             int i = 0;
             List<DetailPiece> pieces = new List<DetailPiece>();
 
@@ -165,6 +159,7 @@ namespace GED.Handlers
               if (dicto.ContainsKey(rep.CodeISIN)){
                         rep.code_support_ext = dicto[rep.CodeISIN];
                     }else{
+                    // les codes ISIN ne passent pas pour l'instant
                         rep.code_support_ext = rep.CodeISIN;
                     }
                 }
