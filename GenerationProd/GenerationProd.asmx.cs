@@ -131,28 +131,24 @@ namespace GenerationProd
                 {
                     if (codeCompagnie == "SPI")
                     {
+
+
                         // A ENLEVER
                         foreach(Acte a in listeActeTraitementEdi)
                             Log.Trace(IDProd, "a enregistrer !!!", new JavaScriptSerializer().Serialize(a));
-                        
-                            Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
-                            List<Acte> listeActeSucces = new List<Acte>();
-                            string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
-                            
-                            
-
-                            for (int i = 0; i < respones.Length; i++)
-                            {
+                        Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
+                        // générer le recap si 1 seule arbitrage passe avec succes, sinon
+                        List<Acte> listeActeSucces = new List<Acte>();
+                        string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
+                        for (int i = 0; i < respones.Length; i++){
                                 // TEST IF NULL CELL
                                 if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) {
-                                    listeActeSucces.Add(listeActeTraitementEdi[i]);
-                                    
-                                    
+                                    listeActeSucces.Add(listeActeTraitementEdi[i]);  
                                 } else {
-                                    Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
-                                } 
-                            }
-
+                                //#integrer la generation du recap d'erreur ici
+                                Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
+                                }
+                         }
                         if (listeActeSucces.Count() > 0)
                         { //Génération du Recap PDF
                             if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
@@ -162,7 +158,10 @@ namespace GenerationProd
                                 throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
                             }
 
-                    }
+
+
+
+                    } // OTHER IS_EDI Companies
                     else
                     {
                         //Génération de l'XML

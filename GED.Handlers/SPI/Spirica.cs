@@ -149,7 +149,6 @@ namespace GED.Handlers
                     reader.Close();
                     Definition.connexionQualif.Close();
             }
-
             // end remplissage de pieces
 
             // transtypage de supports
@@ -166,9 +165,6 @@ namespace GED.Handlers
 
             Definition.connexionQualif.Close();
         }
-
-
-
     }
 }
 

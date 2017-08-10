@@ -8,6 +8,7 @@ namespace GED.Handlers
 {
     public interface IActe
     {
-        Task<string> sendProd(); // fait l'appel au web service pour envoyer la prod
+        // method to send PRODUCTION (generic)
+        Task<string> sendProd(); 
     }
 }

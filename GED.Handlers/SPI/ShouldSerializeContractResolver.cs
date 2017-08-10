@@ -20,8 +20,8 @@ namespace GED.Handlers
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             IList<JsonProperty> properties = base.CreateProperties(type, memberSerialization);
-            properties = 
-                properties.Where(p => pptActeNames.Contains(p.PropertyName, StringComparer.OrdinalIgnoreCase)).ToList();
+            properties =
+                properties.Where(p => pptActeNames.Contains(p.PropertyName, StringComparer.OrdinalIgnoreCase)).ToArray();
 
             return properties;
         }
