@@ -13,7 +13,7 @@ namespace GED.Handlers
     public class Production
     {
         private static Production refInstance;
-        public Dictionary<string, string> TRANSTYPE;
+
 
 
         //method to get the instance of class
@@ -33,17 +33,7 @@ namespace GED.Handlers
             return refInstance;
         }
 
-        private Production()
-        {
-            TRANSTYPE = new Dictionary<string, string>();
-
-            SqlCommand cmd = new SqlCommand("SELECT Code_ISIN , Code_Support FROM [dbo].[SUPPORT_TRANSTYPE]", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
-            Definition.connexionQualif.Open();
-            SqlDataReader dr = cmd.ExecuteReader();
-            while (dr.Read())
-                TRANSTYPE.Add(dr[0].ToString() , dr[1].ToString());
-            Definition.connexionQualif.Close();
-        }
+        private Production(){}
 
         //DEPRECATED
         public async static Task<string[]> envoyerProd(List<IActe> actes){
@@ -60,6 +50,7 @@ namespace GED.Handlers
             string[] response = new string[nombreActes];
             for (int i = 0; i < nombreActes; i++)
             {
+            // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies) # a voir aprés
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
                 response[i] = (await acteprod.sendProd());

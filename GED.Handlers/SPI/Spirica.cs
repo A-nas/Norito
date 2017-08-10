@@ -28,6 +28,20 @@ namespace GED.Handlers
         public string dateDeSignature;
         List<binaries> binaires;
 
+        public static Dictionary<string, string> TRANSTYPE = null;
+
+        private void getSupports()
+        {
+            TRANSTYPE = new Dictionary<string, string>();
+
+            SqlCommand cmd = new SqlCommand("SELECT Code_ISIN , Code_Support FROM [dbo].[SUPPORT_TRANSTYPE]", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
+            Definition.connexionQualif.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+                TRANSTYPE.Add(dr[0].ToString(), dr[1].ToString());
+            Definition.connexionQualif.Close();
+        }
+
         //method that serialise the current object (this) into a JSON flow (this method rely on the ShouldSerialiseContratResolver Class) 
         private string genJson() {
             JsonSerializerSettings jsonSetting = new JsonSerializerSettings
@@ -109,6 +123,7 @@ namespace GED.Handlers
             this.binaires = new List<binaries>();
 
             fillData();
+            if (TRANSTYPE == null) getSupports();
         }
 
 
