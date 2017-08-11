@@ -33,8 +33,13 @@ namespace GED.Handlers
         private void getSupports()
         {
             TRANSTYPE = new Dictionary<string, string>();
+            // we select distinct code_isin to ensure we get only one isin code
+            SqlCommand cmd = new SqlCommand("SELECT * from "
+                + "(SELECT code_isin, code_support, ROW_NUMBER() OVER(PARTITION BY code_isin ORDER BY code_isin DESC) rn "
+                + "from[dbo].[SUPPORT_TRANSTYPE] "
+                + ") sub_query "
+                + "WHERE rn = 1 ", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
 
-            SqlCommand cmd = new SqlCommand("SELECT Code_ISIN , Code_Support FROM [dbo].[SUPPORT_TRANSTYPE]", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
             Definition.connexionQualif.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
@@ -66,7 +71,6 @@ namespace GED.Handlers
 
         // Attach and send the current production (**add elec signature)
         public async Task<string> sendProd(){
-
             // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
@@ -122,8 +126,8 @@ namespace GED.Handlers
             this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy"); // sans le prefix 'acte' on prend la propriete de this.base.dateEnvoieEnProd
             this.binaires = new List<binaries>();
 
-            fillData();
             if (TRANSTYPE == null) getSupports();
+            fillData();
         }
 
 
@@ -162,24 +166,25 @@ namespace GED.Handlers
                         });
                     }
                     reader.Close();
-                    Definition.connexionQualif.Close();
+                    //===>Definition.connexionQualif.Close();
             }
             // end remplissage de pieces
 
             // transtypage de supports
             var instance = Production.getInstance();
-            Dictionary<string,string> dicto = instance.TRANSTYPE;
+            Dictionary<string,string> dicto = TRANSTYPE;
             foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
               if (dicto.ContainsKey(rep.CodeISIN)){
                         rep.code_support_ext = dicto[rep.CodeISIN];
                     }else{
                     // les codes ISIN ne passent pas pour l'instant
                         rep.code_support_ext = rep.CodeISIN;
+                        throw new Exception("impossible de trouver le code support du support :" + rep.CodeISIN);
                     }
                 }
-
             Definition.connexionQualif.Close();
         }
+
     }
 }
 

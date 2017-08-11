@@ -648,14 +648,14 @@ namespace Tests.Interfaces
                 {
                 GenererProd.Repartition rep01 = new GenererProd.Repartition
                 {
-                        CodeISIN = "FR0010286021",
+                        CodeISIN = "FR0010696765",
                         TypeRepartition = "%",
-                        ValeurRepartition = 100
+                        ValeurRepartition = 30
                     };
 
                 GenererProd.Repartition rep02 = new GenererProd.Repartition
                 {
-                        CodeISIN = "FR0000992349",
+                        CodeISIN = "FR0007071378",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
@@ -679,6 +679,7 @@ namespace Tests.Interfaces
                 Sactes[0].ListeSupportInvestir = new GenererProd.Repartition[1];
                 Sactes[0].ListeSupportDesinvestir[0] = new GenererProd.Repartition();
                 Sactes[0].ListeSupportInvestir[0] = new GenererProd.Repartition();
+
                 Sactes[0].ListeSupportDesinvestir[0] = rep01;
                 Sactes[0].ListeSupportInvestir[0] = rep02;
            
@@ -696,12 +697,12 @@ namespace Tests.Interfaces
                 
                 Sactes[0].NomType = "Arbitrage";
                 Sactes[0].NomActeAdministratif = "";
-                Sactes[0].ReferenceInterne = "ACT000406644";
-                Sactes[0].NomCompletSouscripteurs = "Myriam MINCHENEAU";
-                Sactes[0].NumContrat = "112900003";
-                Sactes[0].CodeApporteur = "NOR100062";
-                Sactes[0].NomApporteur = "PATRIMUM SAS";
-                Sactes[0].MontantBrut = 5787.81f;
+                Sactes[0].ReferenceInterne = "ACT000407496";
+                Sactes[0].NomCompletSouscripteurs = "";
+                Sactes[0].NumContrat = "112900052";
+                Sactes[0].CodeApporteur = "NOR100055";
+                Sactes[0].NomApporteur = "TEISSEDRE ET ASSOCIES GESTION DE PATRIMOINE";
+                Sactes[0].MontantBrut = 8253.12f;
                 Sactes[0].TypeFrais = "%";
                 Sactes[0].Frais = 1;
                 Sactes[0].ID_ProfilCompagnie = "";

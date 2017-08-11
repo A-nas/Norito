@@ -870,7 +870,7 @@ namespace GenerationProd
                     response.ProductionMessage = message;
 
                     //identification
-                    GED.Tools.k.SforceService bdAuth = new GED.Tools.wsdl_enterprise_dev.SforceService();
+                    GED.Tools.wsdl_enterprise_dev.SforceService bdAuth = new GED.Tools.wsdl_enterprise_dev.SforceService();
                     GED.Tools.wsdl_enterprise_dev.LoginResult lr = bdAuth.login(loginSF, mdpSF);
                     sIdSF = lr.sessionId;
 
