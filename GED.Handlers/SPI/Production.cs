@@ -35,14 +35,6 @@ namespace GED.Handlers
 
         private Production(){}
 
-        //DEPRECATED
-        public async static Task<string[]> envoyerProd(List<IActe> actes){
-            int nombreActes = actes.Count();
-            string[] response = new string[nombreActes];
-            for(int i=0; i < nombreActes; i++) response[i] = (await actes[i].sendProd());
-            return response;
-        }
-
         //** method to send a List of 'Acte'
         public async Task<string[]> envoyerProd(List<Acte> actes)
         {
@@ -50,10 +42,10 @@ namespace GED.Handlers
             string[] response = new string[nombreActes];
             for (int i = 0; i < nombreActes; i++)
             {
-            // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies) # a voir aprés
+            // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies)
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
-                response[i] = (await acteprod.sendProd());
+                response[i] = (await acteprod.sendProd()); //# ici recevoir la lste des reponses ()
             }
             return response;
         }
