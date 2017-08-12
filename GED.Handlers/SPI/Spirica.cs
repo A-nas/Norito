@@ -28,7 +28,10 @@ namespace GED.Handlers
         public string dateDeSignature;
         List<binaries> binaires;
 
-        public static Dictionary<string, string> TRANSTYPE = null;
+        // Properties to manage/save the state and data of the multi instance of the current class
+        private static Dictionary<string, string> TRANSTYPE = null;
+        private static bool isSuccess = false;
+
 
         private void getSupports()
         {
@@ -70,7 +73,7 @@ namespace GED.Handlers
 
 
         // Attach and send the current production (**add elec signature)
-        public async Task<string> sendProd(){
+        public async Task<Dictionary<string,string>> sendProd(){
             // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
@@ -92,9 +95,10 @@ namespace GED.Handlers
             }
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
-            string content = await message.Content.ReadAsStringAsync();
+            Dictionary<string, string> response = new Dictionary<string, string>();
+            response.Add(this.ReferenceInterne,await message.Content.ReadAsStringAsync());
             //here We are waiting until we get the JSON response !
-            return content;
+            return response;
         }
 
         public Spirica() { }
