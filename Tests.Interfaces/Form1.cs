@@ -913,10 +913,11 @@ namespace Tests.Interfaces
                 SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
 
                 QueryResult result = SfService.query(soqlQuery);
-                if (result.size > 0)
+
+                for(int i = 0; i<result.size; i++)
                 {
-                    Acte__c sfActe = (Acte__c)result.records[0];
-                    MessageBox.Show("data retrived ==> "+ sfActe.Commentaire_Interne__c + " ; "+ sfActe.Statut_du_XML__c);
+                    Acte__c sfActe = (Acte__c)result.records[i];
+                    MessageBox.Show("data retrived ==> " + sfActe.Commentaire_Interne__c + " ; " + sfActe.Statut_du_XML__c);
                     // do some stuff
                 }
             }
@@ -926,6 +927,7 @@ namespace Tests.Interfaces
                 throw (ex);
             }
             // update list
+
             // save update
         
     }

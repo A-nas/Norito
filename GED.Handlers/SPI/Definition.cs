@@ -106,7 +106,7 @@ namespace GED.Handlers
 
                 la.Add(new Acte
                 {
-                    ReferenceInterne = "ACT000448992",
+                    ReferenceInterne = "ACT000399761",
                     Frais = 0f,
                     ListeSupportDesinvestir = { rep01 },
                     ListeSupportInvestir = { rep02/*, rep03*/ },
@@ -181,7 +181,7 @@ namespace GED.Handlers
                 //==
                 la.Add(new Acte
                 {
-                    ReferenceInterne = "TEST_FINAL02",
+                    ReferenceInterne = "ACT000000146",
                     ListeSupportInvestir = { rep01 , rep02 },
                     Commentaire = "un commentaire",
                     //pieces = { piece01, piece02, piece03 },
@@ -242,7 +242,7 @@ namespace GED.Handlers
                 //==
                 la.Add(new Acte
                 {
-                    ReferenceInterne = "TEST_FINAL03",
+                    ReferenceInterne = "ACT000407451",
                     ListeSupportInvestir = { rep02 },
                     //ListeSupportDesinvestir = { rep01 },
                     Commentaire = "un commentaire",
@@ -298,7 +298,7 @@ namespace GED.Handlers
                 //==
                 la.Add(new Acte
                 {
-                    ReferenceInterne = "TEST_FINAL04",
+                    ReferenceInterne = "ACT000000176",
                     ListeSupportInvestir = { rep01 },
                     Commentaire = "un commentaire",
                     Frais = 0.5f,
