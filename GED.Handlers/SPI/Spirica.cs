@@ -32,6 +32,9 @@ namespace GED.Handlers
         private static Dictionary<string, string> TRANSTYPE = null;
         private static bool isSuccess = false;
 
+        public static bool getProdState(){
+            return isSuccess;
+        }
 
         private void getSupports()
         {

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+// for sales force
+using GED.Tools.WSDLQualif;
 
 
 
@@ -57,6 +59,26 @@ namespace GED.Handlers
         public void updateSalesForce(Dictionary<string,string> responses){
             //## this fucntion must after all manage exceptions in case if we can't connect to Force.com API
             // fetch for all actes data list
+            string soqlQuery = "SELECT #message_interne,xml_status FROM Acte__c where #id_acte# in {#list_of_ids}";
+
+            string username = "username";//
+            string passwd = "password";//
+
+            SforceService SfService = new GED.Tools.WSDLQualif.SforceService();
+            try
+            {
+               LoginResult loginResult = SfService.login(username, passwd);
+                SfService.Url = loginResult.serverUrl;
+                SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+                QueryResult result = SfService.query(soqlQuery);
+                if(result.size > 0){
+                    // do stuff
+                }
+            }catch(Exception ex)
+            {
+                SfService = null;
+                throw (ex);
+            }
             // update list
             // save update
         }

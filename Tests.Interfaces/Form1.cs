@@ -23,6 +23,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Data.SqlClient;
 //Json read
 using Newtonsoft.Json.Linq;
+//Sales Force connexion
+using GED.Tools.WSDLQualif;
 
 namespace Tests.Interfaces
 {
@@ -581,12 +583,17 @@ namespace Tests.Interfaces
         private async void button8_Click(object sender, EventArgs e)
         {
             // liste des actes attendues
+
+
+            /*
             List<Acte> actes = Definition.GetListeActes();
             string[] respones = await Production.getInstance().envoyerProd(actes);
             List<Acte> listeActeSucces = new List<Acte>();
             for (int i = 0; i < respones.Length; i++)
                  if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) listeActeSucces.Add(actes[i]);
-               
+            */ 
+            
+              
             /*List<Acte> actes = Definition.GetListeActes();
                 // prod
                 int nombreActes = actes.Count();
@@ -883,5 +890,42 @@ namespace Tests.Interfaces
         {
         
         }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            //## this fucntion must after all manage exceptions in case if we can't connect to Force.com API
+            // fetch for all actes data list
+            List<Acte> actes = Definition.GetListeActes(); // data for testing
+            string[] idActes = actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
+            string idList = "'" + String.Join("','", idActes) + "'"; // construct the part of 'in' query string clause
+            string soqlQuery = "SELECT Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in ("+ idList +")";
+
+            string username = "noluser@nortia.fr.nqualif";//
+            string passwd = "nortia01";//
+
+            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
+
+            try
+            {
+                LoginResult loginResult = SfService.login(username, passwd);
+                SfService.Url = loginResult.serverUrl;
+                SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+                QueryResult result = SfService.query(soqlQuery);
+                if (result.size > 0)
+                {
+                    Acte__c sfActe = (Acte__c)result.records[0];
+                    MessageBox.Show("data retrived ==> "+ sfActe.Commentaire_Interne__c + " ; "+ sfActe.Statut_du_XML__c);
+                    // do some stuff
+                }
+            }
+            catch (Exception ex)
+            {
+                SfService = null;
+                throw (ex);
+            }
+            // update list
+            // save update
+        
+    }
     }
 }

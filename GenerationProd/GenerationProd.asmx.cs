@@ -139,7 +139,7 @@ namespace GenerationProd
                         Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
                         // générer le recap si 1 seule arbitrage passe avec succes, sinon
                         List<Acte> listeActeSucces = new List<Acte>();
-                        string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
+                        /*string[] respones = await Production.getInstance().envoyerProd(listeActeTraitementEdi); ...
                         for (int i = 0; i < respones.Length; i++){
                                 // TEST IF NULL CELL
                                 if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) {
@@ -148,7 +148,7 @@ namespace GenerationProd
                                 //#integrer la generation du recap d'erreur ici
                                 Log.Trace(IDProd, Log.MESSAGE_INFO, "erreur l'ors de l'envoie d'arbitrage ref("+ listeActeTraitementEdi[i].ReferenceInterne + ") pour la raison =>  "+ respones[i]);
                                 }
-                         }
+                         }*/
                         if (listeActeSucces.Count() > 0)
                         { //Génération du Recap PDF
                             if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
