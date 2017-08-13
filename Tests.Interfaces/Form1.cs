@@ -909,7 +909,9 @@ namespace Tests.Interfaces
             {
                 LoginResult loginResult = SfService.login(username, passwd);
                 SfService.Url = loginResult.serverUrl;
+                SfService.SessionHeaderValue = new SessionHeader();
                 SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+
                 QueryResult result = SfService.query(soqlQuery);
                 if (result.size > 0)
                 {

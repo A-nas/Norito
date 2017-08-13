@@ -106,7 +106,7 @@ namespace GED.Handlers
 
                 la.Add(new Acte
                 {
-                    ReferenceInterne = "TEST_FINAL01",
+                    ReferenceInterne = "ACT000448992",
                     Frais = 0f,
                     ListeSupportDesinvestir = { rep01 },
                     ListeSupportInvestir = { rep02/*, rep03*/ },
