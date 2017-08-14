@@ -904,7 +904,7 @@ namespace Tests.Interfaces
             string passwd = "nortia01";//
 
             SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
-
+            Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
             try
             {
                 LoginResult loginResult = SfService.login(username, passwd);
@@ -913,23 +913,27 @@ namespace Tests.Interfaces
                 SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
 
                 QueryResult result = SfService.query(soqlQuery);
-
-                for(int i = 0; i<result.size; i++)
-                {
-                    Acte__c sfActe = (Acte__c)result.records[i];
+                Acte__c[] SfActes = new Acte__c[result.size]; // size of dictionnary parameter (list to save)
+                for(int i = 0; i<result.size; i++){
+                    Acte__c sfActe = (Acte__c)result.records[i];//#
+                    SfActes[i] = (Acte__c)result.records[i];
+                    // update list //updating current cell //extract here message format and status
+                    SfActes[i].Commentaire_Interne__c = dictionnaire[SfActes[i].Name];// select cell from dictionnary where index is the sfActe current index loop
+                    SfActes[i].Statut_du_XML__c = dictionnaire[SfActes[i].Name];
                     MessageBox.Show("data retrived ==> " + sfActe.Commentaire_Interne__c + " ; " + sfActe.Statut_du_XML__c);
+                    
                     // do some stuff
                 }
+
+                // save update
+                SaveResult[] saveResultsV2 = SfService.update(new sObject[] { sfActe });// deplcaer vers la fin
             }
             catch (Exception ex)
             {
                 SfService = null;
                 throw (ex);
             }
-            // update list
 
-            // save update
-        
-    }
+        }
     }
 }

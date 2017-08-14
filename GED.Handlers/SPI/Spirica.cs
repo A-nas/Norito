@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Data;
 using System.Windows.Forms;
 // WEB SERVICE INCLUDES
@@ -76,7 +77,8 @@ namespace GED.Handlers
 
 
         // Attach and send the current production (**add elec signature)
-        public async Task<Dictionary<string,string>> sendProd(){
+        public async Task<Dictionary<string,WsResponse>> sendProd(){
+
             // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
@@ -87,7 +89,7 @@ namespace GED.Handlers
             //preparing request BODY
             MultipartFormDataContent requestContent = new MultipartFormDataContent();
             ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
-            json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+            json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json"); // can be configured
             requestContent.Add(json, "arbitrage");
 
             foreach (binaries bin in this.binaires)
@@ -97,11 +99,23 @@ namespace GED.Handlers
                 requestContent.Add(binaryFile, "file", bin.nomFichie );
             }
             //POST ASYNC CALL
-            HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent);
-            Dictionary<string, string> response = new Dictionary<string, string>();
-            response.Add(this.ReferenceInterne,await message.Content.ReadAsStringAsync());
-            //here We are waiting until we get the JSON response !
+            HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent); // must be extracted
+
+            Dictionary<string, WsResponse> response = new Dictionary<string, WsResponse>();
+            string returnMessages = await message.Content.ReadAsStringAsync();
+            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages), // extract ici 
+                                                                 status_xml = getStatusXml(message) } 
+                        );
+            //waiting until we get the JSON response !
             return response;
+        }
+
+        private string[] getMessage(string returnMessages){
+            JToken Jobj = JObject.Parse(returnMessages)["anomalies"]; // table d'anomalie (0..N)
+            return new { string.Empty };
+        }
+        private string getStatusXml(HttpResponseMessage message){
+            return message.IsSuccessStatusCode ? "Accepté":"Rejeté";
         }
 
         public Spirica() { }
@@ -140,14 +154,8 @@ namespace GED.Handlers
 
         //this method will fill additional properties
         private void fillData(){
-            int i = 0;
-            List<DetailPiece> pieces = new List<DetailPiece>();
 
-            int[] idDocs = new int[base.ListeDocument.Count()];
-            foreach (DocumentProduction p in base.ListeDocument){
-                idDocs[i] = p.ID_DocumentNortia;
-                i++;
-            }
+            int[] idDocs = base.ListeDocument.Select(x => x.ID_DocumentNortia).ToArray();
 
             if (idDocs.Length > 0)
             {
@@ -173,7 +181,6 @@ namespace GED.Handlers
                         });
                     }
                     reader.Close();
-                    //===>Definition.connexionQualif.Close();
             }
             // end remplissage de pieces
 
@@ -199,4 +206,10 @@ public class binaries
 {
     public byte[] ficheirPDF;
     public string nomFichie;
+}
+
+public class WsResponse // mettre dans SPI ou depalcer vers production
+{
+    public string[] message;
+    public string status_xml;
 }

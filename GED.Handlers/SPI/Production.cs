@@ -11,12 +11,10 @@ using GED.Tools.WSDLQualif;
 
 namespace GED.Handlers
 {
-    //SINGLETON (duplicata web service)
+    //SINGLETON !
     public class Production
     {
         private static Production refInstance;
-
-
 
         //method to get the instance of class
         public static Production getInstance(){
@@ -42,45 +40,59 @@ namespace GED.Handlers
         {
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
-            Dictionary<string, string> responses = new Dictionary<string,string>(); //#
-            Dictionary<string, string> cresponse = new Dictionary<string, string>();
+            Dictionary<string, WsResponse> cresponse = new Dictionary<string, WsResponse>();
             for (int i = 0; i < nombreActes; i++){
             // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies)
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
                 cresponse = (await acteprod.sendProd()); // send one "Acte"
-                responses.Add(cresponse.Keys.ElementAt(0),cresponse[cresponse.Keys.ElementAt(0)]); // get current element
+                cresponse.Add(cresponse.Keys.ElementAt(0),cresponse[cresponse.Keys.ElementAt(0)]); // get current element
             }
-            updateSalesForce(responses);
-            bool success = Spirica.getProdState(); 
-            return responses;
-        }// must return boolean // method should be implemented by IActe as well
+            updateSalesForce(cresponse);
+            bool success = Spirica.getProdState(); // ### modify status after
+            return cresponse;
+        }// must return boolean
 
-        public void updateSalesForce(Dictionary<string,string> responses){
-            //## this fucntion must after all manage exceptions in case if we can't connect to Force.com API
-            // fetch for all actes data list
-            string soqlQuery = "SELECT #message_interne,xml_status FROM Acte__c where #id_acte# in {#list_of_ids}";
 
-            string username = "username";//
-            string passwd = "password";//
+        //method to update salesForce records (return complex object)
+        public void updateSalesForce(Dictionary<string,WsResponse> responses){
 
-            SforceService SfService = new GED.Tools.WSDLQualif.SforceService();
+            string[] idActes = responses.Keys.ToArray();//actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
+            string idList = "'" + String.Join("','", idActes) + "'";
+            string soqlQuery = "SELECT Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in (" + idList + ")";
+
+            string username = "noluser@nortia.fr.nqualif";//#
+            string passwd = "nortia01";//#
+
+            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
+            Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
+
             try
             {
-               LoginResult loginResult = SfService.login(username, passwd);
+                LoginResult loginResult = SfService.login(username, passwd);
                 SfService.Url = loginResult.serverUrl;
+                SfService.SessionHeaderValue = new SessionHeader();
                 SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+
                 QueryResult result = SfService.query(soqlQuery);
-                if(result.size > 0){
-                    // do stuff
+                Acte__c[] SfActes = new Acte__c[result.size];
+
+                for (int i = 0; i < result.size; i++)
+                {
+                    // cast data
+                    SfActes[i] = (Acte__c)result.records[i];
+                    //######## must modify parent class
+                    SfActes[i].Commentaire_Interne__c += "\n" + dictionnaire[SfActes[i].Name];
+                    SfActes[i].Statut_du_XML__c = dictionnaire[SfActes[i].Name];
                 }
-            }catch(Exception ex)
+                // save update
+                SaveResult[] saveResults = SfService.update(SfActes);
+            }
+            catch (Exception ex)
             {
                 SfService = null;
-                throw (ex);
+                //throw (ex); // you shall not pass
             }
-            // update list
-            // save update
         }
 
     }
