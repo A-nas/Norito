@@ -103,17 +103,38 @@ namespace GED.Handlers
 
             Dictionary<string, WsResponse> response = new Dictionary<string, WsResponse>();
             string returnMessages = await message.Content.ReadAsStringAsync();
-            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages), // extract ici 
+            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages,message), // extract ici 
                                                                  status_xml = getStatusXml(message) } 
                         );
+            // if at least one request return success code, the prod will be considered as success.
+            isSuccess = message.IsSuccessStatusCode;
             //waiting until we get the JSON response !
             return response;
         }
 
-        private string[] getMessage(string returnMessages){
-            JToken Jobj = JObject.Parse(returnMessages)["anomalies"]; // table d'anomalie (0..N)
-            return new { string.Empty };
+        private string[] getMessage(string returnMessages,HttpResponseMessage message){
+
+            if (message.StatusCode == System.Net.HttpStatusCode.NotFound) return new string[] { "Acte introuvable" };
+            if (message.IsSuccessStatusCode){
+                return new string[] { "Acte envoyé avec succés" };
+            }
+            else{
+                // loop for all error messages
+                JToken[] Jobj = JObject.Parse(returnMessages)["anomalies"].ToArray();
+                string[] messages = new string[Jobj.Length];
+                for(int i=0 ; i < Jobj.Length ; i++){
+                    string subJobj = Jobj[i].ToString();
+                    string errorMsg = 
+                      "- " + (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["type"].ToString()) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
+                             (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["categorie"].ToString()) ? String.Empty : "catégorie :" + JObject.Parse(subJobj)["categorie"].ToString()) +
+                             (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["commentaire"].ToString()) ? String.Empty : "commentaire :" + JObject.Parse(subJobj)["commentaire"].ToString())+
+                             "\n \n";
+                    messages[i] = errorMsg;
+                }
+                return messages;
+            }
         }
+
         private string getStatusXml(HttpResponseMessage message){
             return message.IsSuccessStatusCode ? "Accepté":"Rejeté";
         }

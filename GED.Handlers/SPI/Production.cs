@@ -36,7 +36,7 @@ namespace GED.Handlers
         private Production(){}
 
         //** method to send a List of 'Acte'
-        public async Task<Dictionary<string,string>> envoyerProd(List<Acte> actes)
+        public async Task<bool> envoyerProd(List<Acte> actes)
         {
             int nombreActes = actes.Count();
             string[] response = new string[nombreActes];
@@ -49,15 +49,15 @@ namespace GED.Handlers
                 cresponse.Add(cresponse.Keys.ElementAt(0),cresponse[cresponse.Keys.ElementAt(0)]); // get current element
             }
             updateSalesForce(cresponse);
-            bool success = Spirica.getProdState(); // ### modify status after
-            return cresponse;
+            bool prodState = Spirica.getProdState(); // ### modify status after
+            return prodState;
         }// must return boolean
 
 
         //method to update salesForce records (return complex object)
         public void updateSalesForce(Dictionary<string,WsResponse> responses){
 
-            string[] idActes = responses.Keys.ToArray();//actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
+            string[] idActes = responses.Keys.ToArray();//actes.Select(p => p.ReferenceInterne).ToArray(); // extract only keys (ids)
             string idList = "'" + String.Join("','", idActes) + "'";
             string soqlQuery = "SELECT Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in (" + idList + ")";
 
@@ -65,7 +65,7 @@ namespace GED.Handlers
             string passwd = "nortia01";//#
 
             SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
-            Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
+            //Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
 
             try
             {
@@ -81,9 +81,9 @@ namespace GED.Handlers
                 {
                     // cast data
                     SfActes[i] = (Acte__c)result.records[i];
-                    //######## must modify parent class
-                    SfActes[i].Commentaire_Interne__c += "\n" + dictionnaire[SfActes[i].Name];
-                    SfActes[i].Statut_du_XML__c = dictionnaire[SfActes[i].Name];
+                    // update data
+                    SfActes[i].Commentaire_Interne__c +=  responses[SfActes[i].Name].message.ToString();
+                    SfActes[i].Statut_du_XML__c = responses[SfActes[i].Name].status_xml;
                 }
                 // save update
                 SaveResult[] saveResults = SfService.update(SfActes);
