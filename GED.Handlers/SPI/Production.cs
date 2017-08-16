@@ -38,18 +38,18 @@ namespace GED.Handlers
         //** method to send a List of 'Acte'
         public async Task<bool> envoyerProd(List<Acte> actes)
         {
-            int nombreActes = actes.Count();
-            string[] response = new string[nombreActes];
-            Dictionary<string, WsResponse> cresponse = new Dictionary<string, WsResponse>();
+            int nombreActes = actes.Count;
+            Dictionary<string, WsResponse> cresponses = new Dictionary<string, WsResponse>();
             for (int i = 0; i < nombreActes; i++){
             // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies)
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
-                cresponse = (await acteprod.sendProd()); // send one "Acte"
-                cresponse.Add(cresponse.Keys.ElementAt(0),cresponse[cresponse.Keys.ElementAt(0)]); // get current element
+                Dictionary<string, WsResponse> currentResponse = new Dictionary<string, WsResponse>();
+                currentResponse = await acteprod.sendProd(); // send one "Acte" *** (dic with one element)
+                cresponses.Add(currentResponse.Keys.ElementAt(0), currentResponse[currentResponse.Keys.ElementAt(0)]); // get current element???
             }
-            updateSalesForce(cresponse);
-            bool prodState = Spirica.getProdState(); // ### modify status after
+            updateSalesForce(cresponses);
+            bool prodState = Spirica.getProdState();
             return prodState;
         }// must return boolean
 
@@ -59,7 +59,7 @@ namespace GED.Handlers
 
             string[] idActes = responses.Keys.ToArray();//actes.Select(p => p.ReferenceInterne).ToArray(); // extract only keys (ids)
             string idList = "'" + String.Join("','", idActes) + "'";
-            string soqlQuery = "SELECT Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in (" + idList + ")";
+            string soqlQuery = "SELECT Id, Name, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name in (" + idList + ")";
 
             string username = "noluser@nortia.fr.nqualif";//#
             string passwd = "nortia01";//#
@@ -82,7 +82,8 @@ namespace GED.Handlers
                     // cast data
                     SfActes[i] = (Acte__c)result.records[i];
                     // update data
-                    SfActes[i].Commentaire_Interne__c +=  responses[SfActes[i].Name].message.ToString();
+                    string retMessage = string.Join(" ", responses[SfActes[i].Name].message);
+                    SfActes[i].Commentaire_Interne__c += retMessage;
                     SfActes[i].Statut_du_XML__c = responses[SfActes[i].Name].status_xml;
                 }
                 // save update
@@ -90,6 +91,7 @@ namespace GED.Handlers
             }
             catch (Exception ex)
             {
+                //"Unable to create/update fields: Name. Please check the security settings of this field and verify that it is read/write for your profile or permission set.";
                 SfService = null;
                 //throw (ex); // you shall not pass
             }

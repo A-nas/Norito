@@ -100,13 +100,12 @@ namespace GED.Handlers
             }
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent); // must be extracted
-
-            Dictionary<string, WsResponse> response = new Dictionary<string, WsResponse>();
             string returnMessages = await message.Content.ReadAsStringAsync();
-            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages,message), // extract ici 
+            Dictionary<string, WsResponse> response = new Dictionary<string, WsResponse>();
+            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages,message),
                                                                  status_xml = getStatusXml(message) } 
                         );
-            // if at least one request return success code, the prod will be considered as success.
+            // 1 acte success => prod success
             isSuccess = message.IsSuccessStatusCode;
             //waiting until we get the JSON response !
             return response;
@@ -124,12 +123,13 @@ namespace GED.Handlers
                 string[] messages = new string[Jobj.Length];
                 for(int i=0 ; i < Jobj.Length ; i++){
                     string subJobj = Jobj[i].ToString();
-                    string errorMsg = 
-                      "- " + (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["type"].ToString()) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
-                             (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["categorie"].ToString()) ? String.Empty : "catégorie :" + JObject.Parse(subJobj)["categorie"].ToString()) +
-                             (String.IsNullOrWhiteSpace(JObject.Parse(subJobj)["commentaire"].ToString()) ? String.Empty : "commentaire :" + JObject.Parse(subJobj)["commentaire"].ToString())+
-                             "\n \n";
-                    messages[i] = errorMsg;
+                    string errorMsg =
+                      "- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
+                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie :" + JObject.Parse(subJobj)["categorie"].ToString()) +
+                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " commentaire :" + JObject.Parse(subJobj)["commentaire"].ToString()) +
+                             "\n\n";
+
+                messages[i] = errorMsg;
                 }
                 return messages;
             }
@@ -206,8 +206,8 @@ namespace GED.Handlers
             // end remplissage de pieces
 
             // transtypage de supports
-            var instance = Production.getInstance();
-            Dictionary<string,string> dicto = TRANSTYPE;
+            var instance = Production.getInstance(); // ##a supprimer ?##
+            Dictionary<string,string> dicto = TRANSTYPE; // ### a optimiser ###
             foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
               if (dicto.ContainsKey(rep.CodeISIN)){
                         rep.code_support_ext = dicto[rep.CodeISIN];

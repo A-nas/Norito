@@ -898,7 +898,7 @@ namespace Tests.Interfaces
             List<Acte> actes = Definition.GetListeActes(); // data for testing
             string[] idActes = actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
             string idList = "'" + String.Join("','", idActes) + "'"; // construct the part of 'in' query string clause
-            string soqlQuery = "SELECT Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in ("+ idList +")";
+            string soqlQuery = "SELECT Name, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in ("+ idList +")";
 
             string username = "noluser@nortia.fr.nqualif";//
             string passwd = "nortia01";//
@@ -913,25 +913,24 @@ namespace Tests.Interfaces
                 SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
 
                 QueryResult result = SfService.query(soqlQuery);
-                Acte__c[] SfActes = new Acte__c[result.size]; // size of dictionnary parameter (list to save)
-                for(int i = 0; i<result.size; i++){
-                    Acte__c sfActe = (Acte__c)result.records[i];//#
-                    SfActes[i] = (Acte__c)result.records[i];
-                    // update list //updating current cell //extract here message format and status
-                    SfActes[i].Commentaire_Interne__c = dictionnaire[SfActes[i].Name];// select cell from dictionnary where index is the sfActe current index loop
-                    SfActes[i].Statut_du_XML__c = dictionnaire[SfActes[i].Name];
-                    MessageBox.Show("data retrived ==> " + sfActe.Commentaire_Interne__c + " ; " + sfActe.Statut_du_XML__c);
-                    
-                    // do some stuff
-                }
+                // array to alter/safe
+                Acte__c[] SfActes = new Acte__c[result.size];
 
+                for(int i = 0; i<result.size; i++){
+                    // cast data
+                    SfActes[i] = (Acte__c)result.records[i];
+                    //update list //updating current cell //extract here message format and status
+                    SfActes[i].Commentaire_Interne__c += "\n"+dictionnaire[SfActes[i].Name];
+                    SfActes[i].Statut_du_XML__c = dictionnaire[SfActes[i].Name];
+                    MessageBox.Show("data retrived ==> " + SfActes[i].Commentaire_Interne__c + " ; " + SfActes[i].Statut_du_XML__c);
+                }
                 // save update
-                SaveResult[] saveResultsV2 = SfService.update(new sObject[] { sfActe });// deplcaer vers la fin
+                SaveResult[] saveResultsV2 = SfService.update( SfActes );// deplcaer vers la fin
             }
             catch (Exception ex)
             {
                 SfService = null;
-                throw (ex);
+                throw (ex); // you shall not pass
             }
 
         }
