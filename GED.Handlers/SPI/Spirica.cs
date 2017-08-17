@@ -124,9 +124,9 @@ namespace GED.Handlers
                 for(int i=0 ; i < Jobj.Length ; i++){
                     string subJobj = Jobj[i].ToString();
                     string errorMsg =
-                      "- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
-                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie :" + JObject.Parse(subJobj)["categorie"].ToString()) +
-                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " commentaire :" + JObject.Parse(subJobj)["commentaire"].ToString()) +
+                      "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
+                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
+                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " commentaire : " + JObject.Parse(subJobj)["commentaire"].ToString()) +
                              "\n\n";
 
                 messages[i] = errorMsg;

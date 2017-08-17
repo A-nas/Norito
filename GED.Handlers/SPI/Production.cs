@@ -54,19 +54,18 @@ namespace GED.Handlers
         }// must return boolean
 
 
-        //method to update salesForce records (return complex object)
-        public void updateSalesForce(Dictionary<string,WsResponse> responses){
-
+        //method to update salesForce records all lsit is retrived (Not working for lack of permission), could be fixed if i had the SF acte id
+        public void updateSalesForceV1(Dictionary<string,WsResponse> responses){
+            //Build Query
             string[] idActes = responses.Keys.ToArray();//actes.Select(p => p.ReferenceInterne).ToArray(); // extract only keys (ids)
             string idList = "'" + String.Join("','", idActes) + "'";
             string soqlQuery = "SELECT Id, Name, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name in (" + idList + ")";
-
+            // IDS
             string username = "noluser@nortia.fr.nqualif";//#
             string passwd = "nortia01";//#
-
-            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
-            //Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
-
+            // call ws
+            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); 
+            //Execute query
             try
             {
                 LoginResult loginResult = SfService.login(username, passwd);
@@ -87,14 +86,45 @@ namespace GED.Handlers
                     SfActes[i].Statut_du_XML__c = responses[SfActes[i].Name].status_xml;
                 }
                 // save update
-                SaveResult[] saveResults = SfService.update(SfActes);
+                SaveResult[] saveResults = SfService.update(SfActes); //==> "Unable to create/update fields: Name. Please check the security settings of this field and verify that it is read/write for your profile or permission set.";
             }
             catch (Exception ex)
             {
-                //"Unable to create/update fields: Name. Please check the security settings of this field and verify that it is read/write for your profile or permission set.";
                 SfService = null;
                 //throw (ex); // you shall not pass
             }
+        }
+
+        //update "acte" by "acte" this fucntion consume more time/space than updateSalesForce but fix permission issue
+        public void updateSalesForce(Dictionary<string,WsResponse> responses){
+            // IDS
+            string username = "noluser@nortia.fr.nqualif";//#
+            string passwd = "nortia01";//#
+            try
+            {
+                SforceService SfService = new GED.Tools.WSDLQualif.SforceService();
+                LoginResult loginResult = SfService.login(username, passwd);
+                SfService.Url = loginResult.serverUrl;
+                SfService.SessionHeaderValue = new SessionHeader();
+                SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+
+                foreach(KeyValuePair<string, WsResponse> response in responses)
+                {
+                    Acte__c SfActe = new Acte__c();
+                    string soqlQuery = "SELECT Id, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'";
+                    QueryResult result = SfService.query(soqlQuery);
+                    if(result.size != 0)
+                        SfActe = (Acte__c)result.records[0]; // take the only item
+                    // update data
+                    SfActe.Commentaire_Interne__c += string.Join(" ", responses[response.Key].message);
+                    SfActe.Statut_du_XML__c = responses[response.Key].status_xml;
+                    SaveResult[] saveResults = SfService.update(new sObject[] { SfActe } );
+                }
+            }
+            catch(Exception ex){
+
+            }
+
         }
 
     }
