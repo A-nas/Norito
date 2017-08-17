@@ -127,7 +127,7 @@ namespace GED.Handlers
                       "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
                              ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
                              ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " commentaire : " + JObject.Parse(subJobj)["commentaire"].ToString()) +
-                             "\n\n";
+                             "\n";
 
                 messages[i] = errorMsg;
                 }

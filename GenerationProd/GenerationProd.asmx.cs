@@ -130,32 +130,8 @@ namespace GenerationProd
                 if (listeActeTraitementEdi.Count > 0)
                 {
                     if (codeCompagnie == "SPI")
-                    {
-
-
-                        // A ENLEVER
-                        foreach(Acte a in listeActeTraitementEdi)
-                            Log.Trace(IDProd, "a enregistrer !!!", new JavaScriptSerializer().Serialize(a));
-                        Log.Trace(IDProd, Log.MESSAGE_INFO, "DEBUT DE LA GENERATION DE LA PROD SPIRICA");
-
-                        // générer le recap si 1 seule arbitrage passe avec succes, sinon
-                        List<Acte> listeActeSucces = new List<Acte>();
-                        if (!await Production.getInstance().envoyerProd(listeActeTraitementEdi))
-                            throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
-
-                        /*if (listeActeSucces.Count() > 0)
-                        { //Génération du Recap PDF
-                            if (!GenererRecap(IDProd, codeCompagnie, laDate, listeActeSucces, typeEnvoi, false, genererProdActe, classification))
-                                throw new Exception("Erreur lors de la génération du recap de production (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
-                        }
-                        else {
-                                throw new Exception("Erreur lors l'envoie de la production en Web Service (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le LOG pour plus d'infromation");
-                            }*/
-
-
-
-
-                    } // OTHER IS_EDI Companies
+                    if (!await Production.getInstance().envoyerProd(listeActeTraitementEdi))
+                            throw new Exception("Erreur lors l'envoie de la production : " + IDProd.ToString() + " en Web Service  pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le commentaire interne des actes rejetés pour plus d'infromations");
                     else
                     {
                         //Génération de l'XML
