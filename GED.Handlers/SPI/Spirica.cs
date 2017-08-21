@@ -213,8 +213,14 @@ namespace GED.Handlers
                         rep.code_support_ext = TRANSTYPE[rep.CodeISIN];
                     else
                         rep.code_support_ext = rep.CodeISIN;
-                    }
                 }
+        }
+
+
+        // method to merge List<Object> of Docs
+        private void mergeDoc()
+        {
+           
         }
 
     }
