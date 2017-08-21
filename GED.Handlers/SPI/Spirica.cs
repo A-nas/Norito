@@ -51,6 +51,7 @@ namespace GED.Handlers
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString(), dr[1].ToString());
+            dr.Close();
             Definition.connexionQualif.Close();
         }
 
@@ -113,9 +114,9 @@ namespace GED.Handlers
 
         private string[] getMessage(string returnMessages,HttpResponseMessage message){
 
-            if (message.StatusCode == System.Net.HttpStatusCode.NotFound) return new string[] { "Acte introuvable" };
+            if (message.StatusCode == System.Net.HttpStatusCode.NotFound) return new string[] { "Acte introuvable\n" };
             if (message.IsSuccessStatusCode){
-                return new string[] { "Acte envoyé avec succés" };
+                return new string[] { "Acte envoyé avec succés\n" };
             }
             else{
                 // loop for all error messages
@@ -126,7 +127,7 @@ namespace GED.Handlers
                     string errorMsg =
                       "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
                              ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
-                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " commentaire : " + JObject.Parse(subJobj)["commentaire"].ToString()) +
+                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " " + JObject.Parse(subJobj)["commentaire"].ToString()) +
                              "\n";
 
                 messages[i] = errorMsg;
@@ -202,22 +203,18 @@ namespace GED.Handlers
                         });
                     }
                     reader.Close();
+                    Definition.connexionQualif.Close();
             }
             // end remplissage de pieces
 
             // transtypage de supports
-            var instance = Production.getInstance(); // ##a supprimer ?##
-            Dictionary<string,string> dicto = TRANSTYPE; // ### a optimiser ###
             foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
-              if (dicto.ContainsKey(rep.CodeISIN)){
-                        rep.code_support_ext = dicto[rep.CodeISIN];
-                    }else{
-                    // les codes ISIN ne passent pas pour l'instant
+              if (TRANSTYPE.ContainsKey(rep.CodeISIN))
+                        rep.code_support_ext = TRANSTYPE[rep.CodeISIN];
+                    else
                         rep.code_support_ext = rep.CodeISIN;
-                        throw new Exception("impossible de trouver le code support du support :" + rep.CodeISIN);
                     }
                 }
-            Definition.connexionQualif.Close();
         }
 
     }
