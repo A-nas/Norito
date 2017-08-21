@@ -24,13 +24,14 @@ namespace GED.Handlers
         [JsonProperty(PropertyName = "support_saisie", Order = 5)]
         private static string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
-        public List<DetailPiece> pieces = new List<DetailPiece>();
+        public List<DetailPiece> pieces;
         [JsonProperty(PropertyName = "date_signature", Order = 2)]
         public string dateDeSignature;
         List<binaries> binaires;
 
         // Properties to manage/save the state and data of the multi instance of the current class
         private static Dictionary<string, string> TRANSTYPE = null;
+        private static Dictionary<string, string> ANOMALIES = null;
         private static bool isSuccess = false;
 
         public static bool getProdState(){
@@ -41,16 +42,35 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
             // we select distinct code_isin to ensure we get only one isin code
-            SqlCommand cmd = new SqlCommand("SELECT * from "
+            SqlCommand cmd = new SqlCommand("SELECT code_isin, code_support FROM "
                 + "(SELECT code_isin, code_support, ROW_NUMBER() OVER(PARTITION BY code_isin ORDER BY code_isin DESC) rn "
                 + "from[dbo].[SUPPORT_TRANSTYPE] "
-                + ") sub_query "
+                + "WHERE code_isin is not null) sub_query "
                 + "WHERE rn = 1 ", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
 
             Definition.connexionQualif.Open();
             SqlDataReader dr = cmd.ExecuteReader();
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString(), dr[1].ToString());
+            dr.Close();
+            Definition.connexionQualif.Close();
+        }
+
+        private void getAnomalies()
+        {
+            ANOMALIES = new Dictionary<string, string>();
+            // we select distinct code_anomalie to ensure we get only one code per description
+            SqlCommand cmd = new SqlCommand("SELECT code_anomalie, descriptif_anomalie FROM ( "
+                + "	SELECT 	code_anomalie, "
+                + " descriptif_anomalie, "
+                + " ROW_NUMBER() OVER(PARTITION BY code_anomalie ORDER BY code_anomalie DESC) rn "
+                + " FROM [dbo].[ANOMALIE_TRANSTYPE] "
+                + " WHERE code_anomalie is not null "
+                + " )sub_query WHERE rn = 1 ", Definition.connexionQualif);
+            Definition.connexionQualif.Open();
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+                ANOMALIES.Add(dr[0].ToString(), dr[1].ToString());
             dr.Close();
             Definition.connexionQualif.Close();
         }
@@ -68,7 +88,7 @@ namespace GED.Handlers
             cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
             cmd.Parameters.AddWithValue("@ID_ProdSF", (object)" --- ");
             cmd.Parameters.AddWithValue("@typeMessage", (object)"VARDEBUG");
-            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting)+"*"+base.DateEnvoiProduction.ToString() + " " + base.DateAcquisition.ToString() + " " + base.DateCreation.ToString());
+            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting));
             Definition.connexionQualif.Open();
             cmd.ExecuteNonQuery();
             Definition.connexionQualif.Close();
@@ -125,9 +145,9 @@ namespace GED.Handlers
                 for(int i=0 ; i < Jobj.Length ; i++){
                     string subJobj = Jobj[i].ToString();
                     string errorMsg =
-                      "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : "Erreur de Type : " + JObject.Parse(subJobj)["type"].ToString()) +
-                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
-                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " " + JObject.Parse(subJobj)["commentaire"].ToString()) +
+                    "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : ANOMALIES[JObject.Parse(subJobj)["type"].ToString()]) +
+                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " ,catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
+                             ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " . " + JObject.Parse(subJobj)["commentaire"].ToString()) +
                              "\n";
 
                 messages[i] = errorMsg;
@@ -144,7 +164,7 @@ namespace GED.Handlers
 
         // Consutructor used to cast ACTE => SPIRICA
         public Spirica(Acte acte) {
-
+            this.pieces = new List<DetailPiece>();
             this.NomType = acte.NomType;
             this.NomActeAdministratif = acte.NomActeAdministratif;
             this.ReferenceInterne = acte.ReferenceInterne;
@@ -170,6 +190,7 @@ namespace GED.Handlers
             this.binaires = new List<binaries>();
 
             if (TRANSTYPE == null) getSupports();
+            if (ANOMALIES == null) getAnomalies();
             fillData();
         }
 
@@ -196,14 +217,16 @@ namespace GED.Handlers
                             nomFichier = reader[0].ToString() + "" + reader[3].ToString(),
                             typeFicher = reader[2].ToString()
                         });
-                    this.binaires.Add(new binaries
-                    {
-                        nomFichie = reader[0].ToString() + "" + reader[3].ToString(),
-                        ficheirPDF = (byte[])reader[1]
-                        });
-                    }
+                        this.binaires.Add(new binaries
+                        {
+                            nomFichie = reader[0].ToString() + "" + reader[3].ToString(),
+                            ficheirPDF = (byte[])reader[1]
+                            });
+                     }
                     reader.Close();
                     Definition.connexionQualif.Close();
+                if (this.isSigned) { //merge all binaries into one pdf *****
+                }
             }
             // end remplissage de pieces
 
@@ -217,7 +240,7 @@ namespace GED.Handlers
         }
 
 
-        // method to merge List<Object> of Docs
+        // method to merge List<binaries> into one 
         private void mergeDoc()
         {
            

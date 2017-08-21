@@ -39,6 +39,8 @@ namespace GED.Handlers
         public string Commentaire { get; set; }
         public bool InvestissementImmediat { get; set; }
         public bool Regul { get; set; }
+        [JsonProperty(PropertyName = "signé", Order = 25)]
+        public bool isSigned; // a remplir !!!!
 
 
         public Acte()
