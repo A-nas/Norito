@@ -13,6 +13,9 @@ using System.Windows.Forms;
 // WEB SERVICE INCLUDES
 using System.Net.Http;
 using System.Net.Http.Headers;
+//Tall Components & merging libs
+using iTextSharp.text.pdf
+using System.IO;
 
 
 
@@ -225,7 +228,17 @@ namespace GED.Handlers
                      }
                     reader.Close();
                     Definition.connexionQualif.Close();
-                if (this.isSigned) { //merge all binaries into one pdf *****
+
+                if (this.isSigned) {
+                    //work only if bianries documents are PDF files
+                    string signedFileName = "Document_signé_Electroniquement.pdf";
+                    string TypeFichier = "dossier_arbitrage_signe_electroniquement";
+
+                    this.pieces.Add(new DetailPiece {
+                        nomFichier = signedFileName,
+                        typeFicher = TypeFichier
+                    });
+                    this.binaires.Add(mergeDoc(binaires, signedFileName));
                 }
             }
             // end remplissage de pieces
@@ -240,10 +253,25 @@ namespace GED.Handlers
         }
 
 
-        // method to merge List<binaries> into one 
-        private void mergeDoc()
-        {
-           
+        // method to merge List<binaries> into one binary (bianires class)
+        private binaries mergeDoc(List<binaries> SignedBinaries, string mergedFileName){
+
+            MemoryStream memoStream = new MemoryStream();
+            iTextSharp.text.Document doc = new iTextSharp.text.Document();
+            PdfSmartCopy copy = new PdfSmartCopy(doc,memoStream);
+
+            List<byte[]> ListOfPDFS = SignedBinaries.Select(x => x.ficheirPDF).ToList();
+            //Loop throgh each byte array (each iteration represent a single PDF)
+            foreach(byte[] pdf in ListOfPDFS){
+                PdfReader pdfReader = new PdfReader(pdf);
+                copy.AddDocument(pdfReader);
+            }
+            doc.Close();
+            return new binaries
+            {
+                ficheirPDF = memoStream.ToArray(),
+                nomFichie = mergedFileName
+            };
         }
 
     }
