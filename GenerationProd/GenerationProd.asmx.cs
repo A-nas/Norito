@@ -129,9 +129,12 @@ namespace GenerationProd
 
                 if (listeActeTraitementEdi.Count > 0)
                 {
-                    if (codeCompagnie == "SPI")
-                    if (!await Production.getInstance().envoyerProd(listeActeTraitementEdi))
+                    if (codeCompagnie == "SPI"){
+                        if (!await Production.getInstance().envoyerProd(listeActeTraitementEdi))
                             throw new Exception("Erreur lors l'envoie de la production : " + IDProd.ToString() + " en Web Service  pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder le commentaire interne des actes rejetés pour plus d'infromations");
+                        //Integrer le Recap
+                    }
+                    
                     else
                     {
                         //Génération de l'XML
