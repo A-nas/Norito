@@ -116,8 +116,7 @@ namespace GED.Handlers
             json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json"); // can be configured
             requestContent.Add(json, "arbitrage");
 
-            foreach (binaries bin in this.binaires)
-            {
+            foreach (binaries bin in this.binaires){ // this can be optimised we have the files dupliated on bianries List Class and pieces List Class
                 var binaryFile = new ByteArrayContent(bin.ficheirPDF);
                 binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
                 requestContent.Add(binaryFile, "file", bin.nomFichie );
@@ -283,7 +282,7 @@ public class binaries
     public string nomFichie;
 }
 
-public class WsResponse // mettre dans SPI ou depalcer vers production
+public class WsResponse // "pas sa place ici" ==> deplacer dans SPI dir ou depalcer vers Production
 {
     public string[] message;
     public string status_xml;
