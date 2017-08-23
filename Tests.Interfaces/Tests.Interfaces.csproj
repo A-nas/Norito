@@ -77,6 +77,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\genererProdNewFinal\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\GenererProd\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -109,6 +114,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Service References\genererProdNewFinal\generationprod.wsdl" />
+    <None Include="Service References\genererProdNewFinal\Tests.Interfaces.genererProdNewFinal.GenererProdResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\GenererProd\GenerationProd.wsdl" />
     <None Include="Service References\GenererProd\Tests.Interfaces.GenererProd.GenererProdResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -162,6 +171,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\genererProdNewFinal\" />
     <WCFMetadataStorage Include="Service References\GenererProd\" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +185,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\GenererProd\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\genererProdNewFinal\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\genererProdNewFinal\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\genererProdNewFinal\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

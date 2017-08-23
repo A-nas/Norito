@@ -647,27 +647,27 @@ namespace Tests.Interfaces
         private void button10_Click(object sender, EventArgs e)
         {
             //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
-            GenererProd.GenerationProdSoapClient test = new GenererProd.GenerationProdSoapClient();
+            genererProdNewFinal.GenerationProdSoapClient test = new genererProdNewFinal.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
-            GenererProd.Acte[] Sactes = new GenererProd.Acte[1];
-            Sactes[0] = new GenererProd.Acte();
+            genererProdNewFinal.Acte[] Sactes = new genererProdNewFinal.Acte[1];
+            Sactes[0] = new genererProdNewFinal.Acte();
                 // sub object
                 {
-                GenererProd.Repartition rep01 = new GenererProd.Repartition
+                genererProdNewFinal.Repartition rep01 = new genererProdNewFinal.Repartition
                 {
                         CodeISIN = "FR0010696765",
                         TypeRepartition = "%",
                         ValeurRepartition = 30
                     };
 
-                GenererProd.Repartition rep02 = new GenererProd.Repartition
+                genererProdNewFinal.Repartition rep02 = new genererProdNewFinal.Repartition
                 {
                         CodeISIN = "FR0007071378",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
-                GenererProd.DocumentProduction doc01 = new GenererProd.DocumentProduction
+                genererProdNewFinal.DocumentProduction doc01 = new genererProdNewFinal.DocumentProduction
                 {
                         ID_DocumentNortia = 1636367,
                         ID_DocumentSalesForce = "a098E000003hgUxQAI",
@@ -682,18 +682,18 @@ namespace Tests.Interfaces
                     };*/
                 //remplissage
           
-                Sactes[0].ListeSupportDesinvestir = new GenererProd.Repartition[1];
-                Sactes[0].ListeSupportInvestir = new GenererProd.Repartition[1];
-                Sactes[0].ListeSupportDesinvestir[0] = new GenererProd.Repartition();
-                Sactes[0].ListeSupportInvestir[0] = new GenererProd.Repartition();
+                Sactes[0].ListeSupportDesinvestir = new genererProdNewFinal.Repartition[1];
+                Sactes[0].ListeSupportInvestir = new genererProdNewFinal.Repartition[1];
+                Sactes[0].ListeSupportDesinvestir[0] = new genererProdNewFinal.Repartition();
+                Sactes[0].ListeSupportInvestir[0] = new genererProdNewFinal.Repartition();
 
                 Sactes[0].ListeSupportDesinvestir[0] = rep01;
                 Sactes[0].ListeSupportInvestir[0] = rep02;
            
 
 
-                Sactes[0].ListeDocument = new GenererProd.DocumentProduction[1];
-                Sactes[0].ListeDocument[0] = new GenererProd.DocumentProduction();
+                Sactes[0].ListeDocument = new genererProdNewFinal.DocumentProduction[1];
+                Sactes[0].ListeDocument[0] = new genererProdNewFinal.DocumentProduction();
                // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
                 //Sactes[0].ListeDocument[1] = doc02;
@@ -704,7 +704,7 @@ namespace Tests.Interfaces
                 
                 Sactes[0].NomType = "Arbitrage";
                 Sactes[0].NomActeAdministratif = "";
-                Sactes[0].ReferenceInterne = "ACT000407496";
+                Sactes[0].ReferenceInterne = "ACT000407542";
                 Sactes[0].NomCompletSouscripteurs = "";
                 Sactes[0].NumContrat = "112900052";
                 Sactes[0].CodeApporteur = "NOR100055";
@@ -721,6 +721,7 @@ namespace Tests.Interfaces
                 Sactes[0].Commentaire = "";
                 Sactes[0].InvestissementImmediat = false;
                 Sactes[0].Regul = true;
+                Sactes[0].isSigned = true;
             }
 
                 test.GenererProd("TEST", "SPI", Sactes, "Scan", true, "");

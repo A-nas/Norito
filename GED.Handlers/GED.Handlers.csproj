@@ -128,6 +128,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TallComponents.PDF.Kit, Version=4.0.94.0, Culture=neutral, PublicKeyToken=76bf2dedaa68ccb5, processorArchitecture=MSIL">
+      <HintPath>..\packages\TallComponents.PDFKit.4.0.94\lib\net40\TallComponents.PDF.Kit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TallComponents.PDF.Layout, Version=4.0.21.0, Culture=neutral, PublicKeyToken=76bf2dedaa68ccb5, processorArchitecture=MSIL">
+      <HintPath>..\packages\TallComponents.TallPDF.4.0.21\lib\net40\TallComponents.PDF.Layout.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acte.cs" />
