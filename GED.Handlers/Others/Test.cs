@@ -12,7 +12,6 @@ using System.IO;
 using System.IO.Compression;
 using GED.Handlers;
 using GED.Tools;
-using TallComponents.PDF;
 //using IntegrationAvenant.Properties;
 using System.Web;
 using System.Data.SqlClient;

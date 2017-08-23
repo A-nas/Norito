@@ -59,8 +59,9 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\GED - Copie\binary\Ionic.Zip.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp">
-      <HintPath>..\binary\itextsharp.dll</HintPath>
+    <Reference Include="itextsharp, Version=5.5.11.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Nequeo, Version=2016.26.1.1, Culture=neutral, PublicKeyToken=a8d0fd4d65ef7906, processorArchitecture=MSIL">
       <HintPath>..\packages\NequeoBase.2016.26.1.1\lib\4.6\Nequeo.dll</HintPath>
@@ -127,9 +128,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TallComponents.PDF.Kit">
-      <HintPath>..\binary\TallComponents\192.168.3.1\TallComponents.PDF.Kit.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acte.cs" />
