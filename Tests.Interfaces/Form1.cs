@@ -674,6 +674,14 @@ namespace Tests.Interfaces
                         NbPage = 1
                 };
 
+                genererProdNewFinal.DocumentProduction doc02 = new genererProdNewFinal.DocumentProduction
+                {
+                    ID_DocumentNortia = 1636370,
+                    ID_DocumentSalesForce = "a098E000003hgUxQAI",
+                    NbPage = 1
+                };
+
+
                 /*
                 GenererProd.DocumentProduction doc02 = new GenererProd.DocumentProduction
                 {
@@ -681,7 +689,7 @@ namespace Tests.Interfaces
                         ID_DocumentSalesForce = "idSalesForce"
                     };*/
                 //remplissage
-          
+
                 Sactes[0].ListeSupportDesinvestir = new genererProdNewFinal.Repartition[1];
                 Sactes[0].ListeSupportInvestir = new genererProdNewFinal.Repartition[1];
                 Sactes[0].ListeSupportDesinvestir[0] = new genererProdNewFinal.Repartition();
@@ -692,13 +700,15 @@ namespace Tests.Interfaces
            
 
 
-                Sactes[0].ListeDocument = new genererProdNewFinal.DocumentProduction[1];
+                Sactes[0].ListeDocument = new genererProdNewFinal.DocumentProduction[2];
                 Sactes[0].ListeDocument[0] = new genererProdNewFinal.DocumentProduction();
-               // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
+                Sactes[0].ListeDocument[1] = new genererProdNewFinal.DocumentProduction();
+                // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
+                Sactes[0].ListeDocument[1] = doc02;
                 //Sactes[0].ListeDocument[1] = doc02;
                 //
-                
+
                 Sactes[0].Frais = 0f;
                 Sactes[0].Commentaire = "un commentaire";
                 

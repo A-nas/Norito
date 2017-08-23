@@ -146,9 +146,10 @@ namespace GED.Handlers
                 string[] messages = new string[Jobj.Length];
                 for(int i=0 ; i < Jobj.Length ; i++){
                     string subJobj = Jobj[i].ToString();
+                    // may throw exception in case if new 'Anomalies' types are added (*)
                     string errorMsg =
                     "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : ANOMALIES[JObject.Parse(subJobj)["type"].ToString()]) +
-                             ((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " ,catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) +
+                             //((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " ,catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) + uncomment to have the catégorie
                              ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " . " + JObject.Parse(subJobj)["commentaire"].ToString()) +
                              "\n";
 
@@ -190,7 +191,7 @@ namespace GED.Handlers
             this.Regul = acte.Regul;
             this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy"); // sans le prefix 'acte' on prend la propriete de this.base.dateEnvoieEnProd
             this.binaires = new List<binaries>();
-
+            this.isSigned = acte.isSigned;
             if (TRANSTYPE == null) getSupports();
             if (ANOMALIES == null) getAnomalies();
             fillData();
@@ -230,14 +231,16 @@ namespace GED.Handlers
 
                 if (this.isSigned) {
                     //work only if bianries documents are PDF files
-                    string signedFileName = "Document_signé_Electroniquement.pdf";
+                    string signedFileName = "Document_signe_Electroniquement.pdf";
                     string TypeFichier = "dossier_arbitrage_signe_electroniquement";
 
                     this.pieces.Add(new DetailPiece {
                         nomFichier = signedFileName,
                         typeFicher = TypeFichier
                     });
-                    this.binaires.Add(mergeDoc(binaires, signedFileName));
+                    this.binaires.Add(
+                        mergeDoc(binaires, signedFileName)
+                    );
                 }
             }
             // end remplissage de pieces
@@ -254,23 +257,33 @@ namespace GED.Handlers
 
         // method to merge List<binaries> into one binary (bianires class)
         private binaries mergeDoc(List<binaries> SignedBinaries, string mergedFileName){
-
-            MemoryStream memoStream = new MemoryStream();
-            iTextSharp.text.Document doc = new iTextSharp.text.Document();
-            PdfSmartCopy copy = new PdfSmartCopy(doc,memoStream);
-
-            List<byte[]> ListOfPDFS = SignedBinaries.Select(x => x.ficheirPDF).ToList();
-            //Loop throgh each byte array (each iteration represent a single PDF)
-            foreach(byte[] pdf in ListOfPDFS){
-                PdfReader pdfReader = new PdfReader(pdf);
-                copy.AddDocument(pdfReader);
-            }
-            doc.Close();
-            return new binaries
+            try
             {
-                ficheirPDF = memoStream.ToArray(),
-                nomFichie = mergedFileName
-            };
+                MemoryStream memoStream = new MemoryStream();
+                iTextSharp.text.Document doc = new iTextSharp.text.Document();
+                PdfSmartCopy copy = new PdfSmartCopy(doc, memoStream);
+                doc.Open();
+
+                List<byte[]> ListOfPDFS = SignedBinaries.Select(x => x.ficheirPDF).ToList();
+                //Loop throgh each byte array (each iteration represent a single PDF)
+                foreach (byte[] pdf in ListOfPDFS)
+                {
+                    PdfReader pdfReader = new PdfReader(pdf);
+                    copy.AddDocument(pdfReader);
+                }
+                doc.Close();
+                return new binaries
+                {
+                    ficheirPDF = memoStream.ToArray(),
+                    nomFichie = mergedFileName
+                };
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return new binaries();
+
         }
 
     }
