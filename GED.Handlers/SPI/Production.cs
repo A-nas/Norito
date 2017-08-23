@@ -36,7 +36,7 @@ namespace GED.Handlers
         private Production(){}
 
         //** method to send a List of 'Acte'
-        public async Task<bool> envoyerProd(List<Acte> actes)
+        public async Task<List<string>> envoyerProd(List<Acte> actes)
         {
             int nombreActes = actes.Count;
             Dictionary<string, WsResponse> cresponses = new Dictionary<string, WsResponse>();
@@ -50,7 +50,7 @@ namespace GED.Handlers
             }
             updateSalesForce(cresponses);
             bool prodState = Spirica.getProdState();
-            return prodState;
+            return Spirica.getListSuccess();
         }// must return boolean
 
         //method to update salesForce records all lsit is retrived (Not working for lack of permission), could be fixed if i had the SF acte id

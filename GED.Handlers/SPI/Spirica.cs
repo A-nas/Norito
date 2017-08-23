@@ -35,8 +35,12 @@ namespace GED.Handlers
         // Properties to manage/save the state and data of the multi instance of the current class
         private static Dictionary<string, string> TRANSTYPE = null;
         private static Dictionary<string, string> ANOMALIES = null;
-        private static bool isSuccess = false;
+        private static bool isSuccess = false; // back to sha 222b9a98e149a349f920aa17e8c71e38f2ab20a5 for boolean return
+        private static List<string> SuccessActes = new List<string>(); // 
 
+        public static List<string> getListSuccess(){
+            return SuccessActes;
+        }
         public static bool getProdState(){
             return isSuccess;
         }
@@ -100,7 +104,7 @@ namespace GED.Handlers
         }
 
 
-        // Attach and send the current production (**add elec signature)
+        // Attach and send the current production
         public async Task<Dictionary<string,WsResponse>> sendProd(){
 
             // preparing request HEADER
@@ -129,7 +133,10 @@ namespace GED.Handlers
                                                                  status_xml = getStatusXml(message) } 
                         );
             // 1 acte success => prod success
-            isSuccess = message.IsSuccessStatusCode;
+            if (message.IsSuccessStatusCode){
+                SuccessActes.Add(this.ReferenceInterne);
+                isSuccess = true;
+            }
             //waiting until we get the JSON response !
             return response;
         }
@@ -137,6 +144,7 @@ namespace GED.Handlers
         private string[] getMessage(string returnMessages,HttpResponseMessage message){
 
             if (message.StatusCode == System.Net.HttpStatusCode.NotFound) return new string[] { "Acte introuvable\n" };
+
             if (message.IsSuccessStatusCode){
                 return new string[] { "Acte envoyé avec succés\n" };
             }
@@ -149,7 +157,7 @@ namespace GED.Handlers
                     // may throw exception in case if new 'Anomalies' types are added (*)
                     string errorMsg =
                     "\n- " + (((JObject.Parse(subJobj)["type"] == null)) ? String.Empty : ANOMALIES[JObject.Parse(subJobj)["type"].ToString()]) +
-                             //((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " ,catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) + uncomment to have the catégorie
+                             //((JObject.Parse(subJobj)["categorie"] == null) ? String.Empty : " ,catégorie : " + JObject.Parse(subJobj)["categorie"].ToString()) + uncomment to have the catégorie detail
                              ((JObject.Parse(subJobj)["commentaire"] == null) ? String.Empty : " . " + JObject.Parse(subJobj)["commentaire"].ToString()) +
                              "\n";
 
@@ -189,7 +197,7 @@ namespace GED.Handlers
             this.Commentaire = acte.Commentaire;
             this.InvestissementImmediat = acte.InvestissementImmediat;
             this.Regul = acte.Regul;
-            this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy"); // sans le prefix 'acte' on prend la propriete de this.base.dateEnvoieEnProd
+            this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy");
             this.binaires = new List<binaries>();
             this.isSigned = acte.isSigned;
             if (TRANSTYPE == null) getSupports();
@@ -257,8 +265,7 @@ namespace GED.Handlers
 
         // method to merge List<binaries> into one binary (bianires class)
         private binaries mergeDoc(List<binaries> SignedBinaries, string mergedFileName){
-            try
-            {
+
                 MemoryStream memoStream = new MemoryStream();
                 iTextSharp.text.Document doc = new iTextSharp.text.Document();
                 PdfSmartCopy copy = new PdfSmartCopy(doc, memoStream);
@@ -266,25 +273,17 @@ namespace GED.Handlers
 
                 List<byte[]> ListOfPDFS = SignedBinaries.Select(x => x.ficheirPDF).ToList();
                 //Loop throgh each byte array (each iteration represent a single PDF)
-                foreach (byte[] pdf in ListOfPDFS)
-                {
+                foreach (byte[] pdf in ListOfPDFS){
                     PdfReader pdfReader = new PdfReader(pdf);
                     copy.AddDocument(pdfReader);
                 }
                 doc.Close();
-                return new binaries
-                {
+
+                return new binaries{
                     ficheirPDF = memoStream.ToArray(),
                     nomFichie = mergedFileName
                 };
-            }
-            catch(Exception ex)
-            {
-
-            }
-            return new binaries();
-
-        }
+         }
 
     }
 }
