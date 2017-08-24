@@ -129,18 +129,15 @@ namespace GenerationProd
 
                 if (listeActeTraitementEdi.Count > 0)
                 {
-                    if (codeCompagnie == "SPI")
-                    {
+                    if (codeCompagnie == "SPI"){ // envoie web service   
                         List<string> ListSuccess = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
-                        if (ListSuccess.Count > 0)
-                        {
+                        if (ListSuccess.Count > 0){
                             List<Acte> ListActeSuccess = listeActeTraitementEdi.Where(x => ListSuccess.Contains(x.ReferenceInterne)).ToList(); // extract successful "ACTES"
                             if (!GenererProdXML(IDProd, codeCompagnie, laDate, ListActeSuccess, typeEnvoi, genererProdActe, classification))
                                 throw new Exception("Erreur lors de la génération de la production XML EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());
-                        }
+                        }else throw new Exception("Erreur lors de la génération de la production XML EDI (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString() + " veuillez regarder les commentaires interne des actes envoyés ");
 
                     }
-
                     else
                     {
                         //Génération de l'XML

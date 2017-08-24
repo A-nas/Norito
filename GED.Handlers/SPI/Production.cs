@@ -14,23 +14,14 @@ namespace GED.Handlers
     //SINGLETON !
     public class Production
     {
-        private static Production refInstance;
+        private static Production refInstance = null;
 
         //method to get the instance of class
         public static Production getInstance(){
-            Production refInstance =  null;
-            try {
-                if (refInstance == null)
-                {
+                if (refInstance == null){
                     refInstance = new Production();
                 }
                 return refInstance;
-            } catch(Exception ex)
-            {
-                // we mustn't be here !
-                Console.WriteLine("exception throwed ==> {0}", ex.Message);
-            }
-            return refInstance;
         }
 
         private Production(){}
