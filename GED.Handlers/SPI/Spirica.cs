@@ -36,7 +36,7 @@ namespace GED.Handlers
         private static Dictionary<string, string> TRANSTYPE = null;
         private static Dictionary<string, string> ANOMALIES = null;
         private static bool isSuccess = false; // back to sha 222b9a98e149a349f920aa17e8c71e38f2ab20a5 for boolean return
-        private static List<string> SuccessActes = new List<string>(); // 
+        private static List<string> SuccessActes = new List<string>(); // list of 'Acte' IDs that return success code (2xx HTTP)
 
         public static List<string> getListSuccess(){
             return SuccessActes;
@@ -90,7 +90,7 @@ namespace GED.Handlers
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ContractResolver = new ShouldSerializeContractResolver()
             };
-            //insert database ##
+            //insert database ## ♣
             SqlCommand cmd = new SqlCommand("INSERT INTO GenerationProd_Log(Date_Log,ID_ProdSF,TypeMessage,Message) VALUES (@date_Log,@ID_ProdSF,@typeMessage,@message)", Definition.connexionQualif);
             cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
             cmd.Parameters.AddWithValue("@ID_ProdSF", (object)" --- ");

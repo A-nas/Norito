@@ -11,12 +11,12 @@ using GED.Tools.WSDLQualif;
 
 namespace GED.Handlers
 {
-    //SINGLETON !
+    //SINGLETON
     public class Production
     {
         private static Production refInstance = null;
 
-        //method to get the instance of class
+        //method to get the instance of singleton
         public static Production getInstance(){
                 if (refInstance == null){
                     refInstance = new Production();
@@ -27,8 +27,8 @@ namespace GED.Handlers
         private Production(){}
 
         //** method to send a List of 'Acte'
-        public async Task<List<string>> envoyerProd(List<Acte> actes)
-        {
+        public async Task<List<string>> envoyerProd(List<Acte> actes){
+            // *** ONLY IF PRODUCTION IS NONE OR FAIL STATUS ***
             int nombreActes = actes.Count;
             Dictionary<string, WsResponse> cresponses = new Dictionary<string, WsResponse>();
             for (int i = 0; i < nombreActes; i++){
@@ -37,10 +37,10 @@ namespace GED.Handlers
                 IActe acteprod = new Spirica(actes[i]);
                 Dictionary<string, WsResponse> currentResponse = new Dictionary<string, WsResponse>();
                 currentResponse = await acteprod.sendProd(); // send one "Acte" *** (dic with one element)
-                cresponses.Add(currentResponse.Keys.ElementAt(0), currentResponse[currentResponse.Keys.ElementAt(0)]); // get current element???
+                cresponses.Add(currentResponse.Keys.ElementAt(0), currentResponse[currentResponse.Keys.ElementAt(0)]); // get current element
             }
             updateSalesForce(cresponses);
-            bool prodState = Spirica.getProdState();
+            bool prodState = Spirica.getProdState(); // used before to return prod state
             return Spirica.getListSuccess();
         }// must return boolean
 
@@ -71,6 +71,7 @@ namespace GED.Handlers
                     // update data
                     string retMessage = string.Join(" ", responses[SfActes[i].Name].message);
                     SfActes[i].Commentaire_Interne__c += retMessage;
+                    // this is safe now ! (we send prod only if it in None OR Rejet Status)
                     SfActes[i].Statut_du_XML__c = responses[SfActes[i].Name].status_xml;
                 }
                 // save update
@@ -82,7 +83,7 @@ namespace GED.Handlers
             }
         }
 
-        //update "acte" by "acte" this fucntion consume more time/space than updateSalesForce but fix permission issue
+        //update "acte" by "acte" this fucntion consume more time/space than updateSalesForceV1 but fix permission issue
         public void updateSalesForce(Dictionary<string,WsResponse> responses){
             // IDS
             string username = "noluser@nortia.fr.nqualif";//#
