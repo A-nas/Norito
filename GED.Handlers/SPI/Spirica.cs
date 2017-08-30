@@ -263,7 +263,6 @@ namespace GED.Handlers
                 }
         }
 
-
         // method to merge List<binaries> into one binary (bianires class)
         private binaries mergeDoc(List<binaries> SignedBinaries, string mergedFileName){
 

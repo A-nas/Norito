@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 // for sales force
-using GED.Tools.WSDLQualif;
+using GED.Tools.WSDLQualifFinal;
 
 
 
@@ -54,7 +54,7 @@ namespace GED.Handlers
             string username = "noluser@nortia.fr.nqualif";//#
             string passwd = "nortia01";//#
             // call ws
-            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); 
+            SforceService SfService = new GED.Tools.WSDLQualifFinal.SforceService(); 
             //Execute query
             try
             {
@@ -88,22 +88,28 @@ namespace GED.Handlers
             string username = "noluser@nortia.fr.nqualif";//#
             string passwd = "nortia01";//#
         
-            SforceService SfService = new GED.Tools.WSDLQualif.SforceService();
+            SforceService SfService = new GED.Tools.WSDLQualifFinal.SforceService();
             LoginResult loginResult = SfService.login(username, passwd);
             SfService.Url = loginResult.serverUrl;
             SfService.SessionHeaderValue = new SessionHeader();
             SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
 
             foreach(KeyValuePair<string, WsResponse> response in responses){
+                //UPDATE ACTE
                 Acte__c SfActe = new Acte__c();
-                string soqlQuery = "SELECT Id, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'";
-                QueryResult result = SfService.query(soqlQuery);
+                //string soqlQuery = "SELECT Id, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'"; OLD
+                string soqlQueryActe = "SELECT Id, Commentaire_XML__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'";
+                QueryResult result = SfService.query(soqlQueryActe);
                 if(result.size != 0)
                 SfActe = (Acte__c)result.records[0]; // take the only item
                 // update data
-                SfActe.Commentaire_Interne__c = string.Join(" ", responses[response.Key].message);
-                SfActe.Statut_du_XML__c = responses[response.Key].status_xml;
+                SfActe.Commentaire_XML__c = string.Join(" ", responses[response.Key].message);
+                SfActe.Statut_du_XML__c = responses[response.Key].status_xml; // <== update status for prod acte and leave it empty in acte
                 SaveResult[] saveResults = SfService.update(new sObject[] { SfActe } );
+
+                //UPDATE PROD ACTE
+                Production_Acte__c prodActe = new Production_Acte__c();
+                string soqlQueryProdActe = "SELECT Id, Statut_du_XML__c FROM "
             }
         }
 
