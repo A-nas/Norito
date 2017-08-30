@@ -71,7 +71,6 @@ namespace GED.Handlers
                     // update data
                     string retMessage = string.Join(" ", responses[SfActes[i].Name].message);
                     SfActes[i].Commentaire_Interne__c += retMessage;
-                    // this is safe now ! (we send prod only if it in None OR Rejet Status)
                     SfActes[i].Statut_du_XML__c = responses[SfActes[i].Name].status_xml;
                 }
                 // save update

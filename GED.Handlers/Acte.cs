@@ -10,6 +10,7 @@ namespace GED.Handlers
 {
     public class Acte
     {
+        public string prodActeID { get; set; }
         public string NomType { get; set; }
         public string NomActeAdministratif { get; set; }
         [JsonProperty(PropertyName = "reference_externe", Order = 1)]

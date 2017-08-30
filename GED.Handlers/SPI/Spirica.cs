@@ -213,6 +213,7 @@ namespace GED.Handlers
 
             if (idDocs.Length > 0)
             {
+            // parameters are not escaped *** must be changed
             var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe, cam.extension [Type de Document] from type_document td "
                                      + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
                                      + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
