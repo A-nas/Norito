@@ -28,14 +28,14 @@ namespace GED.Handlers
 
         //** method to send a List of 'Acte'
         public async Task<List<string>> envoyerProd(List<Acte> actes){
-            // *** ONLY IF PRODUCTION IS NONE OR FAIL STATUS ***
+
             int nombreActes = actes.Count;
-            Dictionary<string, WsResponse> cresponses = new Dictionary<string, WsResponse>();
+            Dictionary<string[], WsResponse> cresponses = new Dictionary<string[], WsResponse>();
             for (int i = 0; i < nombreActes; i++){
             // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies)
                 //Dynamic Dyspatching
                 IActe acteprod = new Spirica(actes[i]);
-                Dictionary<string, WsResponse> currentResponse = new Dictionary<string, WsResponse>();
+                Dictionary<string[], WsResponse> currentResponse = new Dictionary<string[], WsResponse>();
                 currentResponse = await acteprod.sendProd(); // send one "Acte" *** (dic with one element)
                 cresponses.Add(currentResponse.Keys.ElementAt(0), currentResponse[currentResponse.Keys.ElementAt(0)]); // get current element
             }
@@ -83,7 +83,8 @@ namespace GED.Handlers
         }
 
         //update "acte" by "acte" this fucntion consume more time/space than updateSalesForceV1 but fix permission issue
-        public void updateSalesForce(Dictionary<string,WsResponse> responses){
+        // method must be splited for each attribute identifier
+        public void updateSalesForce(Dictionary<string[],WsResponse> responses){
             // IDS
             string username = "noluser@nortia.fr.nqualif";//#
             string passwd = "nortia01";//#
@@ -94,14 +95,14 @@ namespace GED.Handlers
             SfService.SessionHeaderValue = new SessionHeader();
             SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
 
-            foreach(KeyValuePair<string, WsResponse> response in responses){
+            foreach(KeyValuePair<string[], WsResponse> response in responses){
                 //UPDATE ACTE
                 Acte__c SfActe = new Acte__c();
                 //string soqlQuery = "SELECT Id, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'"; OLD
-                string soqlQueryActe = "SELECT Id, Commentaire_XML__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key + "'";
+                string soqlQueryActe = "SELECT Id, Commentaire_XML__c, Statut_du_XML__c FROM Acte__c WHERE Name = '" + response.Key[0] + "'";
                 QueryResult result = SfService.query(soqlQueryActe);
-                if(result.size != 0)
-                SfActe = (Acte__c)result.records[0]; // take the only item
+                if(result.size != 0) // must return one or zero
+                    SfActe = (Acte__c)result.records[0]; // take the only item selected
                 // update data
                 SfActe.Commentaire_XML__c = string.Join(" ", responses[response.Key].message);
                 SfActe.Statut_du_XML__c = responses[response.Key].status_xml; // <== update status for prod acte and leave it empty in acte
@@ -109,7 +110,13 @@ namespace GED.Handlers
 
                 //UPDATE PROD ACTE
                 Production_Acte__c prodActe = new Production_Acte__c();
-                string soqlQueryProdActe = "SELECT Id, Statut_du_XML__c FROM "
+                string soqlQueryProdActe = "SELECT Id, Statut_du_XML__c FROM Production_Acte__c WHERE Name = '" + response.Key[1] + "'";
+                result = SfService.query(soqlQueryProdActe);
+                if (result.size != 0)
+                    prodActe = (Production_Acte__c)result.records[0];
+                prodActe.Statut_du_XML__c = responses[response.Key].status_xml;
+                saveResults = SfService.update(new sObject[] { prodActe });
+
             }
         }
 

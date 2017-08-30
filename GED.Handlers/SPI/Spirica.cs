@@ -105,7 +105,7 @@ namespace GED.Handlers
 
 
         // Attach and send the current production
-        public async Task<Dictionary<string,WsResponse>> sendProd(){
+        public async Task<Dictionary<string[],WsResponse>> sendProd(){
 
             // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
@@ -128,9 +128,11 @@ namespace GED.Handlers
             //POST ASYNC CALL
             HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent); // must be extracted
             string returnMessages = await message.Content.ReadAsStringAsync();
-            Dictionary<string, WsResponse> response = new Dictionary<string, WsResponse>();
-            response.Add(this.ReferenceInterne, new WsResponse { message = getMessage(returnMessages,message),
-                                                                 status_xml = getStatusXml(message) } 
+            Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
+            response.Add(new string[] { this.ReferenceInterne , this.prodActeID },
+                         new WsResponse { message = getMessage(returnMessages,message),
+                                          status_xml = getStatusXml(message)
+                                        }
                         );
             // 1 acte success => prod success
             if (message.IsSuccessStatusCode){
