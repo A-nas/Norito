@@ -118,6 +118,21 @@ namespace GenerationProd
 
                 if (listeActePDF.Count > 0)
                 {
+                    if (codeCompagnie == "SPI")
+                    { // purger les champs remplies par la prod sprica XML
+                        // build empty response object
+                        Dictionary<string[], WsResponse> responses = new Dictionary<string[], WsResponse>();
+                        foreach (Acte acte in listeActePDF)
+                            responses.Add(
+                                new string[] {
+                                    acte.ReferenceInterne,
+                                    acte.prodActeID },
+                                new WsResponse { message = new string[] { "" } ,
+                                    status_xml = "" } 
+                                );
+                        Production.getInstance().updateSalesForce(responses);
+                    }
+
                     //Génération de la Prod PDF
                     if (!(genererProdActe ? GenererProdPDFActe(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, classification) : GenererProdPDF(IDProd, codeCompagnie, laDate, listeActePDF, typeEnvoi, false, classification)))
                         throw new Exception("Erreur lors de la génération de la production PDF (ID: " + IDProd.ToString() + ") pour la compagnie " + codeCompagnie.ToString());

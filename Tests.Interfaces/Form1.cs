@@ -24,7 +24,7 @@ using System.Data.SqlClient;
 //Json read
 using Newtonsoft.Json.Linq;
 //Sales Force connexion
-using GED.Tools.WSDLQualif;
+using GED.Tools.WSDLQualifFinal;
 
 namespace Tests.Interfaces
 {
@@ -647,34 +647,34 @@ namespace Tests.Interfaces
         private void button10_Click(object sender, EventArgs e)
         {
             //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
-            genererProdNewFinal.GenerationProdSoapClient test = new genererProdNewFinal.GenerationProdSoapClient();
+            genererprodLocal.GenerationProdSoapClient test = new genererprodLocal.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
-            genererProdNewFinal.Acte[] Sactes = new genererProdNewFinal.Acte[1];
-            Sactes[0] = new genererProdNewFinal.Acte();
+            genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[1];
+            Sactes[0] = new genererprodLocal.Acte();
                 // sub object
                 {
-                genererProdNewFinal.Repartition rep01 = new genererProdNewFinal.Repartition
+                genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
                 {
                         CodeISIN = "FR0010696765",
                         TypeRepartition = "%",
                         ValeurRepartition = 30
                     };
 
-                genererProdNewFinal.Repartition rep02 = new genererProdNewFinal.Repartition
+                genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
                 {
                         CodeISIN = "FR0007071378",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
-                genererProdNewFinal.DocumentProduction doc01 = new genererProdNewFinal.DocumentProduction
+                genererprodLocal.DocumentProduction doc01 = new genererprodLocal.DocumentProduction
                 {
                         ID_DocumentNortia = 1636367,
                         ID_DocumentSalesForce = "a098E000003hgUxQAI",
                         NbPage = 1
                 };
 
-                genererProdNewFinal.DocumentProduction doc02 = new genererProdNewFinal.DocumentProduction
+                genererprodLocal.DocumentProduction doc02 = new genererprodLocal.DocumentProduction
                 {
                     ID_DocumentNortia = 1636370,
                     ID_DocumentSalesForce = "a098E000003hgUxQAI",
@@ -690,19 +690,19 @@ namespace Tests.Interfaces
                     };*/
                 //remplissage
 
-                Sactes[0].ListeSupportDesinvestir = new genererProdNewFinal.Repartition[1];
-                Sactes[0].ListeSupportInvestir = new genererProdNewFinal.Repartition[1];
-                Sactes[0].ListeSupportDesinvestir[0] = new genererProdNewFinal.Repartition();
-                Sactes[0].ListeSupportInvestir[0] = new genererProdNewFinal.Repartition();
+                Sactes[0].ListeSupportDesinvestir = new genererprodLocal.Repartition[1];
+                Sactes[0].ListeSupportInvestir = new genererprodLocal.Repartition[1];
+                Sactes[0].ListeSupportDesinvestir[0] = new genererprodLocal.Repartition();
+                Sactes[0].ListeSupportInvestir[0] = new genererprodLocal.Repartition();
 
                 Sactes[0].ListeSupportDesinvestir[0] = rep01;
                 Sactes[0].ListeSupportInvestir[0] = rep02;
            
 
 
-                Sactes[0].ListeDocument = new genererProdNewFinal.DocumentProduction[2];
-                Sactes[0].ListeDocument[0] = new genererProdNewFinal.DocumentProduction();
-                Sactes[0].ListeDocument[1] = new genererProdNewFinal.DocumentProduction();
+                Sactes[0].ListeDocument = new genererprodLocal.DocumentProduction[2];
+                Sactes[0].ListeDocument[0] = new genererprodLocal.DocumentProduction();
+                Sactes[0].ListeDocument[1] = new genererprodLocal.DocumentProduction();
                 // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
                 Sactes[0].ListeDocument[1] = doc02;
@@ -732,6 +732,7 @@ namespace Tests.Interfaces
                 Sactes[0].InvestissementImmediat = false;
                 Sactes[0].Regul = true;
                 Sactes[0].isSigned = true;
+                Sactes[0].prodActeID = "PD-0066346";
             }
 
                 test.GenererProd("TEST", "SPI", Sactes, "Scan", true, "");
@@ -914,7 +915,7 @@ namespace Tests.Interfaces
             string username = "noluser@nortia.fr.nqualif";//
             string passwd = "nortia01";//
 
-            SforceService SfService = new GED.Tools.WSDLQualif.SforceService(); // call ws
+            SforceService SfService = new GED.Tools.WSDLQualifFinal.SforceService(); // call ws
             Dictionary<string, string> dictionnaire = new Dictionary<string, string>();
             try
             {

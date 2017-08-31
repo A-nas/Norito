@@ -169,6 +169,10 @@ namespace GED.Handlers
             }
         }
 
+        public static void release(){
+
+        }
+
         private string getStatusXml(HttpResponseMessage message){
             return message.IsSuccessStatusCode ? "Accepté":"Rejeté";
         }

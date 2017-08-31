@@ -32,5 +32,15 @@ namespace Tests.Interfaces.Properties {
                 return ((string)(this["Tests_Interfaces_indexationged_IndexationGED"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:40757/generationprod.asmx")]
+        public string Tests_Interfaces_genererProdLocal_GenerationProd {
+            get {
+                return ((string)(this["Tests_Interfaces_genererProdLocal_GenerationProd"]));
+            }
+        }
     }
 }

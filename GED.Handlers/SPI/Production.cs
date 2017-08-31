@@ -120,5 +120,20 @@ namespace GED.Handlers
             }
         }
 
+        // method to connect to Force API
+        private SforceService connect(string username,string passwd){
+
+            SforceService SfService = new GED.Tools.WSDLQualifFinal.SforceService();
+            LoginResult loginResult = SfService.login(username, passwd);
+            SfService.Url = loginResult.serverUrl;
+            SfService.SessionHeaderValue = new SessionHeader();
+            SfService.SessionHeaderValue.sessionId = loginResult.sessionId;
+            return SfService;
+        }
+
+        //Purge all "ACTES" at once
+        public void release(){
+            // not used
+        }
     }
 }

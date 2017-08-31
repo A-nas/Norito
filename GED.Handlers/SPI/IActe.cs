@@ -9,6 +9,6 @@ namespace GED.Handlers
     public interface IActe
     {
         // method to send PRODUCTION (generic)
-        Task<Dictionary<string,WsResponse>> sendProd(); 
+        Task<Dictionary<string[],WsResponse>> sendProd(); 
     }
 }
