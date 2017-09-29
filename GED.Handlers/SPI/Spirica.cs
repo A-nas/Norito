@@ -169,10 +169,6 @@ namespace GED.Handlers
             }
         }
 
-        public static void release(){
-
-        }
-
         private string getStatusXml(HttpResponseMessage message){
             return message.IsSuccessStatusCode ? "Accepté":"Rejeté";
         }
@@ -206,6 +202,7 @@ namespace GED.Handlers
             this.dateDeSignature = acte.DateEnvoiProduction.ToLocalTime().ToString("dd/MM/yyyy");
             this.binaires = new List<binaries>();
             this.isSigned = acte.isSigned;
+            this.prodActeID = acte.prodActeID;
             if (TRANSTYPE == null) getSupports();
             if (ANOMALIES == null) getAnomalies();
             fillData();
@@ -278,7 +275,7 @@ namespace GED.Handlers
                 doc.Open();
 
                 List<byte[]> ListOfPDFS = SignedBinaries.Select(x => x.ficheirPDF).ToList();
-                //Loop throgh each byte array (each iteration represent a single PDF)
+                //Loop through each byte array (each iteration represent a single PDF)
                 foreach (byte[] pdf in ListOfPDFS){
                     PdfReader pdfReader = new PdfReader(pdf);
                     copy.AddDocument(pdfReader);
@@ -300,7 +297,7 @@ public class binaries
     public string nomFichie;
 }
 
-public class WsResponse // "pas sa place ici" ==> deplacer dans SPI dir ou depalcer vers Production
+public class WsResponse // "pas sa place ici" ==> deplacer vers Production ou suppimer l'objet et crée un type anonyme
 {
     public string[] message;
     public string status_xml;

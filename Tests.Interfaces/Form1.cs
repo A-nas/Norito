@@ -724,7 +724,7 @@ namespace Tests.Interfaces
                 Sactes[0].Frais = 1;
                 Sactes[0].ID_ProfilCompagnie = "";
                 Sactes[0].NomEnveloppe = "PRIVATE VIE";
-                Sactes[0].IsTraitementEdi = true;
+                Sactes[0].IsTraitementEdi = false;
                 Sactes[0].DateCreation = DateTime.Now;
                 Sactes[0].DateAcquisition = DateTime.Now;
                 Sactes[0].DateEnvoiProduction = DateTime.Now; // supposed

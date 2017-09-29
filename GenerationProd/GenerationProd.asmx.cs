@@ -127,8 +127,8 @@ namespace GenerationProd
                                 new string[] {
                                     acte.ReferenceInterne,
                                     acte.prodActeID },
-                                new WsResponse { message = new string[] { "" } ,
-                                    status_xml = "" } 
+                                new WsResponse { message = new string[] { " " } ,
+                                    status_xml = " " } 
                                 );
                         Production.getInstance().updateSalesForce(responses);
                     }
