@@ -708,8 +708,6 @@ namespace Tests.Interfaces
                 Sactes[0].ListeDocument[1] = doc02;
                 //Sactes[0].ListeDocument[1] = doc02;
                 //
-
-                Sactes[0].Frais = 0f;
                 Sactes[0].Commentaire = "un commentaire";
                 
                 Sactes[0].NomType = "Arbitrage";
@@ -721,10 +719,10 @@ namespace Tests.Interfaces
                 Sactes[0].NomApporteur = "TEISSEDRE ET ASSOCIES GESTION DE PATRIMOINE";
                 Sactes[0].MontantBrut = 8253.12f;
                 Sactes[0].TypeFrais = "%";
-                Sactes[0].Frais = 1;
+                //Sactes[0].Frais = 0; undefined
                 Sactes[0].ID_ProfilCompagnie = "";
                 Sactes[0].NomEnveloppe = "PRIVATE VIE";
-                Sactes[0].IsTraitementEdi = false;
+                Sactes[0].IsTraitementEdi = true;
                 Sactes[0].DateCreation = DateTime.Now;
                 Sactes[0].DateAcquisition = DateTime.Now;
                 Sactes[0].DateEnvoiProduction = DateTime.Now; // supposed
