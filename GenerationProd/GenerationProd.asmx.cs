@@ -541,16 +541,6 @@ namespace GenerationProd
 
 
 
-
-
-
-
-
-
-
-
-
-
         protected static bool GenererRecap(string IDProd, string codeCompagnie, DateTime dateGeneration, List<Acte> listeActe, string typeEnvoi = "", bool TraitementEdi = false, bool genererProdActe = false, string classification = "")
         {
             bool retour = false;

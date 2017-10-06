@@ -27,9 +27,11 @@ namespace GED.Handlers
         [JsonProperty(PropertyName = "support_saisie", Order = 5)]
         private static string supsaisie = "bo";
         [JsonProperty(PropertyName = "pieces", Order = 7)]
-        public List<DetailPiece> pieces;
+        private List<DetailPiece> pieces;
         [JsonProperty(PropertyName = "date_signature", Order = 2)]
-        public string dateDeSignature;
+        private string dateDeSignature;
+        [JsonProperty(PropertyName = "incompressible_assureur_deroge")]
+        private bool incompressible;
         List<binaries> binaires;
 
         // Properties to manage/save the state and data of the multi instance of the current class
@@ -203,6 +205,7 @@ namespace GED.Handlers
             this.binaires = new List<binaries>();
             this.isSigned = acte.isSigned;
             this.prodActeID = acte.prodActeID;
+            //if (this.Frais == 0) incompressible = true;
             if (TRANSTYPE == null) getSupports();
             if (ANOMALIES == null) getAnomalies();
             fillData();
@@ -287,6 +290,15 @@ namespace GED.Handlers
                     nomFichie = mergedFileName
                 };
          }
+
+        public bool ShouldSerializeincompressible(){
+            if (Frais == 0) {
+                incompressible = true;
+                    return true;
+            }
+            return false;
+        }
+
 
     }
 }

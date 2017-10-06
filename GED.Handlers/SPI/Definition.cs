@@ -26,7 +26,7 @@ namespace GED.Handlers
         public static readonly string remotePath = "//SPIRICA//"; //sftp://u87840885@home663743708.1and1-data.host/SPIRICA
 
         // SPIRICA SERIALIZABLE PROPERTIES
-        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type", "date_signature", "taux_frais_deroge" };
+        public static List<string> pptActeNames = new List<string> { "reference_externe", "desinvestissements", "reinvestissements", "pieces", "commentaire", "support_saisie", "code_support", "pourcentage", "montant", "nom", "type", "date_signature", "taux_frais_deroge" , "incompressible_assureur_deroge" };
 
         // DATABASE STRING
         public static readonly SqlConnection connexion = new SqlConnection("data source=192.168.1.2\\SQL2005DEV;Database=Nortiaca_MEDIA;Uid=sa;password=NICKEL2000;");

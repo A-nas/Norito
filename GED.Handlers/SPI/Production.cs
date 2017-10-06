@@ -7,6 +7,10 @@ using System.Data.SqlClient;
 // for sales force
 using GED.Tools.WSDLQualifFinal;
 
+// RESTE A FAIRE
+// deplacer les proprietes statique de la class Definition (seulement les declaration)
+// optimiser le code / voir structure 
+// ajouter le code de generalisation (declaration automatqiue a partir du CODE_COMP)
 
 
 namespace GED.Handlers
