@@ -51,8 +51,8 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
             // we select distinct code_isin to ensure we get only one isin code
-            SqlCommand cmd = new SqlCommand("SELECT code_isin, code_support FROM "
-                + "(SELECT code_isin, code_support, ROW_NUMBER() OVER(PARTITION BY code_isin ORDER BY code_isin DESC) rn "
+            SqlCommand cmd = new SqlCommand("SELECT code_isin, code_support +';'+  [Type] "
+                + "(SELECT code_isin, code_support, ROW_NUMBER() OVER(PARTITION BY code_isin ORDER BY code_isin DESC) rn, [Type] "
                 + "from[dbo].[SUPPORT_TRANSTYPE] "
                 + "WHERE code_isin is not null) sub_query "
                 + "WHERE rn = 1 ", Definition.connexionQualif); //TCO_ForcageSupportsCies (changer les nom de colonnes)
@@ -62,6 +62,8 @@ namespace GED.Handlers
             while (dr.Read())
                 TRANSTYPE.Add(dr[0].ToString(), dr[1].ToString());
             dr.Close();
+
+
             Definition.connexionQualif.Close();
         }
 
@@ -262,10 +264,15 @@ namespace GED.Handlers
 
             // transtypage de supports
             foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
-              if (TRANSTYPE.ContainsKey(rep.CodeISIN))
-                        rep.code_support_ext = TRANSTYPE[rep.CodeISIN];
+                if (TRANSTYPE.ContainsKey(rep.CodeISIN))
+                {
+                    if (TRANSTYPE[rep.CodeISIN].Split(';')[0] == "SUPPORT") // spit it here
+                        rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[1];
                     else
-                        rep.code_support_ext = rep.CodeISIN;
+                        rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[2];
+                }
+                else
+                    rep.code_support_ext = rep.CodeISIN;
                 }
         }
 
