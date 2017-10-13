@@ -20,6 +20,8 @@ namespace GED.Handlers
         // mon code
         [JsonProperty(PropertyName = "code_support")]
         public string code_support_ext;
+        [JsonProperty(PropertyName = "code_profil")]
+        public string code_profil;
         [JsonProperty(PropertyName = "pourcentage", Order = 1)]
         private int montant_per;
         [JsonProperty(PropertyName = "montant", Order = 2)]

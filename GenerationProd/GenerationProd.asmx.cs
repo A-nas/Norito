@@ -144,7 +144,7 @@ namespace GenerationProd
 
                 if (listeActeTraitementEdi.Count > 0)
                 {
-                    if (codeCompagnie == "SPI"){ // envoie web service   
+                    if (codeCompagnie == "SPI"){ // envoie web service  
                         List<string> ListSuccess = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
                         if (ListSuccess.Count > 0){
                             List<Acte> ListActeSuccess = listeActeTraitementEdi.Where(x => ListSuccess.Contains(x.ReferenceInterne)).ToList(); // extract successful "ACTES"

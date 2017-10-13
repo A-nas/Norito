@@ -38,7 +38,7 @@ namespace GED.Handlers
             for (int i = 0; i < nombreActes; i++){
             // if i pass TRANSTYPE TABLE here as method parameter, The context will depend on the company (unless TRANSTYPE table concerne all companies)
                 //Dynamic Dyspatching
-                IActe acteprod = new Spirica(actes[i]);
+                IActe acteprod = new Spirica(actes[i]);// ♣
                 Dictionary<string[], WsResponse> currentResponse = new Dictionary<string[], WsResponse>();
                 currentResponse = await acteprod.sendProd(); // send one "Acte" *** (dic with one element)
                 cresponses.Add(currentResponse.Keys.ElementAt(0), currentResponse[currentResponse.Keys.ElementAt(0)]); // get current element

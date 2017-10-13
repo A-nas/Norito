@@ -215,43 +215,46 @@ namespace GED.Handlers
 
 
         //this method will fill additional properties
-        private void fillData(){
+        private void fillData()
+        {
 
             int[] idDocs = base.ListeDocument.Select(x => x.ID_DocumentNortia).ToArray();
 
             if (idDocs.Length > 0)
             {
-            // parameters are not escaped *** must be changed
-            var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe, cam.extension [Type de Document] from type_document td "
-                                     + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
-                                     + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
-                                     + "where cam.pk in ({ID_Document}) ", Definition.connexionQualif);
+                // parameters are not escaped *** must be changed
+                var cmd = new SqlCommand("SELECT cam.nom [Nom de fichier] ,cam.datas [Fichier PDF binaire],tdt.code_type_document_externe, cam.extension [Type de Document] from type_document td "
+                                         + "JOIN CA_MEDIA cam on cam.id_type_document=td.id_type_document "
+                                         + "JOIN TYPE_DOC_TRANSTYPE tdt on tdt.code_type_document = td.ID_Type_Document "
+                                         + "where cam.pk in ({ID_Document}) ", Definition.connexionQualif);
 
                 cmd.addArrayCommand(idDocs, "ID_Document");
                 Definition.connexionQualif.Open();
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    this.pieces.Add(new DetailPiece
                     {
-                        this.pieces.Add(new DetailPiece
-                        {
-                            nomFichier = reader[0].ToString() + "" + reader[3].ToString(),
-                            typeFicher = reader[2].ToString()
-                        });
-                        this.binaires.Add(new binaries
-                        {
-                            nomFichie = reader[0].ToString() + "" + reader[3].ToString(),
-                            ficheirPDF = (byte[])reader[1]
-                            });
-                     }
-                    reader.Close();
-                    Definition.connexionQualif.Close();
+                        nomFichier = reader[0].ToString() + "" + reader[3].ToString(),
+                        typeFicher = reader[2].ToString()
+                    });
+                    this.binaires.Add(new binaries
+                    {
+                        nomFichie = reader[0].ToString() + "" + reader[3].ToString(),
+                        ficheirPDF = (byte[])reader[1]
+                    });
+                }
+                reader.Close();
+                Definition.connexionQualif.Close();
 
-                if (this.isSigned) {
+                if (this.isSigned)
+                {
                     //work only if bianries documents are PDF files
                     string signedFileName = "Document_signe_Electroniquement.pdf";
                     string TypeFichier = "dossier_arbitrage_signe_electroniquement";
 
-                    this.pieces.Add(new DetailPiece {
+                    this.pieces.Add(new DetailPiece
+                    {
                         nomFichier = signedFileName,
                         typeFicher = TypeFichier
                     });
@@ -263,18 +266,19 @@ namespace GED.Handlers
             // end remplissage de pieces
 
             // transtypage de supports
-            foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir)) {
+            foreach (Repartition rep in base.ListeSupportDesinvestir.Concat(ListeSupportInvestir))
+            {
                 if (TRANSTYPE.ContainsKey(rep.CodeISIN))
                 {
-                    if (TRANSTYPE[rep.CodeISIN].Split(';')[0] == "SUPPORT") // spit it here
-                        rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[1];
-                    else
-                        rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[2];
-                }
-                else
-                    rep.code_support_ext = rep.CodeISIN;
-                }
-        }
+                     if (TRANSTYPE[rep.CodeISIN].Split(';')[1] == "SUPPORT") // spit it here
+                         rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[1];
+                     else
+                         rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[1];
+                 }
+                 else
+                     rep.code_support_ext = rep.CodeISIN;
+            }
+      }
 
         // method to merge List<binaries> into one binary (bianires class)
         private binaries mergeDoc(List<binaries> SignedBinaries, string mergedFileName){

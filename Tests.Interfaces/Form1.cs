@@ -591,9 +591,9 @@ namespace Tests.Interfaces
             List<Acte> listeActeSucces = new List<Acte>();
             for (int i = 0; i < respones.Length; i++)
                  if (Convert.ToBoolean(JObject.Parse(respones[i])["succes"])) listeActeSucces.Add(actes[i]);
-            */ 
-            
-              
+            */
+
+
             /*List<Acte> actes = Definition.GetListeActes();
                 // prod
                 int nombreActes = actes.Count();
@@ -604,8 +604,8 @@ namespace Tests.Interfaces
                 //IActe acteprod = (IActe) actes[i]; // cast avec du code 
                 response[i] = (await acteprod.sendProd());
             }*/
-
-
+            List<Acte> actes = Definition.GetListeActes();
+            List<string> ListSuccess = await Production.getInstance().envoyerProd(actes);
 
         }
 
