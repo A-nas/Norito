@@ -114,7 +114,7 @@ namespace GED.Handlers
             // preparing request HEADER
             HttpClientHandler handler = new HttpClientHandler();
             HttpClient client = new HttpClient();
-            byte[] Basic_Auth = Encoding.ASCII.GetBytes(Definition.id + ":" + Definition.pass); // tester cet appel je vais pas y revenir une autre fois.
+            byte[] Basic_Auth = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["id"] + ":" + ConfigurationManager.AppSettings["pass"]); // tester cet appel je vais pas y revenir une autre fois.
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Basic_Auth));
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
@@ -130,7 +130,7 @@ namespace GED.Handlers
                 requestContent.Add(binaryFile, "file", bin.nomFichie );
             }
             //POST ASYNC CALL
-            HttpResponseMessage message = await client.PostAsync(Definition.url + this.NumContrat + "/arbitrages", requestContent); // must be extracted
+            HttpResponseMessage message = await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
             string returnMessages = await message.Content.ReadAsStringAsync();
             Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
             response.Add(new string[] { this.ReferenceInterne , this.prodActeID },

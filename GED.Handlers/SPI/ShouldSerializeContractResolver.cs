@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 // added
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+//config
+using System.Configuration;
 
 
 namespace GED.Handlers
 {
      public class ShouldSerializeContractResolver : DefaultContractResolver
     {
-        public ShouldSerializeContractResolver() { }
-        // ** deplacer vers definition
-        List<string> pptActeNames = Definition.pptActeNames;
-
+        List<string> pptActeNames = ConfigurationManager.AppSettings["propToSerialise"].Split(';').ToList<string>();
         //methode that return the list of properties to be serialised
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
