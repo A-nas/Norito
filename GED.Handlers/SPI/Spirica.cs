@@ -51,7 +51,7 @@ namespace GED.Handlers
         {
             TRANSTYPE = new Dictionary<string, string>();
             // we select distinct code_isin to ensure we get only one isin code
-            SqlCommand cmd = new SqlCommand("SELECT code_isin, code_support +';'+  [Type] "
+            SqlCommand cmd = new SqlCommand("SELECT code_isin, code_support +';'+  [Type] FROM"
                 + "(SELECT code_isin, code_support, ROW_NUMBER() OVER(PARTITION BY code_isin ORDER BY code_isin DESC) rn, [Type] "
                 + "from[dbo].[SUPPORT_TRANSTYPE] "
                 + "WHERE code_isin is not null) sub_query "
@@ -271,9 +271,9 @@ namespace GED.Handlers
                 if (TRANSTYPE.ContainsKey(rep.CodeISIN))
                 {
                      if (TRANSTYPE[rep.CodeISIN].Split(';')[1] == "SUPPORT") // spit it here
-                         rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[1];
+                         rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[0];
                      else
-                         rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[1];
+                         rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[0];
                  }
                  else
                      rep.code_support_ext = rep.CodeISIN;

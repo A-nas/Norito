@@ -662,7 +662,7 @@ namespace Tests.Interfaces
 
                 genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "FR0007071378",
+                        CodeISIN = "CONVIC+",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
