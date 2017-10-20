@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 // for sales force
 using GED.Tools.WSDLQualifFinal;
+using System.Configuration;
 
 
 namespace GED.Handlers
@@ -85,8 +86,8 @@ namespace GED.Handlers
         // method must be splited for each attribute identifier
         public void updateSalesForce(Dictionary<string[],WsResponse> responses){
             // IDS
-            string username = "noluser@nortia.fr.nqualif";//#
-            string passwd = "nortia01";//#
+            string username = ConfigurationManager.AppSettings["loginSF"];
+            string passwd = ConfigurationManager.AppSettings["mdpSF"];
         
             SforceService SfService = new GED.Tools.WSDLQualifFinal.SforceService();
             LoginResult loginResult = SfService.login(username, passwd);

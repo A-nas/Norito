@@ -40,7 +40,7 @@ namespace GED.Handlers
         public string Commentaire { get; set; }
         public bool InvestissementImmediat { get; set; }
         public bool Regul { get; set; }
-        public bool isSigned;
+        public bool isSigned { get; set; }
 
 
         public Acte()
