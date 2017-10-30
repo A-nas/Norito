@@ -130,21 +130,25 @@ namespace GED.Handlers
                 requestContent.Add(binaryFile, "file", bin.nomFichie );
             }
             //POST ASYNC CALL
-            HttpResponseMessage message = await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
-            string returnMessages = await message.Content.ReadAsStringAsync();
-            Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
-            response.Add(new string[] { this.ReferenceInterne , this.prodActeID },
-                         new WsResponse { message = getMessage(returnMessages,message),
-                                          status_xml = getStatusXml(message)
-                                        }
-                        );
-            // 1 acte success => prod success
-            if (message.IsSuccessStatusCode){
-                SuccessActes.Add(this.ReferenceInterne);
-                isSuccess = true;
-            }
-            //waiting until we get the JSON response !
-            return response;
+                HttpResponseMessage message = await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
+                string returnMessages = await message.Content.ReadAsStringAsync();
+                Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
+            response.Add(new string[] { this.ReferenceInterne, this.prodActeID },
+                         new WsResponse
+                         {
+                             isSuccessCall = message.IsSuccessStatusCode,
+                             message = getMessage(returnMessages, message),
+                             status_xml = getStatusXml(message),
+                             }
+                            );
+                // 1 acte success => prod success
+                if (message.IsSuccessStatusCode)
+                {
+                    SuccessActes.Add(this.ReferenceInterne);
+                    isSuccess = true;
+                }
+                //waiting until we get the JSON response !
+                return response;
         }
 
         private string[] getMessage(string returnMessages,HttpResponseMessage message){
@@ -322,6 +326,7 @@ public class binaries
 
 public class WsResponse // "pas sa place ici" ==> deplacer vers Production ou suppimer l'objet et crée un type anonyme
 {
+    public bool isSuccessCall;
     public string[] message;
     public string status_xml;
 }

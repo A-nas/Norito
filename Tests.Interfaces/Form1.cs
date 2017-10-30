@@ -410,7 +410,7 @@ namespace Tests.Interfaces
                 }
                 //MessageBox.Show(json);
                 
-                Definition.setProgressBar(progressBar1);
+                //Definition.setProgressBar(progressBar1);
                 //acte.sendProd();
             }
         }
@@ -604,8 +604,8 @@ namespace Tests.Interfaces
                 //IActe acteprod = (IActe) actes[i]; // cast avec du code 
                 response[i] = (await acteprod.sendProd());
             }*/
-            List<Acte> actes = Definition.GetListeActes();
-            List<string> ListSuccess = await Production.getInstance().envoyerProd(actes);
+            //List<Acte> actes = Definition.GetListeActes();
+            //List<string> ListSuccess = await Production.getInstance().envoyerProd(actes);
 
         }
 
@@ -669,14 +669,14 @@ namespace Tests.Interfaces
 
                 genererprodLocal.DocumentProduction doc01 = new genererprodLocal.DocumentProduction
                 {
-                        ID_DocumentNortia = 1636367,
+                        ID_DocumentNortia = -100,//1636367,
                         ID_DocumentSalesForce = "a098E000003hgUxQAI",
                         NbPage = 1
                 };
 
                 genererprodLocal.DocumentProduction doc02 = new genererprodLocal.DocumentProduction
                 {
-                    ID_DocumentNortia = 1636370,
+                    ID_DocumentNortia = -100,//1636370,
                     ID_DocumentSalesForce = "a098E000003hgUxQAI",
                     NbPage = 1
                 };
@@ -714,7 +714,7 @@ namespace Tests.Interfaces
                 Sactes[0].NomActeAdministratif = "";
                 Sactes[0].ReferenceInterne = "ACT000407542";
                 Sactes[0].NomCompletSouscripteurs = "";
-                Sactes[0].NumContrat = "112900052";
+                Sactes[0].NumContrat = "113104335";
                 Sactes[0].CodeApporteur = "NOR100055";
                 Sactes[0].NomApporteur = "TEISSEDRE ET ASSOCIES GESTION DE PATRIMOINE";
                 Sactes[0].MontantBrut = 8253.12f;
@@ -729,7 +729,7 @@ namespace Tests.Interfaces
                 Sactes[0].Commentaire = "";
                 Sactes[0].InvestissementImmediat = false;
                 Sactes[0].Regul = true;
-                Sactes[0].isSigned = true;
+                Sactes[0].isSigned = false;
                 Sactes[0].prodActeID = "PD-0066346";
             }
 
@@ -905,10 +905,10 @@ namespace Tests.Interfaces
         {
             //## this fucntion must after all manage exceptions in case if we can't connect to Force.com API
             // fetch for all actes data list
-            List<Acte> actes = Definition.GetListeActes(); // data for testing
-            string[] idActes = actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
-            string idList = "'" + String.Join("','", idActes) + "'"; // construct the part of 'in' query string clause
-            string soqlQuery = "SELECT Name, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in ("+ idList +")";
+            //     List<Acte> actes = Definition.GetListeActes(); // data for testing
+            //      string[] idActes = actes.Select(p => p.ReferenceInterne).ToArray(); // extract ids actes
+            //     string idList = "'" + String.Join("','", idActes) + "'"; // construct the part of 'in' query string clause
+            string soqlQuery = "";// "SELECT Name, Commentaire_Interne__c, Statut_du_XML__c FROM Acte__c where Name in ("+ idList +")";
 
             string username = "noluser@nortia.fr.nqualif";//
             string passwd = "nortia01";//
