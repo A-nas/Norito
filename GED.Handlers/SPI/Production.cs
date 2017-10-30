@@ -106,10 +106,8 @@ namespace GED.Handlers
                 // update data
                 SfActe.Commentaire_XML__c = string.Join(" ", responses[response.Key].message);
                 SfActe.Statut_du_XML__c = responses[response.Key].status_xml; // <== update status for prod acte and leave it empty in acte
-                SfActe.Date_Envoi_Prod__c = responses[response.Key].isSuccessCall ? SfActe.Date_Envoi_Prod__c : null;
-
-
-                SaveResult[] saveResults = SfService.update(new sObject[] { SfActe } );
+                if(!responses[response.Key].isSuccessCall) SfActe.fieldsToNull = new String[] { "Date_Envoi_Prod__c" }; // purger la date pour qu'elle ne figure pas dans la Regul
+                SaveResult[] saveResults = SfService.update(new sObject[] { SfActe });
 
                 //UPDATE PROD ACTE
                 Production_Acte__c prodActe = new Production_Acte__c();
