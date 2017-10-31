@@ -649,7 +649,7 @@ namespace Tests.Interfaces
             //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
             genererprodLocal.GenerationProdSoapClient test = new genererprodLocal.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
-            genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[1];
+            genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[2];
             Sactes[0] = new genererprodLocal.Acte();
                 // sub object
                 {
@@ -733,7 +733,86 @@ namespace Tests.Interfaces
                 Sactes[0].prodActeID = "PD-0066346";
             }
 
-                test.GenererProd("PROD-008388", "SPI", Sactes, "Scan", true, "");
+
+
+
+            //###################################################### acte 1
+
+            Sactes[1] = new genererprodLocal.Acte();
+            // sub object
+            {
+                genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
+                {
+                    CodeISIN = "FR0010696765",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 30
+                };
+
+                genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
+                {
+                    CodeISIN = "CONVIC+",
+                    TypeRepartition = "%",
+                    ValeurRepartition = 100
+                };
+
+                genererprodLocal.DocumentProduction doc01 = new genererprodLocal.DocumentProduction
+                {
+                    ID_DocumentNortia = -100,//1636367,
+                    ID_DocumentSalesForce = "a098E000003hgUxQAI",
+                    NbPage = 1
+                };
+
+                genererprodLocal.DocumentProduction doc02 = new genererprodLocal.DocumentProduction
+                {
+                    ID_DocumentNortia = -100,//1636370,
+                    ID_DocumentSalesForce = "a098E000003hgUxQAI",
+                    NbPage = 1
+                };
+
+                Sactes[1].ListeSupportDesinvestir = new genererprodLocal.Repartition[1];
+                Sactes[1].ListeSupportInvestir = new genererprodLocal.Repartition[1];
+                Sactes[1].ListeSupportDesinvestir[0] = new genererprodLocal.Repartition();
+                Sactes[1].ListeSupportInvestir[0] = new genererprodLocal.Repartition();
+
+                Sactes[1].ListeSupportDesinvestir[0] = rep01;
+                Sactes[1].ListeSupportInvestir[0] = rep02;
+
+
+
+                Sactes[1].ListeDocument = new genererprodLocal.DocumentProduction[2];
+                Sactes[1].ListeDocument[0] = new genererprodLocal.DocumentProduction();
+                Sactes[1].ListeDocument[1] = new genererprodLocal.DocumentProduction();
+                // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
+                Sactes[1].ListeDocument[0] = doc01;
+                Sactes[1].ListeDocument[1] = doc02;
+                //Sactes[0].ListeDocument[1] = doc02;
+                //
+                Sactes[1].Commentaire = "un commentaire";
+
+                Sactes[1].NomType = "Arbitrage";
+                Sactes[1].NomActeAdministratif = "";
+                Sactes[1].ReferenceInterne = "ACT000407542";
+                Sactes[1].NomCompletSouscripteurs = "";
+                Sactes[1].NumContrat = "113104335";
+                Sactes[1].CodeApporteur = "NOR100055";
+                Sactes[1].NomApporteur = "TEISSEDRE ET ASSOCIES GESTION DE PATRIMOINE";
+                Sactes[1].MontantBrut = 8253.12f;
+                Sactes[1].TypeFrais = "%";
+                //Sactes[0].Frais = 0; undefined
+                Sactes[1].ID_ProfilCompagnie = "";
+                Sactes[1].NomEnveloppe = "PRIVATE VIE";
+                Sactes[1].IsTraitementEdi = true;
+                Sactes[1].DateCreation = DateTime.Now;
+                Sactes[1].DateAcquisition = DateTime.Now;
+                Sactes[1].DateEnvoiProduction = DateTime.Now; // supposed
+                Sactes[1].Commentaire = "";
+                Sactes[1].InvestissementImmediat = false;
+                Sactes[1].Regul = true;
+                Sactes[1].isSigned = false;
+                Sactes[1].prodActeID = "PD-0066346";
+            }
+
+            test.GenererProd("PROD-008388", "SPI", Sactes, "Scan", true, "");
             /*
             //deuxiemmme acte
             // sub object
