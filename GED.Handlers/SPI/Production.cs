@@ -117,7 +117,6 @@ namespace GED.Handlers
                     prodActe = (Production_Acte__c)result.records[0];
                 prodActe.Statut_du_XML__c = responses[response.Key].status_xml;
                 saveResults = SfService.update(new sObject[] { prodActe });
-
             }
         }
 

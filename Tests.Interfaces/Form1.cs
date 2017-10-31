@@ -733,7 +733,7 @@ namespace Tests.Interfaces
                 Sactes[0].prodActeID = "PD-0066346";
             }
 
-                test.GenererProd("TEST", "SPI", Sactes, "Scan", true, "");
+                test.GenererProd("PROD-008388", "SPI", Sactes, "Scan", true, "");
             /*
             //deuxiemmme acte
             // sub object
