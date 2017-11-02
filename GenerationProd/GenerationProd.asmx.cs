@@ -144,6 +144,12 @@ namespace GenerationProd
 
                 if (listeActeTraitementEdi.Count > 0)
                 {
+                    //** debug
+                    foreach (Acte acteEDI in listeActeTraitementEdi) {
+                        string json = new JavaScriptSerializer().Serialize(acteEDI);
+                        Log.Trace(IDProd, "OBJECT TO SEND ", json);
+                    }
+                    //** end debug
                     if (codeCompagnie == "SPI"){ // envoie web service  
                         List<string> ListSuccess = await Production.getInstance().envoyerProd(listeActeTraitementEdi);
                         if (ListSuccess.Count > 0){
