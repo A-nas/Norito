@@ -26,6 +26,8 @@ using Newtonsoft.Json.Linq;
 //Sales Force connexion
 using GED.Tools.WSDLQualifFinal;
 
+
+
 namespace Tests.Interfaces
 {
 
@@ -649,29 +651,29 @@ namespace Tests.Interfaces
             //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
             genererprodLocal.GenerationProdSoapClient test = new genererprodLocal.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
-            genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[2];
+            genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[1];
             Sactes[0] = new genererprodLocal.Acte();
                 // sub object
                 {
                 genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "FR0010696765",
+                        CodeISIN = "NOT-FOUND",//"FR0007051040",
                         TypeRepartition = "%",
-                        ValeurRepartition = 30
+                        ValeurRepartition = 100
                     };
 
                 genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "CONVIC+",
+                        CodeISIN = "NOT-FOUND",//"FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 genererprodLocal.DocumentProduction doc01 = new genererprodLocal.DocumentProduction
                 {
-                        ID_DocumentNortia = -100,//1636367,
-                        ID_DocumentSalesForce = "a098E000003hgUxQAI",
-                        NbPage = 1
+                        ID_DocumentNortia = 1636433,//1636367,
+                        ID_DocumentSalesForce = "a098E000003hkhvQAA",
+                        NbPage = 4
                 };
 
                 genererprodLocal.DocumentProduction doc02 = new genererprodLocal.DocumentProduction
@@ -700,28 +702,28 @@ namespace Tests.Interfaces
            
 
 
-                Sactes[0].ListeDocument = new genererprodLocal.DocumentProduction[2];
+                Sactes[0].ListeDocument = new genererprodLocal.DocumentProduction[1];
                 Sactes[0].ListeDocument[0] = new genererprodLocal.DocumentProduction();
-                Sactes[0].ListeDocument[1] = new genererprodLocal.DocumentProduction();
+                //Sactes[0].ListeDocument[1] = new genererprodLocal.DocumentProduction();
                 // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
-                Sactes[0].ListeDocument[1] = doc02;
+                   //Sactes[0].ListeDocument[1] = doc02;
                 //Sactes[0].ListeDocument[1] = doc02;
                 //
                 Sactes[0].Commentaire = "un commentaire";
                 
                 Sactes[0].NomType = "Arbitrage";
                 Sactes[0].NomActeAdministratif = "";
-                Sactes[0].ReferenceInterne = "ACT000407542";
-                Sactes[0].NomCompletSouscripteurs = "";
-                Sactes[0].NumContrat = "113104335";
-                Sactes[0].CodeApporteur = "NOR100055";
-                Sactes[0].NomApporteur = "TEISSEDRE ET ASSOCIES GESTION DE PATRIMOINE";
-                Sactes[0].MontantBrut = 8253.12f;
+                Sactes[0].ReferenceInterne = "ACT000406683";
+                Sactes[0].NomCompletSouscripteurs = "Raymond PELLIET";
+                Sactes[0].NumContrat = "112900012";
+                Sactes[0].CodeApporteur = "NOR100033";
+                Sactes[0].NomApporteur = "LA FINANCIERE D'ORION SAS";
+                Sactes[0].MontantBrut = 37356.45f;
                 Sactes[0].TypeFrais = "%";
-                //Sactes[0].Frais = 0; undefined
+                Sactes[0].Frais = 1; //undefined
                 Sactes[0].ID_ProfilCompagnie = "";
-                Sactes[0].NomEnveloppe = "PRIVATE VIE";
+                Sactes[0].NomEnveloppe = "PRIVATE CAPI";
                 Sactes[0].IsTraitementEdi = true;
                 Sactes[0].DateCreation = DateTime.Now;
                 Sactes[0].DateAcquisition = DateTime.Now;
@@ -730,14 +732,14 @@ namespace Tests.Interfaces
                 Sactes[0].InvestissementImmediat = false;
                 Sactes[0].Regul = true;
                 Sactes[0].isSigned = false;
-                Sactes[0].prodActeID = "PD-0066346";
+                Sactes[0].prodActeID = "a0S8E000000c3dwUAA";
             }
 
 
 
 
             //###################################################### acte 1
-
+ /*
             Sactes[1] = new genererprodLocal.Acte();
             // sub object
             {
@@ -811,7 +813,7 @@ namespace Tests.Interfaces
                 Sactes[1].isSigned = false;
                 Sactes[1].prodActeID = "PD-0066346";
             }
-
+            */
             test.GenererProd("PROD-008388", "SPI", Sactes, "Scan", true, "");
             /*
             //deuxiemmme acte

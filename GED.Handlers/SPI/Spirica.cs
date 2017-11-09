@@ -119,7 +119,12 @@ namespace GED.Handlers
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
             //preparing request BODY
-            MultipartFormDataContent requestContent = new MultipartFormDataContent();
+            MultipartFormDataContent requestContent = new MultipartFormDataContent("BOUNDARY"); // default boundary
+            string boundary = "----MyBoundary" + DateTime.Now.Ticks.ToString("x");
+            requestContent.Headers.Remove("Content-Type");
+            requestContent.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
+            ///MultipartFormDataContent requestContent = new MultipartFormDataContent(); // default boundary
+            //requestContent.Headers
             ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
             json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json"); // can be configured
             requestContent.Add(json, "arbitrage");
@@ -154,7 +159,7 @@ namespace GED.Handlers
         private string[] getMessage(string returnMessages,HttpResponseMessage message){
 
             if (message.StatusCode == System.Net.HttpStatusCode.NotFound) return new string[] { "Acte introuvable\n" };
-
+            if (message.StatusCode == System.Net.HttpStatusCode.InternalServerError) return new string[] { "Erreur Web Service Spirica\n" };
             if (message.IsSuccessStatusCode){
                 return new string[] { "Acte envoyé avec succés\n" };
             }
