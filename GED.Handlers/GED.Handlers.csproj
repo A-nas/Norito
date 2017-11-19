@@ -183,6 +183,10 @@
       <Project>{1f5dda92-9f1f-4c25-ae35-3ba4342d34e3}</Project>
       <Name>GED.Tools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Log\Log.csproj">
+      <Project>{7d876e17-69dd-435c-9951-f28d477b0705}</Project>
+      <Name>Log</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

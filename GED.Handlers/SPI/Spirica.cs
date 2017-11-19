@@ -16,6 +16,8 @@ using System.Net.Http.Headers;
 //Tall Components & merging libs
 using iTextSharp.text.pdf;
 using System.IO;
+// log class
+using Log;
 
 
 
@@ -94,57 +96,53 @@ namespace GED.Handlers
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ContractResolver = new ShouldSerializeContractResolver()
             };
-            //insert database ## ♣
-            SqlCommand cmd = new SqlCommand("INSERT INTO GenerationProd_Log(Date_Log,ID_ProdSF,TypeMessage,Message) VALUES (@date_Log,@ID_ProdSF,@typeMessage,@message)", Definition.connexionQualif);
-            cmd.Parameters.AddWithValue("@date_Log", (object)DateTime.Now);
-            cmd.Parameters.AddWithValue("@ID_ProdSF", (object)" --- ");
-            cmd.Parameters.AddWithValue("@typeMessage", (object)"VARDEBUG");
-            cmd.Parameters.AddWithValue("@message", (object)JsonConvert.SerializeObject(this, jsonSetting));
-            Definition.connexionQualif.Open();
-            cmd.ExecuteNonQuery();
             Definition.connexionQualif.Close();
-            // end insert datatbse ##
+
+            LogTrace.Trace("SPI-WS JSON", LogTrace.MESSAGE_INFO, JsonConvert.SerializeObject(this, jsonSetting) );
             return JsonConvert.SerializeObject(this, jsonSetting);
         }
 
 
         // Attach and send the current production
         public async Task<Dictionary<string[],WsResponse>> sendProd(){
+            try {
+                // preparing request HEADER
+                HttpClientHandler handler = new HttpClientHandler();
+                HttpClient client = new HttpClient();
+                byte[] Basic_Auth = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["id"] + ":" + ConfigurationManager.AppSettings["pass"]); // tester cet appel je vais pas y revenir une autre fois.
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Basic_Auth));
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
+                //preparing request BODY
+                MultipartFormDataContent requestContent = new MultipartFormDataContent(); // default boundary
+                                                                                          //string boundary = "----MyBoundary" + DateTime.Now.Ticks.ToString("x");
+                                                                                          //requestContent.Headers.Remove("Content-Type");
+                                                                                          //requestContent.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
+                ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
+                json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json"); // can be configured
+                requestContent.Add(json, "arbitrage");
 
-            // preparing request HEADER
-            HttpClientHandler handler = new HttpClientHandler();
-            HttpClient client = new HttpClient();
-            byte[] Basic_Auth = Encoding.ASCII.GetBytes(ConfigurationManager.AppSettings["id"] + ":" + ConfigurationManager.AppSettings["pass"]); // tester cet appel je vais pas y revenir une autre fois.
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Basic_Auth));
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("Accept-Charset", "UTF-8");
-            //preparing request BODY
-            MultipartFormDataContent requestContent = new MultipartFormDataContent(); // default boundary
-                //string boundary = "----MyBoundary" + DateTime.Now.Ticks.ToString("x");
-                //requestContent.Headers.Remove("Content-Type");
-                //requestContent.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary);
-            ByteArrayContent json = new ByteArrayContent(Encoding.UTF8.GetBytes(genJson())); // encodage a verifier apres !!
-            json.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json"); // can be configured
-            requestContent.Add(json, "arbitrage");
-
-            foreach (binaries bin in this.binaires){ // this can be optimised we have the files dupliated on bianries List Class and pieces List Class
-                ByteArrayContent binaryFile = new ByteArrayContent(bin.ficheirPDF);
-                binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-                requestContent.Add(binaryFile, "file", bin.nomFichie );
-            }
-            //POST ASYNC CALL
+                foreach (binaries bin in this.binaires)
+                { // this can be optimised we have the files dupliated on bianries List Class and pieces List Class
+                    ByteArrayContent binaryFile = new ByteArrayContent(bin.ficheirPDF);
+                    binaryFile.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+                    requestContent.Add(binaryFile, "file", bin.nomFichie);
+                }
+                //POST ASYNC CALL
                 client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
                 HttpResponseMessage message = await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
+                LogTrace.Trace("SPI-WS Return Value", LogTrace.MESSAGE_INFO, message.ToString());
                 string returnMessages = await message.Content.ReadAsStringAsync();
-            Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
-            response.Add(new string[] { this.ReferenceInterne, this.prodActeID },
-                         new WsResponse
-                         {
-                             isSuccessCall = message.IsSuccessStatusCode,
-                             message = getMessage(returnMessages, message),
-                             status_xml = getStatusXml(message),
+                LogTrace.Trace("SPI-WS Return Messages", LogTrace.MESSAGE_INFO, returnMessages);
+                Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
+                response.Add(new string[] { this.ReferenceInterne, this.prodActeID },
+                             new WsResponse
+                             {
+                                 isSuccessCall = message.IsSuccessStatusCode,
+                                 message = getMessage(returnMessages, message),
+                                 status_xml = getStatusXml(message),
                              }
-                            );
+                                );
                 // 1 acte success => prod success
                 if (message.IsSuccessStatusCode)
                 {
@@ -153,6 +151,12 @@ namespace GED.Handlers
                 }
                 //waiting until we get the JSON response !
                 return response;
+
+            } catch(Exception ex)
+            {
+
+            }
+            return new Dictionary<string[], WsResponse>();
         }
 
         private string[] getMessage(string returnMessages,HttpResponseMessage message){
