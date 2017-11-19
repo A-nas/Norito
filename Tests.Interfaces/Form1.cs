@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using Microsoft.Office.Interop.Word;
 using Newtonsoft.Json;
 using GED.Handlers;
-// call web service (not tested yet)
+// call web service
 using System.Net.Http;
 using System.Net.Http.Headers;
 // for webProxyClass
@@ -657,14 +657,14 @@ namespace Tests.Interfaces
                 {
                 genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "NOT-FOUND",//"FR0007051040",
+                        CodeISIN = "AXACOURTERMEC",//"FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "NOT-FOUND",//"FR0007051040",
+                        CodeISIN = "FR0013285269",//"FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
@@ -714,7 +714,7 @@ namespace Tests.Interfaces
                 
                 Sactes[0].NomType = "Arbitrage";
                 Sactes[0].NomActeAdministratif = "";
-                Sactes[0].ReferenceInterne = "ACT000406683";
+                Sactes[0].ReferenceInterne = "ACT000466032";
                 Sactes[0].NomCompletSouscripteurs = "Raymond PELLIET";
                 Sactes[0].NumContrat = "112900012";
                 Sactes[0].CodeApporteur = "NOR100033";
