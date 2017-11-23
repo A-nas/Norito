@@ -657,29 +657,29 @@ namespace Tests.Interfaces
                 {
                 genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "AXACOURTERMEC",//"FR0007051040",
+                        CodeISIN = "FR0000288946",//"FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 genererprodLocal.Repartition rep02 = new genererprodLocal.Repartition
                 {
-                        CodeISIN = "FR0013285269",//"FR0007051040",
+                        CodeISIN = "FR0013283769",//"FR0007051040",
                         TypeRepartition = "%",
                         ValeurRepartition = 100
                     };
 
                 genererprodLocal.DocumentProduction doc01 = new genererprodLocal.DocumentProduction
                 {
-                        ID_DocumentNortia = 1636433,//1636367,
-                        ID_DocumentSalesForce = "a098E000003hkhvQAA",
+                        ID_DocumentNortia = 2086379,//1636367,
+                        ID_DocumentSalesForce = "a090O00001EgYQkQAN",
                         NbPage = 4
                 };
 
                 genererprodLocal.DocumentProduction doc02 = new genererprodLocal.DocumentProduction
                 {
-                    ID_DocumentNortia = -100,//1636370,
-                    ID_DocumentSalesForce = "a098E000003hgUxQAI",
+                    ID_DocumentNortia = 2086378,//1636370,
+                    ID_DocumentSalesForce = "a090O00001EgYQfQAN",
                     NbPage = 1
                 };
 
@@ -702,12 +702,12 @@ namespace Tests.Interfaces
            
 
 
-                Sactes[0].ListeDocument = new genererprodLocal.DocumentProduction[1];
+                Sactes[0].ListeDocument = new genererprodLocal.DocumentProduction[2];
                 Sactes[0].ListeDocument[0] = new genererprodLocal.DocumentProduction();
                 //Sactes[0].ListeDocument[1] = new genererprodLocal.DocumentProduction();
                 // Sactes[0].ListeDocument[1] = new GenererProd.DocumentProduction();
                 Sactes[0].ListeDocument[0] = doc01;
-                   //Sactes[0].ListeDocument[1] = doc02;
+                Sactes[0].ListeDocument[1] = doc02;
                 //Sactes[0].ListeDocument[1] = doc02;
                 //
                 Sactes[0].Commentaire = "un commentaire";
@@ -730,8 +730,8 @@ namespace Tests.Interfaces
                 Sactes[0].DateEnvoiProduction = DateTime.Now; // supposed
                 Sactes[0].Commentaire = "";
                 Sactes[0].InvestissementImmediat = false;
-                Sactes[0].Regul = true;
-                Sactes[0].isSigned = false;
+                Sactes[0].Regul = false;
+                Sactes[0].isSigned = true;
                 Sactes[0].prodActeID = "a0S8E000000c3dwUAA";
             }
 

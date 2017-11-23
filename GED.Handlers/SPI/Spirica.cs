@@ -283,7 +283,7 @@ namespace GED.Handlers
             {
                 if (TRANSTYPE.ContainsKey(rep.CodeISIN))
                 {
-                     if (TRANSTYPE[rep.CodeISIN].Split(';')[1] == "SUPPORT") // spit it here
+                     if (TRANSTYPE[rep.CodeISIN].Split(';')[1] == "SUPPORT") 
                          rep.code_support_ext = TRANSTYPE[rep.CodeISIN].Split(';')[0];
                      else
                          rep.code_profil = TRANSTYPE[rep.CodeISIN].Split(';')[0];

@@ -24,8 +24,6 @@ using GED.Tools;
 using System.Web.Script.Serialization;
 using Newtonsoft.Json.Linq;
 using GED.Handlers;
-// only for debugging
-using System.Web.Script.Serialization;
 
 
 namespace GenerationProd
