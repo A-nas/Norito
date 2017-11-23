@@ -23,7 +23,7 @@ namespace GED.Handlers
         [JsonProperty(PropertyName = "code_profil")]
         public string code_profil;
         [JsonProperty(PropertyName = "pourcentage", Order = 1)]
-        private int montant_per;
+        private float montant_per;
         [JsonProperty(PropertyName = "montant", Order = 2)]
         private float montant_euro;
 
