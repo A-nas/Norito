@@ -25,6 +25,9 @@ using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 //Sales Force connexion
 using GED.Tools.WSDLQualifFinal;
+//json serialiser
+using System.Web.Script.Serialization;
+
 
 
 
@@ -648,11 +651,17 @@ namespace Tests.Interfaces
 
         private void button10_Click(object sender, EventArgs e)
         {
+            genererprodLocal.Acte actprod = new JavaScriptSerializer().Deserialize<genererprodLocal.Acte>("{\"prodActeID\":\"a0S0O00000QmG5LUAV\",\"NomType\":\"Arbitrage\",\"NomActeAdministratif\":\"\",\"ReferenceInterne\":\"ACT000470506\",\"NomCompletSouscripteurs\":\"Maryvonne TAUPIN\",\"NumContrat\":\"112900387\",\"CodeApporteur\":\"NOR100018\",\"NomApporteur\":\"3A PATRIMOINE\",\"MontantBrut\":14973.29,\"TypeFrais\":\"%\",\"Frais\":1,\"ID_ProfilCompagnie\":\"\",\"NomEnveloppe\":\"PRIVATE CAPI\",\"ListeSupportDesinvestir\":[{\"code_support_ext\":null,\"code_profil\":null,\"CodeISIN\":\"FR0000288946\",\"TypeRepartition\":\"%\",\"ValeurRepartition\":100},{\"code_support_ext\":null,\"code_profil\":null,\"CodeISIN\":\"FEURO\",\"TypeRepartition\":\"%\",\"ValeurRepartition\":100}],\"ListeSupportInvestir\":[{\"code_support_ext\":null,\"code_profil\":null,\"CodeISIN\":\"FR0013284882\",\"TypeRepartition\":\"%\",\"ValeurRepartition\":100}],\"ListeDocument\":[{\"ID_DocumentNortia\":2086766,\"ID_DocumentSalesForce\":\"a090O00001EgbmvQAB\",\"NbPage\":1},{\"ID_DocumentNortia\":2086765,\"ID_DocumentSalesForce\":\"a090O00001EgbmuQAB\",\"NbPage\":1}],\"IsTraitementEdi\":true,\"Commentaire\":\"\",\"InvestissementImmediat\":false,\"Regul\":false,\"isSigned\":false}");
+            actprod.DateCreation = DateTime.Now;
+            actprod.DateAcquisition = DateTime.Now;
+            actprod.DateEnvoiProduction = DateTime.Now;
+
             //List<GED.Handlers.Acte> HActes = Definition.GetListeActes();
             genererprodLocal.GenerationProdSoapClient test = new genererprodLocal.GenerationProdSoapClient();
             //test.GenererProd("TEST", "SPI", actes.ToArray() , "Scan", true, "");
             genererprodLocal.Acte[] Sactes = new genererprodLocal.Acte[1];
-            Sactes[0] = new genererprodLocal.Acte();
+            Sactes[0] = actprod;
+            /*genererprodLocal.Acte();
                 // sub object
                 {
                 genererprodLocal.Repartition rep01 = new genererprodLocal.Repartition
@@ -692,7 +701,7 @@ namespace Tests.Interfaces
                     };*/
                 //remplissage
 
-                Sactes[0].ListeSupportDesinvestir = new genererprodLocal.Repartition[1];
+                /*Sactes[0].ListeSupportDesinvestir = new genererprodLocal.Repartition[1];
                 Sactes[0].ListeSupportInvestir = new genererprodLocal.Repartition[1];
                 Sactes[0].ListeSupportDesinvestir[0] = new genererprodLocal.Repartition();
                 Sactes[0].ListeSupportInvestir[0] = new genererprodLocal.Repartition();

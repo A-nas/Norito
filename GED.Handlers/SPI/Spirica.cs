@@ -129,11 +129,9 @@ namespace GED.Handlers
                     requestContent.Add(binaryFile, "file", bin.nomFichie);
                 }
                 //POST ASYNC CALL
-                client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
-                HttpResponseMessage message = new HttpResponseMessage(System.Net.HttpStatusCode.RequestedRangeNotSatisfiable); // await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
-
+                HttpResponseMessage message = await client.PostAsync(ConfigurationManager.AppSettings["route"] + this.NumContrat + "/arbitrages", requestContent); // must be extracted
                 LogTrace.Trace("SPI-WS Return Value", LogTrace.MESSAGE_INFO, message.ToString());
-                string returnMessages = "{\"succes\":false,\"anomalies\":[{\"type\":\"support_inexistant\",\"categorie\":\"support\",\"commentaire\":\"Code du support : FR0013285269\"},{\"type\":\"support_inexistant\",\"categorie\":\"support\",\"commentaire\":\"Code du support : FR0013286598\"},{\"type\":\"doublon_piece\",\"categorie\":\"piece\"},{\"type\":\"doublon_fichier_joint\",\"categorie\":\"piece\"}]}";//= await message.Content.ReadAsStringAsync();
+                string returnMessages = await message.Content.ReadAsStringAsync();
                 LogTrace.Trace("SPI-WS Return Messages", LogTrace.MESSAGE_INFO, returnMessages);
                 Dictionary<string[], WsResponse> response = new Dictionary<string[], WsResponse>();
                 response.Add(new string[] { this.ReferenceInterne, this.prodActeID },
@@ -260,7 +258,7 @@ namespace GED.Handlers
                 reader.Close();
                 Definition.connexionQualif.Close();
 
-                if (this.isSigned)
+                if (this.isSigned && this.pieces.Count > 0)
                 {
                     //work only if bianries documents are PDF files
                     string signedFileName = "Document_signe_Electroniquement.pdf";
