@@ -28,15 +28,6 @@ using GED.Handlers;
 
 namespace GenerationProd
 {
-    /// <summary>
-    /// Description résumée de Service1
-    /// </summary>
-    //OLD
-    //[WebService(Namespace = "http://62.161.183.114:1519/GenerationProd.asmx")]   //QUALIF
-    //[WebService(Namespace = "http://62.161.183.114:8064/GenerationProd.asmx")]     //PROD
-
-    //NEW
-    //[WebService(Namespace = "http://dev-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]      //DEV
     [WebService(Namespace = "http://qualif-extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //QUALIF
     //[WebService(Namespace = "http://extranet.nortia.fr/GenerationProd/GenerationProd.asmx")]   //PROD
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
@@ -645,48 +636,6 @@ namespace GenerationProd
                 string compagnie = codeCompagnie;
                 string adresse1 = "";
                 string adresse2 = "";
-
-                switch (codeCompagnie)
-                {
-                    case "LMP":
-                        compagnie = "LA MONDIALE";
-                        adresse1 = "32, avenue Emile Zola";
-                        adresse2 = "TSA 61022 MONS EN BAROEUL";
-
-                        break;
-
-                    case "LMEP":
-                        compagnie = "LA MONDIALE EUROPARTNER SA";
-                        adresse1 = "BP2122";
-                        adresse2 = "L-1021 LUXEMBOURG";
-
-                        break;
-                    case "AEP":
-                        compagnie = "AEP – Assurance Epargne Pension";
-                        adresse1 = "76, rue de la Victoire";
-                        adresse2 = "75009 PARIS";
-
-                        break;
-                    case "CNP":
-                        compagnie = "CNP Assurances";
-                        adresse1 = "4, place Raoul Dautry";
-                        adresse2 = "75716 PARIS Cedex 15";
-
-                        break;
-                    case "SPI":
-                        compagnie = "SPIRICA";
-                        adresse1 = "31, rue Falguière";
-                        adresse2 = "75015 PARIS";
-
-                        break;
-
-                    case "IWI":
-                        compagnie = "IWI International Wealth Insurer S.A.";
-                        adresse1 = "2, rue Nicolas Bové";
-                        adresse2 = "L-1253 LUXEMBOURG";
-
-                        break;
-                }
 
                 TextField myField = docInter.Fields["Compagnie"] as TextField;
                 myField.Value = compagnie;
